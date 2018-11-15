@@ -1,3 +1,3 @@
 rootProject.name = 'facecraft'
 
-include 'facecraft-plugin', 'facecraft-springio'
+include 'facecraft-plugin', 'facecraft-springio', 'facecraft-app', 'facecraft-app:app'
