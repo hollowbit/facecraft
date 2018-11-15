@@ -41,5 +41,8 @@ task dist(type: Jar) {
     from files(sourceSets.main.output.classesDirs)
     from files(sourceSets.main.output.resourcesDir)
     from {configurations.injar.collect {zipTree(it)}}
-    into "../server/plugins/"
+    destinationDir = file("../server/plugins/")
+    doLast {
+        println "TEST!"
+    }
 }
