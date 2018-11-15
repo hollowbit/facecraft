@@ -1,6 +1,0 @@
-main: uk.co.olbois.facecraftplugin.FacecraftPluginKt
-name: Facecraft-plugin
-version: 0.1
-api-version: 1.13
-description: Plugin to interact with facecraft
-author: coolbois
