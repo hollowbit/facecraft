@@ -4,8 +4,8 @@ matrix:
       install: true
       jdk:
         - oraclejdk8
-    script:
-      - ./gradlew facecraft-plugin:build facecraft-springio:build --scan -s
+      script:
+        - ./gradlew facecraft-plugin:build facecraft-springio:build --scan -s
     - language: android
       android:
         components:
