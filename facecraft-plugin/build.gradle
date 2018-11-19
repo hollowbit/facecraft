@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.2.51'
+    id 'org.jetbrains.kotlin.jvm'
 }
 
 group 'uk.co.olbois'
@@ -36,13 +36,10 @@ compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }
 
-task dist(type: Jar) {
+task buildPlugin(type: Jar) {
     dependsOn compileJava
     from files(sourceSets.main.output.classesDirs)
     from files(sourceSets.main.output.resourcesDir)
     from {configurations.injar.collect {zipTree(it)}}
-    destinationDir = file("../server/plugins/")
-    doLast {
-        println "TEST!"
-    }
+    destinationDir = file("../minecraft-server/plugins/")
 }
