@@ -4,6 +4,9 @@ Facecraft is a Minecraft Social Media with server management features. You can i
 ## Developer Instructions
 Some instructions to get you started with our development environment. Many things have been made simpler using gradle.
 
+### Android Studio
+Start by importing the repository into Android Studio as a Gradle project.
+
 ### Techstack
 We use Gradle for our build systems. JUnit for unit tests. All code is written in Kotlin and Java.
 
