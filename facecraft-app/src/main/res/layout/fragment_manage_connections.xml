@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ManageConnectionsActivityFragment"
+    tools:context="uk.co.olbois.facecraft.ManageConnectionsActivityFragment"
     tools:showIn="@layout/activity_manage_connections">
 
     <TextView

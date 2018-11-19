@@ -1,4 +1,4 @@
-package com.example.a1661884.facecraft
+package uk.co.olbois.facecraft
 
 import org.junit.Test
 
