@@ -1,4 +1,4 @@
-package com.example.a1661884.facecraft
+package uk.co.olbois.facecraft
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
