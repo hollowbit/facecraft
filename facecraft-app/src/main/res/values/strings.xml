@@ -3,4 +3,5 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_server_manager">ServerManagerActivity</string>
+    <string name="title_activity_chatroom">ChatroomActivity</string>
 </resources>
