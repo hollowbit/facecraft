@@ -12,6 +12,10 @@ public class ServerConnection implements Identifiable<Long> {
     private int userCount;
     private Role role = Role.MEMBER;
 
+    public ServerConnection(){
+
+    }
+
     public ServerConnection(Long id, String host, int port, int userCount, Role role) {
         this.id = id;
         this.host = host;

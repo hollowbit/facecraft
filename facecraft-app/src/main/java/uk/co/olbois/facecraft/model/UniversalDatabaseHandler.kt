@@ -9,7 +9,7 @@ import android.content.Context
 import uk.co.olbois.facecraft.model.serverconnection.ServerConnection
 
 
-class NoteDatabaseHandler
+class UniversalDatabaseHandler
 /**
  * Construct a new database handler.
  * @param context The application context.
@@ -45,7 +45,7 @@ class NoteDatabaseHandler
     }
 
     override fun onUpgrade(database: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        Log.w(NoteDatabaseHandler::class.java.name, "Upgrading database from version $oldVersion to $newVersion, which will destroy all old data")
+        Log.w(UniversalDatabaseHandler::class.java.name, "Upgrading database from version $oldVersion to $newVersion, which will destroy all old data")
         database.execSQL(connectionsTable.getDropTableStatement())
         onCreate(database)
     }
