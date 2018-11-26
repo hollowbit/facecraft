@@ -198,5 +198,6 @@
     <orderEntry type="library" exported="" scope="TEST" name="logback-core-1.2.3" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="log4j-api-2.10.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="asm-5.0.4" level="project" />
+    <orderEntry type="library" exported="" name="facecraft-springio.gs-rest-service-0.1.0" level="project" />
   </component>
 </module>
