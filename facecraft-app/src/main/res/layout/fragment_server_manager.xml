@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.servermanager.ServerManagerActivityFragment"
+    tools:context=".ui.servermanager.ServerManagerFragment"
     tools:showIn="@layout/activity_server_manager">
 
     <LinearLayout
