@@ -5,4 +5,6 @@
     <string name="title_activity_server_manager">ServerManagerActivity</string>
     <string name="title_activity_chatroom">ChatroomActivity</string>
     <string name="title_activity_server_console">ServerConsoleActivity</string>
+    <string name="sendCommand">Send</string>
+    <string name="enterCommandHint">Enter command...</string>
 </resources>
