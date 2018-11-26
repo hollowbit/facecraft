@@ -13,11 +13,17 @@
             android:name=".ui.servermanager.ServerManagerActivity"
             android:label="@string/title_activity_server_manager"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        </activity>
+        <activity
+            android:windowSoftInputMode="adjustPan"
+            android:name=".ui.chatroom.ChatroomActivity"
+            android:label="@string/title_activity_chatroom"
+            android:theme="@style/AppTheme.NoActionBar">
+                <intent-filter>
+                    <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                    <category android:name="android.intent.category.LAUNCHER" />
+                </intent-filter>
         </activity>
     </application>
 
