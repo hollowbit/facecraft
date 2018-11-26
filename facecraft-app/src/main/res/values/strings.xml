@@ -4,4 +4,11 @@
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_server_manager">ServerManagerActivity</string>
     <string name="title_activity_chatroom">ChatroomActivity</string>
+    <string name="title_activity_calendar">CalendarActivity</string>
+
+    <string-array name="AMPM_arrays">
+    <item>AM</item>
+    <item>PM</item>
+    </string-array>
+
 </resources>
