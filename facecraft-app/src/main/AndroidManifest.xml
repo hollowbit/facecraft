@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ServerManagerActivity"
+            android:name=".ui.servermanager.ServerManagerActivity"
             android:label="@string/title_activity_server_manager"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
