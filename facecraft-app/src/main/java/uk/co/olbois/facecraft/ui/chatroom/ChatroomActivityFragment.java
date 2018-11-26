@@ -3,12 +3,15 @@ package uk.co.olbois.facecraft.ui.chatroom;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import uk.co.olbois.facecraft.R;
@@ -19,6 +22,8 @@ import uk.co.olbois.facecraft.model.message.Message;
  */
 public class ChatroomActivityFragment extends Fragment {
 
+    private List<Message> messageData;
+
     public ChatroomActivityFragment() {
     }
 
@@ -27,11 +32,22 @@ public class ChatroomActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_chatroom, container, false);
 
+        messageData = generateMessages();
+
+        // Set the message recycler view adapter
+        RecyclerView messageRecyclerView = view.findViewById(R.id.message_recycler_view);
+        messageRecyclerView.setLayoutManager(new LinearLayoutManager((getContext())));
+        messageRecyclerView.setAdapter(new MessageAdapter(messageData));
 
         return view;
     }
 
     private  class MessageViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView username;
+        private TextView userType;
+        private TextView time;
+        private TextView messageText;
 
         private final View root;
         private Message message;
@@ -39,6 +55,12 @@ public class ChatroomActivityFragment extends Fragment {
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
             root = itemView;
+
+            // Get all message properties
+            username = root.findViewById(R.id.username_text_view);
+            userType = root.findViewById(R.id.user_type_text_view);
+            time = root.findViewById(R.id.time_text_view);
+            messageText = root.findViewById(R.id.message_text_view);
 
             root.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -51,6 +73,13 @@ public class ChatroomActivityFragment extends Fragment {
         public void setMessage(Message message) {
             this.message = message;
 
+            // Set the message texts
+            username.setText(message.getUsername());
+            userType.setText(message.getSenderType());
+
+            // TODO format date
+            time.setText(message.getTime().toString());
+            messageText.setText(message.getContent());
         }
     }
 
@@ -86,6 +115,24 @@ public class ChatroomActivityFragment extends Fragment {
         }
 
 
+    }
+
+    private List<Message> generateMessages() {
+        List<Message> sampleData = new ArrayList<Message>();
+
+        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
+        sampleData.add(new Message("Nate", "app", "Hi, my name is Nate", new Date()));
+        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
+        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
+        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
+        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
+        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
+        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
+        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
+        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
+
+
+        return sampleData;
     }
     
 
