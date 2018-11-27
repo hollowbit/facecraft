@@ -20,6 +20,11 @@ import uk.co.olbois.facecraft.sqlite.DatabaseException;
  * A placeholder fragment containing a simple view.
  */
 public class LoginFragment extends Fragment {
+    public interface OnLoggedInListener{
+        void onLoggedIn(SampleUser u);
+    }
+
+    private OnLoggedInListener onLoggedInListener;
 
     private EditText usernameEditText;
     private EditText passwordEditText;
@@ -27,6 +32,10 @@ public class LoginFragment extends Fragment {
 
     private UniversalDatabaseHandler dbh;
     private List<SampleUser> users;
+
+    public void setOnLoggedInListener(OnLoggedInListener onLoggedInListener){
+        this.onLoggedInListener = onLoggedInListener;
+    }
 
     public LoginFragment() {
     }
@@ -58,21 +67,31 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 boolean found = false;
+                SampleUser u = null;
                 for(SampleUser currentUser : users){
                     String password = currentUser.getPassword();
                     String sentPassword = passwordEditText.getText().toString();
                     if(currentUser.getUsername().toLowerCase().equals(usernameEditText.getText().toString().toLowerCase())
                             && currentUser.getPassword().equals(passwordEditText.getText().toString())){
                         found = true;
+                        u = currentUser;
                         break;
                     }
                 }
 
-                if(found)
-                    Toast.makeText(getContext(), "Logging in!", Toast.LENGTH_LONG).show();
+                if(found){
+                    if(onLoggedInListener == null)
+                        return;
+                    onLoggedInListener.onLoggedIn(u);
+                }
                 else
                     Toast.makeText(getContext(), "Invalid Username / Password", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public void clearFields(){
+        usernameEditText.setText("");
+        passwordEditText.setText("");
     }
 }

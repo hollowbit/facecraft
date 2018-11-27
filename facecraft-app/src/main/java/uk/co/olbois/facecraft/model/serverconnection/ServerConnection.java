@@ -68,6 +68,14 @@ public class ServerConnection implements Identifiable<Long> {
         this.role = role;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     public enum Role {
         MEMBER, ADMIN, OWNER
     }

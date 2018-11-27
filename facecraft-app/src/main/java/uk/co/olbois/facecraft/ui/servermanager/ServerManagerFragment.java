@@ -13,9 +13,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import uk.co.olbois.facecraft.R;
+import uk.co.olbois.facecraft.model.SampleUser;
 import uk.co.olbois.facecraft.model.UniversalDatabaseHandler;
 import uk.co.olbois.facecraft.model.serverconnection.ServerConnection;
 import uk.co.olbois.facecraft.sqlite.DatabaseException;
@@ -24,6 +26,9 @@ import uk.co.olbois.facecraft.sqlite.DatabaseException;
  * A placeholder fragment containing a simple view.
  */
 public class ServerManagerFragment extends Fragment {
+    public interface OnLoggedOutListener{
+        void onLoggedOut();
+    }
 
     private Button createConnectionButton;
     private Button logoutButton;
@@ -31,6 +36,14 @@ public class ServerManagerFragment extends Fragment {
     private TextView welcomeTextView;
     private UniversalDatabaseHandler udbh;
     private List<ServerConnection> connections;
+    private SampleUser user;
+
+    private OnLoggedOutListener onLoggedOutListener;
+
+    public void setOnLoggedOutListener(OnLoggedOutListener onLoggedOutListener){
+        this.onLoggedOutListener = onLoggedOutListener;
+    }
+
 
     public ServerManagerFragment() {
     }
@@ -44,22 +57,30 @@ public class ServerManagerFragment extends Fragment {
         logoutButton = root.findViewById(R.id.logout_Button);
         connectionsRecyclerView = root.findViewById(R.id.connections_RecyclerView);
         welcomeTextView = root.findViewById(R.id.welcome_TextView);
+        connections = new ArrayList<ServerConnection>();
 
         udbh = new UniversalDatabaseHandler(getContext());
 
-        try {
-            connections = udbh.getConnectionsTable().readAll();
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
         connectionsRecyclerView.setHasFixedSize(true);
         connectionsRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
         connectionsRecyclerView.setAdapter(new ConnectionsAdapter());
 
         connectionsRecyclerView.getAdapter().notifyDataSetChanged();
+
+        setUpLoggedOutButton();
         return root;
     }
 
+    private void setUpLoggedOutButton(){
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onLoggedOutListener == null)
+                    return;
+                onLoggedOutListener.onLoggedOut();
+            }
+        });
+    }
     private void setupCreateConnection(){
         createConnectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,5 +139,21 @@ public class ServerManagerFragment extends Fragment {
         public int getItemCount() {
             return connections.size();
         }
+    }
+
+    public void setUser(SampleUser u){
+        this.user = u;
+
+        try {
+            List<ServerConnection> unfilteredConnections = udbh.getConnectionsTable().readAll();
+            for(ServerConnection connection : unfilteredConnections){
+                if(connection.getUserId() == user.getId())
+                    connections.add(connection);
+            }
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+
+        connectionsRecyclerView.getAdapter().notifyDataSetChanged();
     }
 }
