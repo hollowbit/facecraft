@@ -18,14 +18,28 @@ class UniversalDatabaseHandler
 
     /*  NoteDatabaseHandler Tables */
     val connectionsTable: Table<ServerConnection>
+    val sampleUserTable: Table<SampleUser>
 
     init {
-        val connections = mutableListOf(
-                ServerConnection(0,"mc.hollowbit.net", 25565, 3, ServerConnection.Role.MEMBER),
-                ServerConnection(1,"realserver.realdomain.com", 25565, 16, ServerConnection.Role.ADMIN)
+        val users = mutableListOf(
+                SampleUser(0, "JJ", "Password123"),
+                SampleUser(1, "Nate", "Password123")
         )
+        val connections = mutableListOf(
+                ServerConnection(0,"mc.hollowbit.net", 25565, 3, ServerConnection.Role.MEMBER, 0),
+                ServerConnection(1,"realserver.realdomain.com", 25565, 16, ServerConnection.Role.ADMIN, 0),
+                ServerConnection(0,"mc.hollowbit.net", 25565, 3, ServerConnection.Role.OWNER, 1),
+                ServerConnection(0,"realhost.realdomain.com", 25565, 3, ServerConnection.Role.MEMBER, 1)
+        )
+
+
+
         connectionsTable = TableFactory.makeFactory(this, ServerConnection::class.java)
                 .setSeedData(connections)
+                .table
+
+        sampleUserTable = TableFactory.makeFactory(this, SampleUser::class.java)
+                .setSeedData(users)
                 .table
     }
 
@@ -39,9 +53,12 @@ class UniversalDatabaseHandler
 
     override fun onCreate(database: SQLiteDatabase) {
         database.execSQL(connectionsTable.getCreateTableStatement())
+        database.execSQL(sampleUserTable.getCreateTableStatement())
 
         if (connectionsTable.hasInitialData())
             connectionsTable.initialize(database)
+        if(sampleUserTable.hasInitialData())
+            sampleUserTable.initialize(database)
     }
 
     override fun onUpgrade(database: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

@@ -7,6 +7,7 @@ public class ServerConnection implements Identifiable<Long> {
     private Long id;
     private String host;
     private int port = 25565;
+    private Long userId;
 
     // TODO delete these, they will eventually be queried from the server
     private int userCount;
@@ -16,12 +17,13 @@ public class ServerConnection implements Identifiable<Long> {
 
     }
 
-    public ServerConnection(Long id, String host, int port, int userCount, Role role) {
+    public ServerConnection(Long id, String host, int port, int userCount, Role role, Long userId) {
         this.id = id;
         this.host = host;
         this.port = port;
         this.userCount = userCount;
         this.role = role;
+        this.userId = userId;
     }
 
     @Override
