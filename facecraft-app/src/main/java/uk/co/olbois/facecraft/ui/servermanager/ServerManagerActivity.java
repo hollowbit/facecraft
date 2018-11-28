@@ -12,6 +12,8 @@ import android.view.View;
 import uk.co.olbois.facecraft.R;
 import uk.co.olbois.facecraft.model.SampleUser;
 import uk.co.olbois.facecraft.model.serverconnection.ServerConnection;
+import uk.co.olbois.facecraft.ui.invite.InviteActivity;
+import uk.co.olbois.facecraft.ui.invite.InviteFragment;
 
 public class ServerManagerActivity extends AppCompatActivity {
 
@@ -47,10 +49,10 @@ public class ServerManagerActivity extends AppCompatActivity {
 
         //set event listener for reaching the hub with a connection
         serverManagerFragment.setOnConnectListener(new ServerManagerFragment.OnConnectListener() {
+            //TODO Uncomment these lines when HubActivity is made!
             //Intent intent = new Intent(ServerManagerActivity.this, HubActivity.class);
             @Override
             public void onConnect(ServerConnection connection) {
-
 
                 //intent.putExtra(HubActivity.param.INITIAL_CONNECTION, connection);
                 //startActivityForResult(intent, 0);
