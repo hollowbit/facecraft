@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -32,12 +34,38 @@ public class ChatroomActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_chatroom, container, false);
 
+        Button sendButton = view.findViewById(R.id.send_message_button);
+        final EditText input = view.findViewById(R.id.text_edit_text);
+
         messageData = generateMessages();
 
         // Set the message recycler view adapter
-        RecyclerView messageRecyclerView = view.findViewById(R.id.message_recycler_view);
+        final RecyclerView messageRecyclerView = view.findViewById(R.id.message_recycler_view);
+        final MessageAdapter messageAdapter = new MessageAdapter(messageData);
         messageRecyclerView.setLayoutManager(new LinearLayoutManager((getContext())));
-        messageRecyclerView.setAdapter(new MessageAdapter(messageData));
+        messageRecyclerView.setAdapter(messageAdapter);
+        messageRecyclerView.scrollToPosition(messageData.size() -1);
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // send the message and clear the message box
+                sendMessage(input.getText().toString());
+                input.setText("");
+
+                // sample a response every 2 messages
+                if (messageData.size() % 3 == 0) {
+                    sampleRespond();
+                }
+
+                // Notify the data changed
+                messageAdapter.notifyDataSetChanged();
+
+                // scroll to the bottom of th recycler view
+                messageRecyclerView.scrollToPosition(messageData.size() -1);
+            }
+        });
 
         return view;
     }
@@ -117,22 +145,45 @@ public class ChatroomActivityFragment extends Fragment {
 
     }
 
+    /**
+     * Generates a list of sample messages
+     * @return
+     */
     private List<Message> generateMessages() {
         List<Message> sampleData = new ArrayList<Message>();
 
         sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
-        sampleData.add(new Message("Nate", "app", "Hi, my name is Nate", new Date()));
-        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
-        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
-        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
-        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
-        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
-        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
-        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
-        sampleData.add(new Message("JJ", "app", "Hi, my name is JJ", new Date()));
+        sampleData.add(new Message("Nate", "game", "Hi, my name is Nate", new Date()));
+        sampleData.add(new Message("Alex", "app", "U guys are losers", new Date()));
+        sampleData.add(new Message("Ahmed", "app", "Hi everyone", new Date()));
+        sampleData.add(new Message("Ian", "game", "Emacs", new Date()));
+        sampleData.add(new Message("Jothua", "game", "hey guyth im jothua", new Date()));
+        sampleData.add(new Message("Kennard", "app", "I have many logins", new Date()));
+        sampleData.add(new Message("Natunaial", "game", "tuna", new Date()));
+        sampleData.add(new Message("JayJay2", "app", "Not all heroes wear caps", new Date()));
+        sampleData.add(new Message("Jessii", "game", "I spell my name with an i", new Date()));
 
 
         return sampleData;
+    }
+
+    /**
+     * a sample response message
+     */
+    private void sampleRespond() {
+
+        messageData.add(new Message("nate", "game", "hello user!", new Date()));
+    }
+
+    /**
+     * adds a message to the list of messages
+     * @param in
+     */
+    private void sendMessage(String in) {
+
+        //TODO get users info (maybe?????)
+
+        messageData.add(new Message("user", "app", in, new Date()));
     }
     
 
