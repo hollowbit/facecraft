@@ -72,10 +72,12 @@ public class ServerManagerFragment extends Fragment {
 
         udbh = new UniversalDatabaseHandler(getContext());
 
+        //Set up recycler view
         connectionsRecyclerView.setHasFixedSize(true);
         connectionsRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
         connectionsRecyclerView.setAdapter(new ConnectionsAdapter());
 
+        //refresh it
         connectionsRecyclerView.getAdapter().notifyDataSetChanged();
 
         setUpLoggedOutButton();
@@ -83,6 +85,7 @@ public class ServerManagerFragment extends Fragment {
         return root;
     }
 
+    //Creates a clickListener for logout that throws a onLoggedOut custom event.
     private void setUpLoggedOutButton(){
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,13 +96,17 @@ public class ServerManagerFragment extends Fragment {
             }
         });
     }
+    //creates a alert dialog to create a new connection (SQLite only for now)
     private void setUpCreateConnection(){
         createConnectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //set up alert dialog basic information
                 final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
                 alertDialog.setTitle("Create Connection!");
                 alertDialog.setMessage("Enter Domain : ");
+
+                //The view to show is an EditText instead of a textview
                 final EditText input = new EditText(getContext());
                 LinearLayout.LayoutParams lp  = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
@@ -109,11 +116,13 @@ public class ServerManagerFragment extends Fragment {
                 alertDialog.setView(input);
                 alertDialog.setIcon(R.drawable.rounded);
 
+                //set up Create button on Alert Dialog
                 alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Create", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String connectionString = input.getText().toString();
 
+                        //create the connection locally, then create it on sqlite db
                         ServerConnection conn = new ServerConnection();
                         conn.setHost(connectionString);
                         conn.setRole(ServerConnection.Role.OWNER);
@@ -132,6 +141,7 @@ public class ServerManagerFragment extends Fragment {
                 alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        //Nothing more to do, exit out of alert dialog
                         dialog.cancel();
                     }
                 });
@@ -156,10 +166,12 @@ public class ServerManagerFragment extends Fragment {
         }
 
         public void setConnection(final ServerConnection currentConnection){
+            //set Ui elements based on particular connection
             serverInformationTextView.setText("Server : " + currentConnection.getHost() + ":" + currentConnection.getPort());
             userCountTextView.setText("User Count : " + currentConnection.getUserCount());
             roleTextView.setText("Role : " + currentConnection.getRole());
 
+            //set up access button event handler, sends a connection to HubActivity
             accessButton.setOnClickListener(new View.OnClickListener(){
 
                 @Override
@@ -206,8 +218,10 @@ public class ServerManagerFragment extends Fragment {
         if(user == null)
             return;
 
+        //create a new connections list, dont populate old one
         connections = new ArrayList<ServerConnection>();
         try {
+            //get all connections and populate in-data connections array
             List<ServerConnection> unfilteredConnections = udbh.getConnectionsTable().readAll();
             for(ServerConnection connection : unfilteredConnections){
                 if(connection.getUserId() == user.getId())
@@ -216,7 +230,7 @@ public class ServerManagerFragment extends Fragment {
         } catch (DatabaseException e) {
             e.printStackTrace();
         }
-
+        //refresh adapter!
         connectionsRecyclerView.getAdapter().notifyDataSetChanged();
     }
 }

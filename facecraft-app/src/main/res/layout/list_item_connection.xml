@@ -9,10 +9,10 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/rounded"
-        android:backgroundTint="@android:color/holo_blue_dark"
+        android:backgroundTint="@color/design_default_color_primary_dark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -20,8 +20,8 @@
             android:id="@+id/access_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="36dp"
             android:layout_marginTop="12dp"
+            android:layout_marginEnd="36dp"
             android:text="ACCESS"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,10 +30,11 @@
             android:id="@+id/userCount_TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:text="TextView"
+            android:textColor="@android:color/background_light"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/access_Button"
             app:layout_constraintTop_toBottomOf="@+id/access_Button" />
@@ -45,6 +46,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="TextView"
+            android:textColor="@android:color/background_light"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,10 +54,11 @@
             android:id="@+id/role_TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
             android:text="TextView"
+            android:textColor="@android:color/background_light"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/serverInformation_TextView" />
