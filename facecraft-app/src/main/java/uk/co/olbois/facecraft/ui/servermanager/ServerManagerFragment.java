@@ -1,5 +1,7 @@
 package uk.co.olbois.facecraft.ui.servermanager;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -10,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +34,10 @@ public class ServerManagerFragment extends Fragment {
         void onLoggedOut();
     }
 
+    public interface OnConnectListener{
+        void onConnect(ServerConnection connection);
+    }
+
     private Button createConnectionButton;
     private Button logoutButton;
     private RecyclerView connectionsRecyclerView;
@@ -39,11 +47,15 @@ public class ServerManagerFragment extends Fragment {
     private SampleUser user;
 
     private OnLoggedOutListener onLoggedOutListener;
+    private OnConnectListener onConnectListener;
 
     public void setOnLoggedOutListener(OnLoggedOutListener onLoggedOutListener){
         this.onLoggedOutListener = onLoggedOutListener;
     }
 
+    public void setOnConnectListener(OnConnectListener onConnectListener){
+        this.onConnectListener = onConnectListener;
+    }
 
     public ServerManagerFragment() {
     }
@@ -57,7 +69,6 @@ public class ServerManagerFragment extends Fragment {
         logoutButton = root.findViewById(R.id.logout_Button);
         connectionsRecyclerView = root.findViewById(R.id.connections_RecyclerView);
         welcomeTextView = root.findViewById(R.id.welcome_TextView);
-        connections = new ArrayList<ServerConnection>();
 
         udbh = new UniversalDatabaseHandler(getContext());
 
@@ -68,6 +79,7 @@ public class ServerManagerFragment extends Fragment {
         connectionsRecyclerView.getAdapter().notifyDataSetChanged();
 
         setUpLoggedOutButton();
+        setUpCreateConnection();
         return root;
     }
 
@@ -81,11 +93,50 @@ public class ServerManagerFragment extends Fragment {
             }
         });
     }
-    private void setupCreateConnection(){
+    private void setUpCreateConnection(){
         createConnectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+                alertDialog.setTitle("Create Connection!");
+                alertDialog.setMessage("Enter Domain : ");
+                final EditText input = new EditText(getContext());
+                LinearLayout.LayoutParams lp  = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT
+                );
+                input.setLayoutParams(lp);
+                alertDialog.setView(input);
+                alertDialog.setIcon(R.drawable.rounded);
 
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Create", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String connectionString = input.getText().toString();
+
+                        ServerConnection conn = new ServerConnection();
+                        conn.setHost(connectionString);
+                        conn.setRole(ServerConnection.Role.OWNER);
+                        conn.setUserCount(1);
+                        conn.setUserId(user.getId());
+
+                        try {
+                            udbh.getConnectionsTable().create(conn);
+                            refreshList();
+                        } catch (DatabaseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                alertDialog.show();
             }
         });
     }
@@ -104,7 +155,7 @@ public class ServerManagerFragment extends Fragment {
             accessButton = itemView.findViewById(R.id.access_Button);
         }
 
-        public void setConnection(ServerConnection currentConnection){
+        public void setConnection(final ServerConnection currentConnection){
             serverInformationTextView.setText("Server : " + currentConnection.getHost() + ":" + currentConnection.getPort());
             userCountTextView.setText("User Count : " + currentConnection.getUserCount());
             roleTextView.setText("Role : " + currentConnection.getRole());
@@ -113,7 +164,9 @@ public class ServerManagerFragment extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(), "Connecting!", Toast.LENGTH_LONG).show();
+                    if(onConnectListener == null)
+                        return;
+                    onConnectListener.onConnect(currentConnection);
                 }
             });
         }
@@ -144,6 +197,16 @@ public class ServerManagerFragment extends Fragment {
     public void setUser(SampleUser u){
         this.user = u;
 
+        welcomeTextView.setText("Welcome, " + user.getUsername() + " !");
+
+        refreshList();
+    }
+
+    public void refreshList(){
+        if(user == null)
+            return;
+
+        connections = new ArrayList<ServerConnection>();
         try {
             List<ServerConnection> unfilteredConnections = udbh.getConnectionsTable().readAll();
             for(ServerConnection connection : unfilteredConnections){
