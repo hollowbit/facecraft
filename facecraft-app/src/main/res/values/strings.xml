@@ -11,4 +11,6 @@
     <item>PM</item>
     </string-array>
 
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_invite">InviteActivity</string>
 </resources>

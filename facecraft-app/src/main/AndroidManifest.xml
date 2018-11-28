@@ -10,8 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.calendar.CalendarActivity"
-            android:label="@string/title_activity_calendar"
+            android:name=".ui.servermanager.ServerManagerActivity"
+            android:label="@string/title_activity_server_manager"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".ui.chatroom.ChatroomActivity"
+            android:label="@string/title_activity_chatroom"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar">
 
             <intent-filter>
@@ -22,13 +31,19 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.calendar.CalendarActivity"
+            android:label="@string/title_activity_calendar"/>
+        <activity
             android:name=".ui.chatroom.ChatroomActivity"
             android:label="@string/title_activity_chatroom"
             android:theme="@style/AppTheme.NoActionBar" />
-    <activity
+        <activity
         android:name=".ui.servermanager.ServerManagerActivity"
         android:label="@string/title_activity_server_manager"
         android:theme="@style/AppTheme.NoActionBar"/>
+            android:name=".ui.invite.InviteActivity"
+            android:label="@string/title_activity_invite"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

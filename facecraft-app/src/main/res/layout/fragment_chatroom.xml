@@ -5,6 +5,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.chatroom.ChatroomActivityFragment"
+    tools:layout_editor_absoluteY="137dp"
     tools:showIn="@layout/activity_chatroom">
+
+    <EditText
+        android:id="@+id/text_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="message"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:singleLine="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/send_message_button"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/message_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/text_edit_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/send_message_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
