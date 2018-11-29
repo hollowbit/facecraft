@@ -24,7 +24,6 @@
             android:theme="@style/AppTheme.NoActionBar">
 
             <intent-filter>
-                <!--<action android:name="android.intent.action.MAIN" />-->
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,17 +33,8 @@
             android:name=".ui.calendar.CalendarActivity"
             android:label="@string/title_activity_calendar"/>
         <activity
-            android:name=".ui.chatroom.ChatroomActivity"
-            android:label="@string/title_activity_chatroom"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-        android:name=".ui.servermanager.ServerManagerActivity"
-        android:label="@string/title_activity_server_manager"
-        android:theme="@style/AppTheme.NoActionBar"/>
-        <activity
             android:name=".ui.invite.InviteActivity"
             android:label="@string/title_activity_invite"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
-
 </manifest>
