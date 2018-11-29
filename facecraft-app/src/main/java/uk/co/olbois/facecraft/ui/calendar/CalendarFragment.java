@@ -55,6 +55,7 @@ public class CalendarFragment extends Fragment {
                 long currentDate = System.currentTimeMillis();
                 if(date > currentDate){
                     Toast.makeText(getContext(), "Cannot set an event in the past" ,Toast.LENGTH_SHORT).show();
+                    calendarView.setDate(-1);
                 }
                 else {
                     calendarView.setDate(date);
@@ -78,8 +79,9 @@ public class CalendarFragment extends Fragment {
 
 
                 time = String.valueOf(timeView.getText()).trim();
-
-                Toast.makeText(getContext(), "Event " + titleView.getText() + " saved for \n" + date + " at " + time ,Toast.LENGTH_SHORT).show();
+                if( unixTime > 0 ){
+                    Toast.makeText(getContext(), "Event " + titleView.getText() + " saved for \n" + date + " at " + time ,Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
