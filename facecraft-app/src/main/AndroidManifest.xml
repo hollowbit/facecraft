@@ -16,6 +16,10 @@
         <activity
             android:name=".ui.chatroom.ChatroomActivity"
             android:label="@string/title_activity_chatroom"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.serverconsole.ServerConsoleActivity"
+            android:label="@string/title_activity_server_console"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
