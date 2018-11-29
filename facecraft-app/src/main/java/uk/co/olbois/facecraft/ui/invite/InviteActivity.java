@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import uk.co.olbois.facecraft.R;
+import uk.co.olbois.facecraft.model.SampleUser;
 import uk.co.olbois.facecraft.model.serverconnection.ServerConnection;
 
 public class InviteActivity extends AppCompatActivity {
@@ -17,6 +18,7 @@ public class InviteActivity extends AppCompatActivity {
 
     public static class param {
         public static final String INITIAL_CONNECTION = "initial_connection";
+        public static final String INITIAL_USER ="initial_user";
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class InviteActivity extends AppCompatActivity {
         Intent intent = getIntent();
         //retrieve the user that was sent
         ServerConnection c = intent.getParcelableExtra(param.INITIAL_CONNECTION);
+        SampleUser sampleUser = intent.getParcelableExtra(param.INITIAL_USER);
 
         inviteFragment.setConnection(c);
     }

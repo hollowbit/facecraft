@@ -35,7 +35,7 @@ public class ServerManagerFragment extends Fragment {
     }
 
     public interface OnConnectListener{
-        void onConnect(ServerConnection connection);
+        void onConnect(ServerConnection connection, SampleUser user);
     }
 
     private Button createConnectionButton;
@@ -178,7 +178,7 @@ public class ServerManagerFragment extends Fragment {
                 public void onClick(View v) {
                     if(onConnectListener == null)
                         return;
-                    onConnectListener.onConnect(currentConnection);
+                    onConnectListener.onConnect(currentConnection, user);
                 }
             });
         }
