@@ -16,7 +16,7 @@ import uk.co.olbois.facecraft.controladapter.TestServerConsoleAdapterImpl
 /**
  * A placeholder fragment containing a simple view.
  */
-class ServerConsoleActivityFragment : Fragment() {
+class ServerConsoleFragment : Fragment() {
 
     private lateinit var commandEditText : EditText
     private lateinit var consoleTextView : TextView

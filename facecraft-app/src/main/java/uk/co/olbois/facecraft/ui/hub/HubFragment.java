@@ -24,6 +24,8 @@ public class HubFragment extends Fragment {
     private OnFragmentChosenListener onFragmentChosenListener;
     private SampleUser user;
     private ServerConnection connection;
+    private Button inviteButton;
+    private Button serverConsoleButton;
 
     public HubFragment() {
     }
@@ -35,8 +37,8 @@ public class HubFragment extends Fragment {
 
         // get all buttons
         Button chatButton = view.findViewById(R.id.button_chatroom);
-        Button inviteButton = view.findViewById(R.id.button_invite);
-        Button serverManagerButton = view.findViewById(R.id.button_server_manager);
+        inviteButton = view.findViewById(R.id.button_invite);
+        serverConsoleButton = view.findViewById(R.id.button_server_manager);
         Button eventButton = view.findViewById(R.id.button_event);
 
         // set button on click listeners
@@ -56,7 +58,7 @@ public class HubFragment extends Fragment {
             }
         });
 
-        serverManagerButton.setOnClickListener(new View.OnClickListener() {
+        serverConsoleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onFragmentChosenListener.onFragmentChosen(connection, user, "server");
@@ -82,6 +84,10 @@ public class HubFragment extends Fragment {
     }
     public void setConnection(ServerConnection c) {
         this.connection = c;
+        if(connection.getRole() == ServerConnection.Role.MEMBER) {
+            inviteButton.setEnabled(false);
+            serverConsoleButton.setEnabled(false);
+        }
     }
 
     public SampleUser getUser() {

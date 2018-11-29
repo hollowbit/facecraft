@@ -18,6 +18,7 @@ import uk.co.olbois.facecraft.ui.chatroom.ChatroomFragment;
 import uk.co.olbois.facecraft.ui.invite.InviteActivity;
 import uk.co.olbois.facecraft.ui.invite.InviteFragment;
 import uk.co.olbois.facecraft.ui.login.LoginActivity;
+import uk.co.olbois.facecraft.ui.serverconsole.ServerConsoleActivity;
 import uk.co.olbois.facecraft.ui.servermanager.ServerManagerActivity;
 import uk.co.olbois.facecraft.ui.servermanager.ServerManagerFragment;
 
@@ -75,13 +76,13 @@ public class HubActivity extends AppCompatActivity {
                         sendIntent.putExtra(CalendarActivity.param.INITIAL_USER, u);
                         startActivityForResult(sendIntent, 0);
                         break;
-                    /*
+
                     case "server":
-                        sendIntent = new Intent(HubActivity.this, ServerCommandsActivity.class);
-                        sendIntent.putExtra(ServerCommandsActivity.param.INITIAL_USER, u);
+                        sendIntent = new Intent(HubActivity.this, ServerConsoleActivity.class);
+                        //sendIntent.putExtra(ServerConsoleActivity.param.INITIAL_USER, u);
                         startActivityForResult(sendIntent, 0);
                         break;
-                     */
+
                 }
             }
         });
