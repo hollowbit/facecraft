@@ -6,4 +6,6 @@
     <string name="title_activity_chatroom">ChatroomActivity</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_invite">InviteActivity</string>
+    <string name="title_activity_hub">HubActivity</string>
+    <string name="title_activity_calendar">CalendarActivity</string>
 </resources>

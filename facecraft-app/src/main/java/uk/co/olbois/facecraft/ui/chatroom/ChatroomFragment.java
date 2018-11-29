@@ -12,21 +12,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import uk.co.olbois.facecraft.R;
+import uk.co.olbois.facecraft.model.SampleUser;
 import uk.co.olbois.facecraft.model.message.Message;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ChatroomActivityFragment extends Fragment {
+public class ChatroomFragment extends Fragment {
 
     private List<Message> messageData;
+    private SampleUser sampleUser;
 
-    public ChatroomActivityFragment() {
+    public ChatroomFragment() {
     }
 
     @Override
@@ -105,8 +108,9 @@ public class ChatroomActivityFragment extends Fragment {
             username.setText(message.getUsername());
             userType.setText(message.getSenderType());
 
-            // TODO format date
-            time.setText(message.getTime().toString());
+            SimpleDateFormat formatter = new SimpleDateFormat("EE MMM d 'at' HH:mm");
+
+            time.setText(formatter.format(message.getTime()));
             messageText.setText(message.getContent());
         }
     }
@@ -172,7 +176,7 @@ public class ChatroomActivityFragment extends Fragment {
      */
     private void sampleRespond() {
 
-        messageData.add(new Message("nate", "game", "hello user!", new Date()));
+        messageData.add(new Message("nate2", "game", "hello user!", new Date()));
     }
 
     /**
@@ -181,9 +185,11 @@ public class ChatroomActivityFragment extends Fragment {
      */
     private void sendMessage(String in) {
 
-        //TODO get users info (maybe?????)
+        messageData.add(new Message(sampleUser.getUsername(), "app", in, new Date()));
+    }
 
-        messageData.add(new Message("user", "app", in, new Date()));
+    public void setUser(SampleUser u) {
+        this.sampleUser = u;
     }
     
 
