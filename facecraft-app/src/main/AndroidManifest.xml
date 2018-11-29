@@ -22,16 +22,12 @@
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.calendar.CalendarActivity"
-            android:label="@string/title_activity_calendar"/>
         <activity
             android:name=".ui.invite.InviteActivity"
             android:label="@string/title_activity_invite"
@@ -45,4 +41,5 @@
             android:label="@string/title_activity_calendar"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
+
 </manifest>
