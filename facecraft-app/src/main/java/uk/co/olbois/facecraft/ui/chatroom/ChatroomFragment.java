@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -107,8 +108,9 @@ public class ChatroomFragment extends Fragment {
             username.setText(message.getUsername());
             userType.setText(message.getSenderType());
 
-            // TODO format date
-            time.setText(message.getTime().toString());
+            SimpleDateFormat formatter = new SimpleDateFormat("EE MMM d 'at' HH:mm");
+
+            time.setText(formatter.format(message.getTime()));
             messageText.setText(message.getContent());
         }
     }

@@ -70,13 +70,13 @@ public class HubActivity extends AppCompatActivity {
                         startActivityForResult(sendIntent, 0);
                         break;
                     /*case "event":
-                        sendIntent = new Intent(HubActivity.this, .class);
-                        sendIntent.putExtra(param.INITIAL_USER, u);
+                        sendIntent = new Intent(HubActivity.this, EventActivity.class);
+                        sendIntent.putExtra(EventActivity.param.INITIAL_USER, u);
                         startActivityForResult(sendIntent, 0);
                         break;
                     case "server":
-                        sendIntent = new Intent(HubActivity.this, ServerManagerFragment.class);
-                        sendIntent.putExtra(ServerManagerActivity.param.INITIAL_USER, u);
+                        sendIntent = new Intent(HubActivity.this, ServerCommandsActivity.class);
+                        sendIntent.putExtra(ServerCommandsActivity.param.INITIAL_USER, u);
                         startActivityForResult(sendIntent, 0);
                         break;
                      */
