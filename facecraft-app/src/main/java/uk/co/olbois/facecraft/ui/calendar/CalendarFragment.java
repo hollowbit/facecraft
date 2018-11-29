@@ -1,5 +1,7 @@
 package uk.co.olbois.facecraft.ui.calendar;
 
+import android.icu.util.Calendar;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +16,8 @@ import org.w3c.dom.Text;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Year;
+import java.util.Date;
 
 import uk.co.olbois.facecraft.R;
 
@@ -37,6 +41,27 @@ public class CalendarFragment extends Fragment {
         final TextView timeView = root.findViewById(R.id.editTime);
 
         final EditText titleView = root.findViewById(R.id.editTextTitle);
+
+        final Calendar calendar = Calendar.getInstance();
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                calendar.set(Calendar.YEAR,year);
+                calendar.set(Calendar.MONTH, month);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                long date =  calendar.getTime().getTime();
+                long currentDate = System.currentTimeMillis();
+                if(date > currentDate){
+                    Toast.makeText(getContext(), "Cannot set an event in the past" ,Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    calendarView.setDate(date);
+                }
+
+            }
+        });
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
