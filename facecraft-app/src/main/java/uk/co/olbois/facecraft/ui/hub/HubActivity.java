@@ -12,6 +12,7 @@ import android.view.View;
 import uk.co.olbois.facecraft.R;
 import uk.co.olbois.facecraft.model.SampleUser;
 import uk.co.olbois.facecraft.model.serverconnection.ServerConnection;
+import uk.co.olbois.facecraft.ui.calendar.CalendarActivity;
 import uk.co.olbois.facecraft.ui.chatroom.ChatroomActivity;
 import uk.co.olbois.facecraft.ui.chatroom.ChatroomFragment;
 import uk.co.olbois.facecraft.ui.invite.InviteActivity;
@@ -69,11 +70,12 @@ public class HubActivity extends AppCompatActivity {
                         sendIntent.putExtra(ChatroomActivity.param.INITIAL_USER, u);
                         startActivityForResult(sendIntent, 0);
                         break;
-                    /*case "event":
-                        sendIntent = new Intent(HubActivity.this, EventActivity.class);
-                        sendIntent.putExtra(EventActivity.param.INITIAL_USER, u);
+                    case "event":
+                        sendIntent = new Intent(HubActivity.this, CalendarActivity.class);
+                        sendIntent.putExtra(CalendarActivity.param.INITIAL_USER, u);
                         startActivityForResult(sendIntent, 0);
                         break;
+                    /*
                     case "server":
                         sendIntent = new Intent(HubActivity.this, ServerCommandsActivity.class);
                         sendIntent.putExtra(ServerCommandsActivity.param.INITIAL_USER, u);

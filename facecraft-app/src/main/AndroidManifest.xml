@@ -35,6 +35,10 @@
         <activity
             android:name=".ui.hub.HubActivity"
             android:label="@string/title_activity_hub"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.calendar.CalendarActivity"
+            android:label="@string/title_activity_calendar"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
