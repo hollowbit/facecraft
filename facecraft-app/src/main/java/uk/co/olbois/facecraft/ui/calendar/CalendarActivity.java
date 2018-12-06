@@ -32,13 +32,21 @@ public class CalendarActivity extends AppCompatActivity {
 
 
     public void showTimePickerDialog(View v) {
-        DialogFragment newFragment = new TimePickerFragment(new myCallBack() {
+        final DialogFragment newFragment = new TimePickerFragment(new myCallBack() {
             @Override
             public void UpdateMyText(String mystr) {
                 EditText txtView = (EditText)findViewById(R.id.editTime);
                 txtView.setText(mystr);
             }
+
+            @Override
+            public String getMyText() {
+                EditText txtView = (EditText)findViewById(R.id.editTime);
+                return txtView.getText().toString();
+            }
         });
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
+
+
 }

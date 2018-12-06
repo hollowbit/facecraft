@@ -20,16 +20,31 @@ public class TimePickerFragment extends DialogFragment
         this.mCallBack=callBack;
     }
 
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current time as the default values for the picker
         final Calendar c = Calendar.getInstance();
+
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
 
+
         // Create a new instance of TimePickerDialog and return it
-        return new TimePickerDialog(getActivity(), this, hour, minute,
-                DateFormat.is24HourFormat(getActivity()));
+        TimePickerDialog timePicker = new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
+
+        String time = mCallBack.getMyText();
+        if(time != "" && time.contains(":")) {
+            String[] times = time.split(":");
+            hour = Integer.parseInt(times[0].trim());
+            minute = Integer.parseInt(times[1].trim());
+
+            timePicker.updateTime(hour,minute);
+        }
+
+
+
+        return  timePicker;
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -41,4 +56,8 @@ public class TimePickerFragment extends DialogFragment
         this.mCallBack.UpdateMyText(hour + " : " + minutes);
 
     }
+
+
+
+
 }
