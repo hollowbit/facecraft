@@ -1,4 +1,4 @@
-package uk.co.olbois.facecraft.ui.chatroom;
+package uk.co.olbois.facecraft.ui.invite;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,37 +11,31 @@ import android.view.View;
 import uk.co.olbois.facecraft.R;
 import uk.co.olbois.facecraft.model.SampleUser;
 import uk.co.olbois.facecraft.model.serverconnection.ServerConnection;
-import uk.co.olbois.facecraft.ui.hub.HubActivity;
-import uk.co.olbois.facecraft.ui.hub.HubFragment;
 
-public class ChatroomActivity extends AppCompatActivity {
+public class InviteActivity extends AppCompatActivity {
 
-    private static ChatroomFragment chatroomFragment;
+    private InviteFragment inviteFragment;
 
     public static class param {
-        public static final String INITIAL_USER = "initial_user";
         public static final String INITIAL_CONNECTION = "initial_connection";
+        public static final String INITIAL_USER ="initial_user";
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chatroom);
+        setContentView(R.layout.activity_invite);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        chatroomFragment = (ChatroomFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
 
+        inviteFragment = (InviteFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
         //Expect to be created out of an intent
         Intent intent = getIntent();
-
         //retrieve the user that was sent
-        SampleUser u = intent.getParcelableExtra(param.INITIAL_USER);
-        ServerConnection serverConnection = intent.getParcelableExtra(param.INITIAL_CONNECTION);
+        ServerConnection c = intent.getParcelableExtra(param.INITIAL_CONNECTION);
+        SampleUser sampleUser = intent.getParcelableExtra(param.INITIAL_USER);
 
-        //set user
-        chatroomFragment.setUser(u);
-
+        inviteFragment.setConnection(c);
     }
 
 }
