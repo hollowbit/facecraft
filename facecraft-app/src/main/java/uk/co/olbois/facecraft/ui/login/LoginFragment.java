@@ -84,8 +84,10 @@ public class LoginFragment extends Fragment {
                         return;
                     onLoggedInListener.onLoggedIn(u);
                 }
-                else
+                else{
                     Toast.makeText(getContext(), "Invalid Username / Password", Toast.LENGTH_SHORT).show();
+                    clearFields();
+                }
             }
         });
     }
