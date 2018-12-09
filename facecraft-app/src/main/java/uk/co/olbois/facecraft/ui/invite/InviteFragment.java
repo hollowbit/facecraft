@@ -1,5 +1,6 @@
 package uk.co.olbois.facecraft.ui.invite;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -9,10 +10,13 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +65,7 @@ public class InviteFragment extends Fragment {
         currentUsersRecyclerView.setAdapter(new CurrentUsersAdapter());
 
         currentUsersRecyclerView.getAdapter().notifyDataSetChanged();
-        rolePossibilities = ServerConnection.Role.values();
+        rolePossibilities = new ServerConnection.Role[]{ServerConnection.Role.MEMBER, ServerConnection.Role.ADMIN};
 
         return root;
     }
@@ -139,13 +143,15 @@ public class InviteFragment extends Fragment {
         private TextView usernameTextView;
         private TextView roleTextView;
         private Button removeButton;
-        private Button changeRoleButton;
+        private Spinner roleSpinner;
+        private int check;
         public CurrentUsersViewHolder(@NonNull View itemView) {
             super(itemView);
             usernameTextView = itemView.findViewById(R.id.username_TextView);
-            changeRoleButton = itemView.findViewById(R.id.changeRole_Button);
+            roleSpinner = itemView.findViewById(R.id.roles_Spinner);
             removeButton = itemView.findViewById(R.id.remove_Button);
             roleTextView = itemView.findViewById(R.id.role_TextView);
+            check = 0;
         }
 
         //Set user for this particular view, this assigns the values to the textviews AND sets up the invite button
@@ -157,9 +163,17 @@ public class InviteFragment extends Fragment {
                 removeButton.setEnabled(false);
             }
 
-            if(connection.getRole() == ServerConnection.Role.OWNER){
-                changeRoleButton.setEnabled(true);
+            ArrayAdapter<ServerConnection.Role> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, rolePossibilities);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+
+            roleSpinner.setAdapter(adapter);
+
+            if(connection.getRole() != ServerConnection.Role.OWNER){
+                roleSpinner.setEnabled(false);
+                roleSpinner.setVisibility(View.INVISIBLE);
             }
+
 
             removeButton.setOnClickListener(new View.OnClickListener(){
 
@@ -181,7 +195,27 @@ public class InviteFragment extends Fragment {
                 }
             });
 
+            roleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
+                    if(++check > 1){
+                        currentValues.second.setRole(rolePossibilities[position]);
+                        try {
+                            udbh.getConnectionsTable().update(currentValues.second);
+                            roleTextView.setText("Role : " + currentValues.second.getRole().toString());
+                        } catch (DatabaseException e) {
+                            e.printStackTrace();
+                        }
+                        Toast.makeText(getContext(), rolePossibilities[position].toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
 
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
         }
     }
 
