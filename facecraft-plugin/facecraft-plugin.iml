@@ -51,22 +51,50 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="Gradle: kotlin-stdlib-jdk8-1.2.51" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spigot-api-1.13.1-R0.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: bukkit-1.13.1-R0.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: kotlin-stdlib-jdk7-1.2.51" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: kotlin-stdlib-1.2.51" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: commons-lang-2.6" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: json-simple-1.1.1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: bungeecord-chat-1.13-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: guava-21.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: gson-2.8.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: snakeyaml-1.21" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: kotlin-stdlib-common-1.2.51" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: annotations-13.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: junit-4.10" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: hamcrest-core-1.1" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: kotlin-stdlib-jdk8-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spigot-api-1.13.1-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: bukkit-1.13.1-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: kotlin-stdlib-jdk7-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: kotlin-stdlib-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: commons-lang-2.6" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: json-simple-1.1.1" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: bungeecord-chat-1.13-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: guava-21.0" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: gson-2.8.0" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: snakeyaml-1.21" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: kotlin-stdlib-common-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: annotations-13.0" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: junit-4.10" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: hamcrest-core-1.1" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: kotlin-stdlib-jdk8-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spigot-api-1.13.1-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: bukkit-1.13.1-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: kotlin-stdlib-jdk7-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: kotlin-stdlib-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: commons-lang-2.6" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: json-simple-1.1.1" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: bungeecord-chat-1.13-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: guava-21.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: gson-2.8.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: snakeyaml-1.21" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: kotlin-stdlib-common-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: annotations-13.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: junit-4.10" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: hamcrest-core-1.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: kotlin-stdlib-jdk8-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spigot-api-1.13.1-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: bukkit-1.13.1-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: json-simple-1.1.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="Gradle: junit-4.12" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: kotlin-stdlib-jdk7-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: kotlin-stdlib-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: commons-lang-2.6" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: bungeecord-chat-1.13-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: guava-21.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: gson-2.8.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: snakeyaml-1.21" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="Gradle: hamcrest-core-1.3" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: kotlin-stdlib-common-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: annotations-13.0" level="project" />
   </component>
 </module>
