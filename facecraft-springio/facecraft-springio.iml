@@ -45,158 +45,241 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/kotlin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/kotlin" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test/kotlin" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="kotlin-stdlib-jdk8-1.2.50" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="kotlin-reflect-1.2.51" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-boot-starter-web-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="kotlin-stdlib-jdk7-1.2.50" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="kotlin-stdlib-1.2.50" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-boot-starter-json-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-boot-starter-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-boot-starter-tomcat-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="hibernate-validator-6.0.12.Final" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-webmvc-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-web-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="kotlin-stdlib-common-1.2.50" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="annotations-13.0" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-boot-autoconfigure-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-boot-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-boot-starter-logging-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="javax.annotation-api-1.3.2" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-context-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-aop-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-beans-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-expression-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-core-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="snakeyaml-1.19" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="jackson-datatype-jdk8-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="jackson-datatype-jsr310-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="jackson-module-parameter-names-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="jackson-databind-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="tomcat-embed-websocket-8.5.34" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="tomcat-embed-core-8.5.34" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="tomcat-embed-el-8.5.34" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="validation-api-2.0.1.Final" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="jboss-logging-3.3.2.Final" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="classmate-1.3.4" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="logback-classic-1.2.3" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="log4j-to-slf4j-2.10.0" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="jul-to-slf4j-1.7.25" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="spring-jcl-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="jackson-annotations-2.9.0" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="jackson-core-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="logback-core-1.2.3" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="slf4j-api-1.7.25" level="project" />
-    <orderEntry type="library" exported="" scope="PROVIDED" name="log4j-api-2.10.0" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="kotlin-stdlib-jdk8-1.2.50" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="kotlin-reflect-1.2.51" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-boot-starter-web-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="kotlin-stdlib-jdk7-1.2.50" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="kotlin-stdlib-1.2.50" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-boot-starter-json-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-boot-starter-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-boot-starter-tomcat-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="hibernate-validator-6.0.12.Final" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-webmvc-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-web-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="kotlin-stdlib-common-1.2.50" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="annotations-13.0" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-boot-autoconfigure-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-boot-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-boot-starter-logging-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="javax.annotation-api-1.3.2" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-context-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-aop-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-beans-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-expression-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-core-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="snakeyaml-1.19" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="jackson-datatype-jdk8-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="jackson-datatype-jsr310-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="jackson-module-parameter-names-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="jackson-databind-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="tomcat-embed-websocket-8.5.34" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="tomcat-embed-core-8.5.34" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="tomcat-embed-el-8.5.34" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="validation-api-2.0.1.Final" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="jboss-logging-3.3.2.Final" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="classmate-1.3.4" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="logback-classic-1.2.3" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="log4j-to-slf4j-2.10.0" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="jul-to-slf4j-1.7.25" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="spring-jcl-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="jackson-annotations-2.9.0" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="jackson-core-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="logback-core-1.2.3" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="slf4j-api-1.7.25" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="log4j-api-2.10.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="kotlin-stdlib-jdk8-1.2.50" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="kotlin-reflect-1.2.51" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-boot-starter-web-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-boot-starter-test-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="junit-4.12" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="kotlin-stdlib-jdk7-1.2.50" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="kotlin-stdlib-1.2.50" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-boot-starter-json-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-boot-starter-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-boot-starter-tomcat-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="hibernate-validator-6.0.12.Final" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-webmvc-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-web-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="hamcrest-library-1.3" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="hamcrest-core-1.3" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-boot-test-autoconfigure-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-boot-test-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="json-path-2.4.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="assertj-core-3.9.1" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="mockito-core-2.15.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="jsonassert-1.5.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-test-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-boot-autoconfigure-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-boot-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-context-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-expression-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-aop-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-beans-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-core-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="xmlunit-core-2.5.1" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="kotlin-stdlib-common-1.2.50" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="annotations-13.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-boot-starter-logging-2.0.5.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="javax.annotation-api-1.3.2" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="snakeyaml-1.19" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="jackson-datatype-jdk8-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="jackson-datatype-jsr310-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="jackson-module-parameter-names-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="jackson-databind-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="tomcat-embed-websocket-8.5.34" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="tomcat-embed-core-8.5.34" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="tomcat-embed-el-8.5.34" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="validation-api-2.0.1.Final" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="jboss-logging-3.3.2.Final" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="classmate-1.3.4" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="json-smart-2.3" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="logback-classic-1.2.3" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="log4j-to-slf4j-2.10.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="jul-to-slf4j-1.7.25" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="slf4j-api-1.7.25" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="byte-buddy-1.7.11" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="byte-buddy-agent-1.7.11" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="objenesis-2.6" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="android-json-0.0.20131108.vaadin1" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="spring-jcl-5.0.9.RELEASE" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="jackson-annotations-2.9.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="jackson-core-2.9.6" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="accessors-smart-1.2" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="logback-core-1.2.3" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="log4j-api-2.10.0" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="asm-5.0.4" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: kotlin-stdlib-jdk8-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: kotlin-reflect-1.2.51" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-boot-starter-data-rest-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-boot-starter-web-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-boot-starter-data-jpa-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-session-core-2.0.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: jaxb-api-2.3.0" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: kotlin-stdlib-jdk7-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: kotlin-stdlib-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-boot-starter-json-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-boot-starter-aop-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-boot-starter-jdbc-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-boot-starter-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-boot-starter-tomcat-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: hibernate-validator-6.0.13.Final" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-data-rest-webmvc-3.0.11.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-data-rest-core-3.0.11.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-hateoas-0.25.0.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-webmvc-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-web-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: javax.transaction-api-1.2" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: hibernate-core-5.2.17.Final" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-data-jpa-2.0.11.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-aspects-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-boot-autoconfigure-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-boot-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-plugin-core-1.2.0.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-context-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-aop-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-orm-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-jdbc-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-tx-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-data-commons-2.0.11.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-beans-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-expression-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-core-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-jcl-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: kotlin-stdlib-common-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: annotations-13.0" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: spring-boot-starter-logging-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: javax.annotation-api-1.3.2" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: snakeyaml-1.19" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: jackson-datatype-jdk8-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: jackson-datatype-jsr310-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: jackson-module-parameter-names-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: jackson-databind-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: tomcat-embed-websocket-8.5.34" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: tomcat-embed-core-8.5.34" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: tomcat-embed-el-8.5.34" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: validation-api-2.0.1.Final" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: hibernate-commons-annotations-5.0.1.Final" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: jboss-logging-3.3.2.Final" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: classmate-1.3.4" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: aspectjweaver-1.8.13" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: HikariCP-2.7.9" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: hibernate-jpa-2.1-api-1.0.2.Final" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: javassist-3.22.0-GA" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: antlr-2.7.7" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: jandex-2.0.3.Final" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: dom4j-1.6.1" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: logback-classic-1.2.3" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: log4j-to-slf4j-2.10.0" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: jul-to-slf4j-1.7.25" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: slf4j-api-1.7.25" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: jackson-annotations-2.9.0" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: jackson-core-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: evo-inflector-1.2.2" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: logback-core-1.2.3" level="project" />
+    <orderEntry type="library" exported="" scope="PROVIDED" name="Gradle: log4j-api-2.10.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: kotlin-stdlib-jdk8-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: kotlin-reflect-1.2.51" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-boot-starter-data-rest-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-boot-starter-web-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-boot-starter-data-jpa-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-session-core-2.0.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: jaxb-api-2.3.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: h2-1.4.197" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: kotlin-stdlib-jdk7-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: kotlin-stdlib-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-boot-starter-json-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-boot-starter-aop-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-boot-starter-jdbc-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-boot-starter-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-boot-starter-tomcat-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: hibernate-validator-6.0.13.Final" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-data-rest-webmvc-3.0.11.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-data-rest-core-3.0.11.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-hateoas-0.25.0.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-webmvc-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-web-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: javax.transaction-api-1.2" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: hibernate-core-5.2.17.Final" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-data-jpa-2.0.11.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-aspects-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-boot-autoconfigure-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-boot-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-plugin-core-1.2.0.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-context-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-aop-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-orm-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-jdbc-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-tx-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-data-commons-2.0.11.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-beans-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-expression-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-core-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-jcl-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: kotlin-stdlib-common-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: annotations-13.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: spring-boot-starter-logging-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: javax.annotation-api-1.3.2" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: snakeyaml-1.19" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: jackson-datatype-jdk8-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: jackson-datatype-jsr310-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: jackson-module-parameter-names-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: jackson-databind-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: tomcat-embed-websocket-8.5.34" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: tomcat-embed-core-8.5.34" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: tomcat-embed-el-8.5.34" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: validation-api-2.0.1.Final" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: hibernate-commons-annotations-5.0.1.Final" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: jboss-logging-3.3.2.Final" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: classmate-1.3.4" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: aspectjweaver-1.8.13" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: HikariCP-2.7.9" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: hibernate-jpa-2.1-api-1.0.2.Final" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: javassist-3.22.0-GA" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: antlr-2.7.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: jandex-2.0.3.Final" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: dom4j-1.6.1" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: logback-classic-1.2.3" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: log4j-to-slf4j-2.10.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: jul-to-slf4j-1.7.25" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: slf4j-api-1.7.25" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: jackson-annotations-2.9.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: jackson-core-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: evo-inflector-1.2.2" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: logback-core-1.2.3" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: log4j-api-2.10.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: kotlin-stdlib-jdk8-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: kotlin-reflect-1.2.51" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-boot-starter-data-rest-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-boot-starter-web-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-boot-starter-data-jpa-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-session-core-2.0.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: jaxb-api-2.3.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-boot-starter-test-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: junit-4.12" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: kotlin-stdlib-jdk7-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: kotlin-stdlib-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-boot-starter-json-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-boot-starter-aop-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-boot-starter-jdbc-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-boot-starter-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-boot-starter-tomcat-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: hibernate-validator-6.0.13.Final" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-data-rest-webmvc-3.0.11.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-data-rest-core-3.0.11.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-hateoas-0.25.0.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-webmvc-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-web-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: javax.transaction-api-1.2" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: hibernate-core-5.2.17.Final" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-data-jpa-2.0.11.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-aspects-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-test-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-boot-test-autoconfigure-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-boot-test-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-boot-autoconfigure-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-boot-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-plugin-core-1.2.0.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-context-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-expression-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-orm-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-jdbc-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-tx-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-aop-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-data-commons-2.0.11.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-beans-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-core-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-jcl-5.0.10.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: hamcrest-library-1.3" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: hamcrest-core-1.3" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: json-path-2.4.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: assertj-core-3.9.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: mockito-core-2.15.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: jsonassert-1.5.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: xmlunit-core-2.5.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: kotlin-stdlib-common-1.2.50" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: annotations-13.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: spring-boot-starter-logging-2.0.6.RELEASE" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: javax.annotation-api-1.3.2" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: snakeyaml-1.19" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: jackson-datatype-jdk8-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: jackson-datatype-jsr310-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: jackson-module-parameter-names-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: jackson-databind-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: tomcat-embed-websocket-8.5.34" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: tomcat-embed-core-8.5.34" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: tomcat-embed-el-8.5.34" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: validation-api-2.0.1.Final" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: hibernate-commons-annotations-5.0.1.Final" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: jboss-logging-3.3.2.Final" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: classmate-1.3.4" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: aspectjweaver-1.8.13" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: HikariCP-2.7.9" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: hibernate-jpa-2.1-api-1.0.2.Final" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: javassist-3.22.0-GA" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: antlr-2.7.7" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: jandex-2.0.3.Final" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: dom4j-1.6.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: logback-classic-1.2.3" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: log4j-to-slf4j-2.10.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: jul-to-slf4j-1.7.25" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: slf4j-api-1.7.25" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: jackson-annotations-2.9.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: json-smart-2.3" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: byte-buddy-1.7.11" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: byte-buddy-agent-1.7.11" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: objenesis-2.6" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: android-json-0.0.20131108.vaadin1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: jackson-core-2.9.7" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: evo-inflector-1.2.2" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: accessors-smart-1.2" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: logback-core-1.2.3" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: log4j-api-2.10.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: asm-5.0.4" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="Gradle: h2-1.4.197" level="project" />
   </component>
 </module>
