@@ -26,7 +26,10 @@ import uk.co.olbois.facecraft.model.message.Message;
  */
 public class ChatroomFragment extends Fragment {
 
+    // List of messages in the chatroom
     private List<Message> messageData;
+
+    // The currently logged in user
     private SampleUser sampleUser;
 
     public ChatroomFragment() {
@@ -40,6 +43,7 @@ public class ChatroomFragment extends Fragment {
         Button sendButton = view.findViewById(R.id.send_message_button);
         final EditText input = view.findViewById(R.id.text_edit_text);
 
+        // Generate sample messages (for prototype demo)
         messageData = generateMessages();
 
         // Set the message recycler view adapter
@@ -47,8 +51,11 @@ public class ChatroomFragment extends Fragment {
         final MessageAdapter messageAdapter = new MessageAdapter(messageData);
         messageRecyclerView.setLayoutManager(new LinearLayoutManager((getContext())));
         messageRecyclerView.setAdapter(messageAdapter);
+
+        // Scroll to the bottom of the recycler view
         messageRecyclerView.scrollToPosition(messageData.size() -1);
 
+        // Add message to the recycler view when the send button is clicked
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,6 +80,9 @@ public class ChatroomFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Message view holder for the chatroom recycler view
+     */
     private  class MessageViewHolder extends RecyclerView.ViewHolder {
 
         private TextView username;
@@ -115,6 +125,9 @@ public class ChatroomFragment extends Fragment {
         }
     }
 
+    /**
+     * Message Adapter for the chatroom recycler view
+     */
     private class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder> {
 
         private List<Message> data;
@@ -150,7 +163,7 @@ public class ChatroomFragment extends Fragment {
     }
 
     /**
-     * Generates a list of sample messages
+     * Generates a list of sample messages (for prototype demo)
      * @return
      */
     private List<Message> generateMessages() {
@@ -172,7 +185,7 @@ public class ChatroomFragment extends Fragment {
     }
 
     /**
-     * a sample response message
+     * a sample response message (for prototype demo)
      */
     private void sampleRespond() {
 
@@ -181,13 +194,17 @@ public class ChatroomFragment extends Fragment {
 
     /**
      * adds a message to the list of messages
-     * @param in
+     * @param in the message
      */
     private void sendMessage(String in) {
 
         messageData.add(new Message(sampleUser.getUsername(), "app", in, new Date()));
     }
 
+    /**
+     * Set the currently logged in user, called at activity start
+     * @param u the user
+     */
     public void setUser(SampleUser u) {
         this.sampleUser = u;
     }

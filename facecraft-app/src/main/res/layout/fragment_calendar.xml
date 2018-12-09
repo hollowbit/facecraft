@@ -28,7 +28,6 @@
         android:id="@+id/btnSetTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:onClick="showTimePickerDialog"
         android:text="Set Time"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnSaveEvent"
