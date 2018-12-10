@@ -4,6 +4,10 @@ import com.google.gson.Gson
 import org.bukkit.Bukkit
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
+import uk.co.olbois.facecraft.networking.packet.ConnectPacket
+import uk.co.olbois.facecraft.networking.packet.RegisterPacket
+import uk.co.olbois.facecraft.networking.packet.ResponsePacket
+import uk.co.olbois.facecraftplugin.networking.packet.DisconnectPacket
 import uk.co.olbois.facecraftplugin.networking.packet.Packet
 import uk.co.olbois.facecraftplugin.networking.packet.PacketType
 import java.lang.Exception
@@ -17,17 +21,13 @@ class NetworkManager private constructor() {
         const val FACECRAFT_CENTRAL_ADDRESS = "localhost"
         const val FACECRAFT_CENTRAL_PORT = 22123
 
-        const val CLEAN_CLOSE_CODE = 1000
-
         val instance: NetworkManager by lazy {Holder.INSTANCE}
     }
 
     private val socket = FacecraftWebsocketClient()
 
-    private val responseListeners = mutableMapOf<Long, (Packet) -> Unit>()
-    private val packetListeners = mutableMapOf<PacketType, MutableList<(Packet) -> Unit>>()
-    private var connectListener : ((Boolean) -> Unit)? = null
-    private var disconnectListener : ((Boolean) -> Unit)? = null
+    private val responseListeners = mutableMapOf<Long, (ResponsePacket) -> Unit>()
+    private val packetListeners = mutableMapOf<PacketType, MutableList<(Packet) -> ResponsePacket>>()
 
     private val gson = Gson()
 
@@ -35,27 +35,38 @@ class NetworkManager private constructor() {
         // create list of packet listeners for each packet typ
         for (p in PacketType.values())
             packetListeners[p] = mutableListOf()
-    }
 
-    fun connect(listener: (Boolean) -> Unit) {
-        connectListener = listener
+        // connect right off the bat
         socket.connect()
     }
 
-    val status : Status get() {
-        // return simplified status for outside
-        return when(socket.isOpen) {
-            true -> Status.OPEN
-            false -> Status.CLOSED
+    var status = Status.CLOSED
+
+    fun register(address: String, password: String, listener : (Boolean, String) -> Unit) {
+        this.sendPacket(RegisterPacket(address, password)) { responsePacket: ResponsePacket ->
+            // send register response
+            listener.invoke(responsePacket.errorCode == 0, responsePacket.errorMessage)
         }
     }
 
-    fun disconnect(listener: (Boolean) -> Unit) {
-        disconnectListener = listener
-        socket.close(CLEAN_CLOSE_CODE)
+    fun connect(address: String, password: String, listener : (Boolean, String) -> Unit) {
+        this.sendPacket(ConnectPacket(address, password)) {responsePacket: ResponsePacket ->
+            // change connection status if successful
+            if (responsePacket.errorCode == 0) {
+                status = Status.OPEN
+            }
+
+            // send connect response
+            listener.invoke(responsePacket.errorCode == 0, responsePacket.errorMessage)
+        }
     }
 
-    fun sendPacket(packet : Packet, responseListener : (Packet) -> Unit) : Boolean {
+    fun disconnect() {
+        status = Status.CLOSED
+        this.sendPacket(DisconnectPacket()) {} // don't handle response
+    }
+
+    fun sendPacket(packet : Packet, responseListener : (ResponsePacket) -> Unit) : Boolean {
         // if not connected just return false
         if (status == Status.CLOSED)
             return false
@@ -68,12 +79,12 @@ class NetworkManager private constructor() {
         return true
     }
 
-    fun registerListener(packetType : PacketType, listener : (Packet) -> Unit) {
+    fun registerListener(packetType : PacketType, listener : (Packet) -> ResponsePacket) {
         // add the listener
         packetListeners[packetType]?.add(listener)
     }
 
-    fun deregisterListener(listener: (Packet) -> Unit) {
+    fun deregisterListener(listener: (Packet) -> ResponsePacket) {
         // check each packet type and remove the listener
         for (list in packetListeners.values)
             list.remove(listener)
@@ -85,16 +96,10 @@ class NetworkManager private constructor() {
 
     private inner class FacecraftWebsocketClient : WebSocketClient(URI.create("ws://$FACECRAFT_CENTRAL_ADDRESS:$FACECRAFT_CENTRAL_PORT")) {
 
-        override fun onOpen(handshakedata: ServerHandshake?) {
-            connectListener?.invoke(true)
-            connectListener = null
-            Bukkit.getServer().consoleSender.sendMessage("Connection to Facecraft Central Server established!")
-        }
+        override fun onOpen(handshakedata: ServerHandshake?) {}
 
         override fun onClose(code: Int, reason: String?, remote: Boolean) {
-            disconnectListener?.invoke(true)
-            disconnectListener = null
-            Bukkit.getServer().consoleSender.sendMessage("Connection to Facecraft Central Server closed.")
+            status = Status.CLOSED
         }
 
         override fun onMessage(message: String?) {
@@ -114,10 +119,6 @@ class NetworkManager private constructor() {
         }
 
         override fun onError(ex: Exception?) {
-            connectListener?.invoke(false)
-            connectListener = null
-            disconnectListener?.invoke(false)
-            disconnectListener = null
             Bukkit.getServer().consoleSender.sendMessage("Facecraft Error: ${ex?.message}")
         }
 

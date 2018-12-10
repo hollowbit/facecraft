@@ -5,6 +5,7 @@ import org.java_websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
 import org.java_websocket.server.WebSocketServer
 import uk.co.olbois.facecraft.model.Server
+import uk.co.olbois.facecraft.networking.packet.ResponsePacket
 import uk.co.olbois.facecraftplugin.networking.packet.Packet
 import uk.co.olbois.facecraftplugin.networking.packet.PacketType
 import java.lang.Exception
@@ -27,8 +28,13 @@ class NetworkManager {
     private val websocketConnections = mutableMapOf<WebSocket, Server>()
     private val serverWebsockets = mutableMapOf<String, WebSocket>()
 
-    private val responseListeners = mutableMapOf<Long, (Packet, Server) -> Unit>()
-    private val packetListeners = mutableMapOf<PacketType, MutableList<(Packet, Server) -> Unit>>()
+    private val responseListeners = mutableMapOf<Long, (ResponsePacket, Server) -> Unit>()
+    private val packetListeners = mutableMapOf<PacketType, MutableList<(Packet, Server) -> ResponsePacket>>()
+
+    init {
+        // init the server connection packet listener to accept connect and register requests
+        ServerConnectionPacketListener()
+    }
 
     var status = Status.CLOSED
 
@@ -41,18 +47,18 @@ class NetworkManager {
         server.stop()
     }
 
-    fun registerListener(packetType : PacketType, listener : (Packet, Server) -> Unit) {
+    fun registerListener(packetType : PacketType, listener : (Packet, Server) -> ResponsePacket) {
         // add the listener
         packetListeners[packetType]?.add(listener)
     }
 
-    fun deregisterListener(listener: (Packet, Server) -> Unit) {
+    fun deregisterListener(listener: (Packet, Server) -> ResponsePacket) {
         // check each packet type and remove the listener
         for (list in packetListeners.values)
             list.remove(listener)
     }
 
-    fun sendPacket(packet: Packet, server: Server, responseListener: (Packet, Server) -> Unit) : Boolean {
+    fun sendPacket(packet: Packet, server: Server, responseListener: (ResponsePacket, Server) -> Unit) : Boolean {
         // if not connected just return false
         if (status == Status.CLOSED)
             return false

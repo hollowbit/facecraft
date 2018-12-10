@@ -7,15 +7,11 @@ import javax.persistence.*
 class Server() {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "server_id")
-    val id: Long = 0
+    @Column(name = "address")
+    val address = ""
 
     @Column(name = "name")
     val name = ""
-
-    @Column(name = "address")
-    val address = ""
 
     @Column(name = "password")
     val password = ""

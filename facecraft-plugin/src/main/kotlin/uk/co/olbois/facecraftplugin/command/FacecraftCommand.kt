@@ -25,14 +25,19 @@ class FacecraftCommand : Command {
                     return true
                 }
 
+                // make sure there are 2 args
+                if (args.size < 2) {
+                    sender?.sendMessage("${ChatColor.RED}<Facecraft> Usage: /facecraft connect <address> <password>")
+                }
+
                 // connect to server and handle result
-                NetworkManager.instance.connect {established ->
+                NetworkManager.instance.connect(args[0], args[1]) {established, message ->
                     when(established) {
                         true -> {
-                            sender?.sendMessage("${ChatColor.GREEN}Facecraft: Connected!")
+                            sender?.sendMessage("${ChatColor.GREEN}<Facecraft> Connected!")
                         }
                         false -> {
-                            sender?.sendMessage("${ChatColor.RED}Facecraft: Connection failed!")
+                            sender?.sendMessage("${ChatColor.RED}<Facecraft> Connection failed! $message")
                         }
                     }
                 }
@@ -45,10 +50,10 @@ class FacecraftCommand : Command {
                     val status = NetworkManager.instance.status
                     when(status) {
                         NetworkManager.Status.OPEN -> {
-                            sender.sendMessage("${ChatColor.GREEN}Facecraft: Connected!")
+                            sender.sendMessage("${ChatColor.GREEN}<Facecraft> Connected")
                         }
                         else -> {
-                            sender.sendMessage("${ChatColor.RED}Facecraft: Disconnected!")
+                            sender.sendMessage("${ChatColor.RED}<Facecraft> Disconnected")
                         }
                     }
                 }
@@ -58,18 +63,36 @@ class FacecraftCommand : Command {
                 // make sure you are not already disconnected
                 val status = NetworkManager.instance.status
                 if (status == NetworkManager.Status.CLOSED) {
-                    sender?.sendMessage("${ChatColor.GREEN}Facecraft: Already Disconnected!")
+                    sender?.sendMessage("${ChatColor.GREEN}<Facecraft> Already Disconnected!")
                     return true
                 }
 
                 // disconnect and handle result
-                NetworkManager.instance.disconnect {disconnected ->
-                    when(disconnected) {
+                NetworkManager.instance.disconnect()
+
+                true
+            }
+            "register" -> {
+                // make sure you are not already connected
+                val status = NetworkManager.instance.status
+                if (status == NetworkManager.Status.OPEN) {
+                    sender?.sendMessage("${ChatColor.GREEN}<Facecraft> Please disconnect first: /facecraft disconnect")
+                    return true
+                }
+
+                // make sure there are 2 args
+                if (args.size < 2) {
+                    sender?.sendMessage("${ChatColor.RED}<Facecraft> Usage: /facecraft register <address> <password>")
+                }
+
+                // connect to server and handle result
+                NetworkManager.instance.register(args[0], args[1]) {established, message ->
+                    when(established) {
                         true -> {
-                            sender?.sendMessage("${ChatColor.GREEN}Facecraft: Disconnected!")
+                            sender?.sendMessage("${ChatColor.GREEN}<Facecraft> Registered! Please connect now: /facecraft connect <address> <password>")
                         }
                         false -> {
-                            sender?.sendMessage("${ChatColor.RED}Facecraft: Disconnection failed!")
+                            sender?.sendMessage("${ChatColor.RED}<Facecraft> Register failed! $message")
                         }
                     }
                 }
