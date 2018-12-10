@@ -25,9 +25,6 @@ class NetworkManager {
 
     private val gson = Gson()
 
-    private val websocketConnections = mutableMapOf<WebSocket, Server>()
-    private val serverWebsockets = mutableMapOf<String, WebSocket>()
-
     private val responseListeners = mutableMapOf<Long, (ResponsePacket, Server) -> Unit>()
     private val packetListeners = mutableMapOf<PacketType, MutableList<(Packet, Server) -> ResponsePacket>>()
 
@@ -67,7 +64,7 @@ class NetworkManager {
         responseListeners[packet.id] = responseListener
 
         // send the packet
-        val socket = serverWebsockets[server.address]
+        val socket = ConnectionManager.instance.serverWebsockets[server.address]
         if (socket != null) {
             socket.send(gson.toJson(packet))
             return true
@@ -87,12 +84,12 @@ class NetworkManager {
         override fun onClose(conn: WebSocket?, code: Int, reason: String?, remote: Boolean) {
             if (conn != null) {
                 // find server connection, if exists
-                val connection = websocketConnections[conn]
+                val connection = ConnectionManager.instance.websocketConnections[conn]
 
                 if (connection != null) {
                     // remove references to this closed connection
-                    websocketConnections.remove(conn)
-                    serverWebsockets.remove(connection.address)
+                    ConnectionManager.instance.websocketConnections.remove(conn)
+                    ConnectionManager.instance.serverWebsockets.remove(connection.address)
                 }
             }
         }
@@ -100,7 +97,7 @@ class NetworkManager {
         override fun onMessage(conn: WebSocket?, message: String?) {
             if (conn != null) {
                 // find server if it exists
-                val connection = websocketConnections[conn]
+                val connection = ConnectionManager.instance.websocketConnections[conn]
 
                 val packet : Packet
                 try {
@@ -126,7 +123,7 @@ class NetworkManager {
 
         override fun onError(conn: WebSocket?, ex: Exception?) {
             if (conn != null) {
-                val connection = websocketConnections[conn]
+                val connection = ConnectionManager.instance.websocketConnections[conn]
                 if (connection != null && ex != null) {
                     println("Error with server [${connection.address}]: ${ex.message}")
                 }
