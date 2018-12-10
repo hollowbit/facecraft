@@ -17,6 +17,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +73,7 @@ public class InviteFragment extends Fragment {
         currentUsersRecyclerView.getAdapter().notifyDataSetChanged();
         rolePossibilities = new ServerConnection.Role[]{ServerConnection.Role.MEMBER, ServerConnection.Role.ADMIN};
 
+
         return root;
     }
 
@@ -89,6 +96,7 @@ public class InviteFragment extends Fragment {
 
                 @Override
                 public void onClick(View v) {
+
                     //update old connection
                     connection.setUserCount(connection.getUserCount() + 1);
                     //create new connection with old connections data + new user
@@ -111,6 +119,8 @@ public class InviteFragment extends Fragment {
                     } catch (DatabaseException e) {
                         e.printStackTrace();
                     }
+
+
                 }
             });
         }

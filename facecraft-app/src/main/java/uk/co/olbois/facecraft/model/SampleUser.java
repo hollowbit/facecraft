@@ -10,6 +10,7 @@ public class SampleUser implements Identifiable<Long>, Parcelable {
     private Long id;
     private String username;
     private String password;
+    private String deviceToken;
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator<SampleUser>() {
 
@@ -28,6 +29,7 @@ public class SampleUser implements Identifiable<Long>, Parcelable {
         this.id = parcel.readLong();
         this.username = parcel.readString();
         this.password = parcel.readString();
+        this.deviceToken = parcel.readString();
     }
 
     @Override
@@ -35,6 +37,7 @@ public class SampleUser implements Identifiable<Long>, Parcelable {
         dest.writeLong(id);
         dest.writeString(username);
         dest.writeString(password);
+        dest.writeString(deviceToken);
     }
 
     @Override
@@ -77,4 +80,11 @@ public class SampleUser implements Identifiable<Long>, Parcelable {
         this.password = password;
     }
 
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
 }
