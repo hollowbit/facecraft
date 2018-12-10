@@ -34,7 +34,7 @@ public class CalendarFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_calendar, container, false);
 
-        View saveBtn = root.findViewById(R.id.btnSaveEvent);
+        final View saveBtn = root.findViewById(R.id.btnSaveEvent);
 
         final CalendarView calendarView = root.findViewById(R.id.calendarView);
 
@@ -56,10 +56,12 @@ public class CalendarFragment extends Fragment {
                 long date =  calendar.getTime().getTime();
                 long currentDate = System.currentTimeMillis();
                 if(date < currentDate){
+                    saveBtn.setClickable(false);
                     Toast.makeText(getContext(), "Cannot set an event in the past" ,Toast.LENGTH_SHORT).show();
                     //calendarView.setDate(-1);
                 }
                 else {
+                    saveBtn.setClickable(true);
                     calendarView.setDate(date);
                 }
 
@@ -71,7 +73,7 @@ public class CalendarFragment extends Fragment {
             public void onClick(View v) {
                 String date = "";
                 Long unixTime = Long.valueOf(0);
-                int time = 0;
+                String time;
 
                 unixTime = calendarView.getDate();
 
@@ -80,9 +82,13 @@ public class CalendarFragment extends Fragment {
                 date = sdf.format(unixTime);
 
 
-                time = Integer.parseInt((String)(timeView.getText()));
-                if( unixTime > 0 ){
-                    Toast.makeText(getContext(), "Event " + titleView.getText() + " saved for \n" + date + " at " + time ,Toast.LENGTH_SHORT).show();
+                time = timeView.getText().toString();
+
+                long currentDate = System.currentTimeMillis();
+                if( unixTime > 0 ) {
+                    if (unixTime >= currentDate){
+                    Toast.makeText(getContext(), "Event " + titleView.getText() + " saved for \n" + date + " at " + time, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
