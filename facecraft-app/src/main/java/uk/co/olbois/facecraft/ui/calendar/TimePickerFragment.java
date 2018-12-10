@@ -31,7 +31,9 @@ public class TimePickerFragment extends DialogFragment
 
 
         // Create a new instance of TimePickerDialog and return it
-        TimePickerDialog timePicker = new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
+        TimePickerDialog timePicker;
+        //timePicker = new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
+        timePicker = new TimePickerDialog(getActivity(), this, hour, minute, true);
 
         String time = mCallBack.getMyText();
         if(time != "" && time.contains(":")) {
@@ -51,6 +53,14 @@ public class TimePickerFragment extends DialogFragment
         // Do something with the time chosen by the user
         String hour = String.valueOf(view.getHour());
         String minutes = String.valueOf(view.getMinute());
+
+        if(minutes.length() == 1) {
+            minutes = "0" + minutes;
+        }
+        if(hour.toString() == "0") {
+            hour = "00";
+        }
+
         //Toast.makeText(getActivity(), hour, Toast.LENGTH_LONG).show();
         //Toast.makeText(getActivity(), minutes, Toast.LENGTH_LONG).show();
         this.mCallBack.UpdateMyText(hour + " : " + minutes);

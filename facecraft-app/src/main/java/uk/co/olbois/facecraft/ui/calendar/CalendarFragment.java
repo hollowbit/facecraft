@@ -47,15 +47,17 @@ public class CalendarFragment extends Fragment {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                calendar.set(Calendar.YEAR,year);
+                /*calendar.set(Calendar.YEAR,year);
                 calendar.set(Calendar.MONTH, month);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);*/
+
+                calendar.set(year,month,dayOfMonth);
 
                 long date =  calendar.getTime().getTime();
                 long currentDate = System.currentTimeMillis();
-                if(date > currentDate){
+                if(date < currentDate){
                     Toast.makeText(getContext(), "Cannot set an event in the past" ,Toast.LENGTH_SHORT).show();
-                    calendarView.setDate(-1);
+                    //calendarView.setDate(-1);
                 }
                 else {
                     calendarView.setDate(date);
@@ -69,7 +71,7 @@ public class CalendarFragment extends Fragment {
             public void onClick(View v) {
                 String date = "";
                 Long unixTime = Long.valueOf(0);
-                String time = "";
+                int time = 0;
 
                 unixTime = calendarView.getDate();
 
@@ -78,7 +80,7 @@ public class CalendarFragment extends Fragment {
                 date = sdf.format(unixTime);
 
 
-                time = String.valueOf(timeView.getText()).trim();
+                time = Integer.parseInt((String)(timeView.getText()));
                 if( unixTime > 0 ){
                     Toast.makeText(getContext(), "Event " + titleView.getText() + " saved for \n" + date + " at " + time ,Toast.LENGTH_SHORT).show();
                 }
@@ -86,8 +88,19 @@ public class CalendarFragment extends Fragment {
         });
 
 
+
+
+
         return root;
 
+    }
+
+
+
+
+
+    public void createNewEvent(){
+        //events.insert();
     }
 
 

@@ -25,6 +25,9 @@ android {
 repositories {
     google()
     jcenter()
+
+
+    mavenCentral()
 }
 
 dependencies {
@@ -36,4 +39,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+
+    compile 'com.google.api-client:google-api-client:1.23.0'
+    compile 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
+    compile 'com.google.apis:google-api-services-calendar:v3-rev305-1.23.0'
+
 }
+
+    mainClassName = 'CalendarQuickstart'
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    version = '1.0'
