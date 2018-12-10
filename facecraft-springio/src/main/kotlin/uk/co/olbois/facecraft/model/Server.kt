@@ -14,6 +14,11 @@ class Server() {
     @Column(name = "name")
     val name = ""
 
+    @Column(name = "address")
+    val address = ""
+
+    @Column(name = "password")
+    val password = ""
 
     @ManyToMany(cascade = [CascadeType.ALL])
     @JoinTable

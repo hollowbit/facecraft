@@ -24,10 +24,10 @@ class NetworkManager private constructor() {
 
     private val socket = FacecraftWebsocketClient()
 
-    val responseListeners = mutableMapOf<Long, (Packet) -> Unit>()
-    val packetListeners = mutableMapOf<PacketType, MutableList<(Packet) -> Unit>>()
-    var connectListener : ((Boolean) -> Unit)? = null
-    var disconnectListener : ((Boolean) -> Unit)? = null
+    private val responseListeners = mutableMapOf<Long, (Packet) -> Unit>()
+    private val packetListeners = mutableMapOf<PacketType, MutableList<(Packet) -> Unit>>()
+    private var connectListener : ((Boolean) -> Unit)? = null
+    private var disconnectListener : ((Boolean) -> Unit)? = null
 
     private val gson = Gson()
 
