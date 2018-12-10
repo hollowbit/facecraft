@@ -18,13 +18,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import uk.co.olbois.facecraft.R;
 import uk.co.olbois.facecraft.model.SampleUser;
@@ -42,6 +42,8 @@ public class InviteFragment extends Fragment {
     private List<SampleUser> users;
     private List<Pair<SampleUser, ServerConnection>> currentConnections;
     private ServerConnection.Role[] rolePossibilities;
+
+    private FirebaseFirestore mFirestore;
 
     public InviteFragment() {
     }
@@ -73,6 +75,7 @@ public class InviteFragment extends Fragment {
         currentUsersRecyclerView.getAdapter().notifyDataSetChanged();
         rolePossibilities = new ServerConnection.Role[]{ServerConnection.Role.MEMBER, ServerConnection.Role.ADMIN};
 
+        mFirestore = FirebaseFirestore.getInstance();
 
         return root;
     }
@@ -106,6 +109,20 @@ public class InviteFragment extends Fragment {
                     c.setRole(ServerConnection.Role.MEMBER);
                     c.setHost(connection.getHost());
                     c.setPort(connection.getPort());
+
+                    Map<String, Object> invite = new HashMap<>();
+                    invite.put("to", currentUser.getUsername());
+                    invite.put("device_token", currentUser.getDeviceToken());
+                    invite.put("server", connection.getHost() + connection.getPort());
+
+                    mFirestore.collection("invites")
+                            .add(invite)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Toast.makeText(getContext(), "Snapshot with id " + documentReference.getId() , Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
                     try {
                         //create and update on database
