@@ -7,13 +7,14 @@ import javax.persistence.*
 class Server() {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "server_id")
-    val id: Long = 0
+    @Column(name = "address")
+    var address = ""
 
     @Column(name = "name")
-    val name = ""
+    var name = ""
 
+    @Column(name = "password")
+    var password = ""
 
     @ManyToMany(cascade = [CascadeType.ALL])
     @JoinTable
