@@ -6,12 +6,23 @@ import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
 import uk.co.olbois.facecraftplugin.command.FacecraftCommand
 import uk.co.olbois.facecraftplugin.events.FacecraftEvents
+import uk.co.olbois.facecraftplugin.networking.NetworkManager
 
 class FacecraftPlugin : JavaPlugin() {
+
+    companion object {
+        val networkManager = NetworkManager()
+    }
 
     override fun onEnable() {
         super.onEnable()
         Bukkit.getServer().pluginManager.registerEvents(FacecraftEvents(), this)
+        networkManager.load()
+    }
+
+    override fun onDisable() {
+        super.onDisable()
+        networkManager.unload()
     }
 
     override fun onCommand(sender: CommandSender?, command: Command?, label: String?, args: Array<out String>?): Boolean {

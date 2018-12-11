@@ -1,19 +1,18 @@
 package uk.co.olbois.facecraftplugin.networking.packet
 
-import uk.co.olbois.facecraft.networking.packet.ResponsePacket
 import uk.co.olbois.facecraftplugin.networking.NetworkManager
 
-abstract class PacketListener {
+abstract class PacketListener(val networkManager: NetworkManager) {
 
-    private val listeners = mutableListOf<(Packet) -> ResponsePacket>()
+    private val listeners = mutableListOf<(Packet) -> ResponsePacket?>()
 
-    protected fun register(packetType : PacketType, listener : (Packet) -> ResponsePacket) {
-        NetworkManager.instance.registerListener(packetType, listener)
+    protected fun register(packetType : PacketType, listener : (Packet) -> ResponsePacket?) {
+        networkManager.registerListener(packetType, listener)
     }
 
     fun deregister() {
         for (l in listeners)
-            NetworkManager.instance.deregisterListener(l)
+            networkManager.deregisterListener(l)
     }
 
 }

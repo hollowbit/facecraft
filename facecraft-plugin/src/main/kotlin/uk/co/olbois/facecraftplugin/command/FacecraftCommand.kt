@@ -2,6 +2,7 @@ package uk.co.olbois.facecraftplugin.command
 
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
+import uk.co.olbois.facecraftplugin.FacecraftPlugin
 import uk.co.olbois.facecraftplugin.networking.NetworkManager
 
 class FacecraftCommand : Command {
@@ -18,20 +19,26 @@ class FacecraftCommand : Command {
         val label = args.first()
         return when(label) {
             "connect" -> {
+                if (!FacecraftPlugin.networkManager.canConnect()) {
+                    sender?.sendMessage("${ChatColor.RED}<Facecraft> Cannot connect to Facecraft Central Server")
+                    return true
+                }
+
                 // make sure you are not already connected
-                val status = NetworkManager.instance.status
+                val status = FacecraftPlugin.networkManager.status
                 if (status == NetworkManager.Status.OPEN) {
                     sender?.sendMessage("${ChatColor.GREEN}Facecraft: Already Connected!")
                     return true
                 }
 
                 // make sure there are 2 args
-                if (args.size < 2) {
+                if (args.size < 3) {
                     sender?.sendMessage("${ChatColor.RED}<Facecraft> Usage: /facecraft connect <address> <password>")
+                    return true
                 }
 
                 // connect to server and handle result
-                NetworkManager.instance.connect(args[0], args[1]) {established, message ->
+                FacecraftPlugin.networkManager.connect(args[1], args[2]) {established, message ->
                     when(established) {
                         true -> {
                             sender?.sendMessage("${ChatColor.GREEN}<Facecraft> Connected!")
@@ -47,7 +54,7 @@ class FacecraftCommand : Command {
             "status" -> {
                 // if the sender is not null, tell them the connection status
                 if (sender != null) {
-                    val status = NetworkManager.instance.status
+                    val status = FacecraftPlugin.networkManager.status
                     when(status) {
                         NetworkManager.Status.OPEN -> {
                             sender.sendMessage("${ChatColor.GREEN}<Facecraft> Connected")
@@ -60,33 +67,45 @@ class FacecraftCommand : Command {
                 true
             }
             "disconnect" -> {
+                if (!FacecraftPlugin.networkManager.canConnect()) {
+                    sender?.sendMessage("${ChatColor.RED}<Facecraft> Cannot connect to Facecraft Central Server")
+                    return true
+                }
+
                 // make sure you are not already disconnected
-                val status = NetworkManager.instance.status
+                val status = FacecraftPlugin.networkManager.status
                 if (status == NetworkManager.Status.CLOSED) {
                     sender?.sendMessage("${ChatColor.GREEN}<Facecraft> Already Disconnected!")
                     return true
                 }
 
                 // disconnect and handle result
-                NetworkManager.instance.disconnect()
+                FacecraftPlugin.networkManager.disconnect()
+                sender?.sendMessage("${ChatColor.RED}<Facecraft> Disconnected.")
 
                 true
             }
             "register" -> {
+                if (!FacecraftPlugin.networkManager.canConnect()) {
+                    sender?.sendMessage("${ChatColor.RED}<Facecraft> Cannot connect to Facecraft Central Server")
+                    return true
+                }
+
                 // make sure you are not already connected
-                val status = NetworkManager.instance.status
+                val status = FacecraftPlugin.networkManager.status
                 if (status == NetworkManager.Status.OPEN) {
                     sender?.sendMessage("${ChatColor.GREEN}<Facecraft> Please disconnect first: /facecraft disconnect")
                     return true
                 }
 
                 // make sure there are 2 args
-                if (args.size < 2) {
+                if (args.size < 3) {
                     sender?.sendMessage("${ChatColor.RED}<Facecraft> Usage: /facecraft register <address> <password>")
+                    return true
                 }
 
                 // connect to server and handle result
-                NetworkManager.instance.register(args[0], args[1]) {established, message ->
+                FacecraftPlugin.networkManager.register(args[1], args[2]) {established, message ->
                     when(established) {
                         true -> {
                             sender?.sendMessage("${ChatColor.GREEN}<Facecraft> Registered! Please connect now: /facecraft connect <address> <password>")

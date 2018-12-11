@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import org.java_websocket.WebSocket
 import org.java_websocket.handshake.ClientHandshake
 import org.java_websocket.server.WebSocketServer
-import uk.co.olbois.facecraft.model.Server
+import uk.co.olbois.facecraft.networking.packet.PacketWrapper
 import uk.co.olbois.facecraft.networking.packet.ResponsePacket
 import uk.co.olbois.facecraftplugin.networking.packet.Packet
 import uk.co.olbois.facecraftplugin.networking.packet.PacketType
@@ -13,49 +13,51 @@ import java.net.InetSocketAddress
 
 class NetworkManager {
 
-    private object Holder {val INSTANCE = NetworkManager()}
-
     companion object {
         const val FACECRAFT_CENTRAL_PORT = 22123
-
-        val instance: NetworkManager by lazy {Holder.INSTANCE}
     }
 
     private val server = FacecraftWebsocketServer()
 
     private val gson = Gson()
 
-    private val responseListeners = mutableMapOf<Long, (ResponsePacket, Server) -> Unit>()
-    private val packetListeners = mutableMapOf<PacketType, MutableList<(Packet, Server) -> ResponsePacket>>()
+    private val responseListeners = mutableMapOf<Long, (ResponsePacket, WebSocket) -> Unit>()
+    private val packetListeners = mutableMapOf<PacketType, MutableList<(Packet, WebSocket) -> ResponsePacket?>>()
 
     init {
+        // create list of packet listeners for each packet typ
+        for (p in PacketType.values())
+            packetListeners[p] = mutableListOf()
+
         // init the server connection packet listener to accept connect and register requests
-        ServerConnectionPacketListener()
+        ServerConnectionPacketListener(this)
     }
 
     var status = Status.CLOSED
 
     fun start() {
         server.start()
+        println("WebSocket Server Started!")
     }
 
     fun stop() {
         status = Status.CLOSED
         server.stop()
+        println("WebSocket Server Stopped.")
     }
 
-    fun registerListener(packetType : PacketType, listener : (Packet, Server) -> ResponsePacket) {
+    fun registerListener(packetType : PacketType, listener : (Packet, WebSocket) -> ResponsePacket?) {
         // add the listener
         packetListeners[packetType]?.add(listener)
     }
 
-    fun deregisterListener(listener: (Packet, Server) -> ResponsePacket) {
+    fun deregisterListener(listener: (Packet, WebSocket) -> ResponsePacket?) {
         // check each packet type and remove the listener
         for (list in packetListeners.values)
             list.remove(listener)
     }
 
-    fun sendPacket(packet: Packet, server: Server, responseListener: (ResponsePacket, Server) -> Unit) : Boolean {
+    fun sendPacket(packet: Packet, socket: WebSocket, responseListener: (ResponsePacket, WebSocket) -> Unit) : Boolean {
         // if not connected just return false
         if (status == Status.CLOSED)
             return false
@@ -64,13 +66,21 @@ class NetworkManager {
         responseListeners[packet.id] = responseListener
 
         // send the packet
-        val socket = ConnectionManager.instance.serverWebsockets[server.address]
-        if (socket != null) {
-            socket.send(gson.toJson(packet))
-            return true
-        }
+        val wrapper = PacketWrapper(packet.type, gson.toJson(packet))
+        socket.send(gson.toJson(wrapper))
+        return true
+    }
 
-        return false
+    private fun sendResponsePacket(packet: ResponsePacket, socket: WebSocket) {
+        // if not connected just return false
+        if (status == Status.CLOSED)
+            return
+
+        // send the packet
+        val wrapper = PacketWrapper(packet.type, gson.toJson(packet))
+        val response = gson.toJson(wrapper)
+        println(response)
+        socket.send(response)
     }
 
     enum class Status {
@@ -96,24 +106,36 @@ class NetworkManager {
 
         override fun onMessage(conn: WebSocket?, message: String?) {
             if (conn != null) {
-                // find server if it exists
-                val connection = ConnectionManager.instance.websocketConnections[conn]
-
                 val packet : Packet
                 try {
-                    packet = gson.fromJson(message, Packet::class.java)
+                    val wrapper = gson.fromJson(message, PacketWrapper::class.java)
+                    packet = gson.fromJson(wrapper.packet, wrapper.type.clazz) as Packet
                 } catch(e: Exception){
                     //ignore bad packets
                     return
                 }
 
-                if (connection != null) {
-                    val listeners = packetListeners[packet.type]
-                    if (listeners != null) {
-                        for (listener in listeners)
-                            listener.invoke(packet, connection)
+                // if this is a response, handle it
+                if (packet is ResponsePacket) {
+                    val responseListener = responseListeners[packet.originId]
+                    if (responseListener != null) {
+                        responseListener.invoke(packet, conn)
+                        responseListeners.remove(packet.originId)
                     }
                 }
+
+                // find listeners and invoke them
+                val listeners = packetListeners[packet.type]
+                if (listeners != null) {
+                   for (listener in listeners) {
+                       val responsePacket = listener.invoke(packet, conn)
+                       if (responsePacket != null) {
+                           sendResponsePacket(responsePacket, conn)
+                           break
+                       }
+                   }
+                }
+
             }
         }
 

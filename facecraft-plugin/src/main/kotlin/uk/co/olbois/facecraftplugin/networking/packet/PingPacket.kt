@@ -1,4 +1,4 @@
-package uk.co.olbois.facecraft.networking.packet
+package uk.co.olbois.facecraftplugin.networking.packet
 
 import uk.co.olbois.facecraftplugin.networking.packet.Packet
 import uk.co.olbois.facecraftplugin.networking.packet.PacketType

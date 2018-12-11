@@ -4,30 +4,21 @@ import com.google.gson.Gson
 import org.bukkit.Bukkit
 import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
-import uk.co.olbois.facecraft.networking.packet.ConnectPacket
-import uk.co.olbois.facecraft.networking.packet.RegisterPacket
-import uk.co.olbois.facecraft.networking.packet.ResponsePacket
-import uk.co.olbois.facecraftplugin.networking.packet.DisconnectPacket
-import uk.co.olbois.facecraftplugin.networking.packet.Packet
-import uk.co.olbois.facecraftplugin.networking.packet.PacketType
+import uk.co.olbois.facecraftplugin.networking.packet.*
 import java.lang.Exception
 import java.net.URI
 
-class NetworkManager private constructor() {
-
-    private object Holder {val INSTANCE = NetworkManager()}
+class NetworkManager {
 
     companion object {
         const val FACECRAFT_CENTRAL_ADDRESS = "localhost"
         const val FACECRAFT_CENTRAL_PORT = 22123
-
-        val instance: NetworkManager by lazy {Holder.INSTANCE}
     }
 
     private val socket = FacecraftWebsocketClient()
 
     private val responseListeners = mutableMapOf<Long, (ResponsePacket) -> Unit>()
-    private val packetListeners = mutableMapOf<PacketType, MutableList<(Packet) -> ResponsePacket>>()
+    private val packetListeners = mutableMapOf<PacketType, MutableList<(Packet) -> ResponsePacket?>>()
 
     private val gson = Gson()
 
@@ -35,14 +26,28 @@ class NetworkManager private constructor() {
         // create list of packet listeners for each packet typ
         for (p in PacketType.values())
             packetListeners[p] = mutableListOf()
-
-        // connect right off the bat
-        socket.connect()
     }
 
     var status = Status.CLOSED
 
+    fun load() {
+        // connect right off the bat
+        socket.connect()
+    }
+
+    fun unload() {
+        // close the socket if unloaded
+        socket.close()
+    }
+
+    fun canConnect() : Boolean {
+        return socket.isOpen
+    }
+
     fun register(address: String, password: String, listener : (Boolean, String) -> Unit) {
+        if (socket.isClosed)
+            return
+
         this.sendPacket(RegisterPacket(address, password)) { responsePacket: ResponsePacket ->
             // send register response
             listener.invoke(responsePacket.errorCode == 0, responsePacket.errorMessage)
@@ -50,10 +55,14 @@ class NetworkManager private constructor() {
     }
 
     fun connect(address: String, password: String, listener : (Boolean, String) -> Unit) {
+        if (socket.isClosed)
+            return
+
         this.sendPacket(ConnectPacket(address, password)) {responsePacket: ResponsePacket ->
             // change connection status if successful
             if (responsePacket.errorCode == 0) {
                 status = Status.OPEN
+                Bukkit.getServer().consoleSender.sendMessage("Connected to Facecraft Central Server!")
             }
 
             // send connect response
@@ -62,29 +71,36 @@ class NetworkManager private constructor() {
     }
 
     fun disconnect() {
+        if (socket.isClosed)
+            return
+
         status = Status.CLOSED
+        Bukkit.getServer().consoleSender.sendMessage("Disconnected to Facecraft Central Server.")
         this.sendPacket(DisconnectPacket()) {} // don't handle response
     }
 
     fun sendPacket(packet : Packet, responseListener : (ResponsePacket) -> Unit) : Boolean {
-        // if not connected just return false
-        if (status == Status.CLOSED)
-            return false
-
         // add the packet listener to be used later when we get a response
         responseListeners[packet.id] = responseListener
 
         // send the packet
-        socket.send(gson.toJson(packet))
+        val wrapper = PacketWrapper(packet.type, gson.toJson(packet))
+        socket.send(gson.toJson(wrapper))
         return true
     }
 
-    fun registerListener(packetType : PacketType, listener : (Packet) -> ResponsePacket) {
+    private fun sendResponsePacket(packet : ResponsePacket) {
+        // send the packet
+        val wrapper = PacketWrapper(packet.type, gson.toJson(packet))
+        socket.send(gson.toJson(wrapper))
+    }
+
+    fun registerListener(packetType : PacketType, listener : (Packet) -> ResponsePacket?) {
         // add the listener
         packetListeners[packetType]?.add(listener)
     }
 
-    fun deregisterListener(listener: (Packet) -> ResponsePacket) {
+    fun deregisterListener(listener: (Packet) -> ResponsePacket?) {
         // check each packet type and remove the listener
         for (list in packetListeners.values)
             list.remove(listener)
@@ -105,16 +121,32 @@ class NetworkManager private constructor() {
         override fun onMessage(message: String?) {
             val packet : Packet
             try {
-                packet = gson.fromJson(message, Packet::class.java)
+                val wrapper = gson.fromJson(message, PacketWrapper::class.java)
+                packet = gson.fromJson(wrapper.packet, wrapper.type.clazz) as Packet
             } catch (e : Exception) {
                 // ignore back packets
                 return
             }
 
+            // handle response packet
+            if (packet is ResponsePacket) {
+                val responseListener = responseListeners[packet.originId]
+                if (responseListener != null) {
+                    responseListener.invoke(packet)
+                    responseListeners.remove(packet.originId)
+                }
+            }
+
+            // find listeners and handle packets
             val listeners = packetListeners[packet.type]
             if (listeners != null) {
-                for (listener in listeners)
-                    listener.invoke(packet)
+                for (listener in listeners) {
+                    val responsePacket = listener.invoke(packet)
+                    if (responsePacket != null) {
+                        sendResponsePacket(responsePacket)
+                        break
+                    }
+                }
             }
         }
 

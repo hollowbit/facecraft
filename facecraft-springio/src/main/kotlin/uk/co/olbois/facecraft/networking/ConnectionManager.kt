@@ -3,12 +3,10 @@ package uk.co.olbois.facecraft.networking
 import org.java_websocket.WebSocket
 import uk.co.olbois.facecraft.model.Server
 
-internal class ConnectionManager {
-
-    private object Holder {val INSTANCE = ConnectionManager()}
+internal class ConnectionManager private constructor() {
 
     companion object {
-        val instance: ConnectionManager by lazy { ConnectionManager.Holder.INSTANCE}
+        val instance = ConnectionManager()
     }
 
     val websocketConnections = mutableMapOf<WebSocket, Server>()
