@@ -1,8 +1,8 @@
 package uk.co.olbois.facecraft.controller
 
-import uk.co.olbois.facecraft.model.Event
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.rest.core.annotation.RepositoryRestResource
+import uk.co.olbois.facecraft.model.Server
 
-@RepositoryRestResource(collectionResourceRel = "events", path = "events")
-interface EventRepository : CrudRepository<Event, Long>
+@RepositoryRestResource(collectionResourceRel = "servers", path = "servers")
+interface ServerRepository : CrudRepository<Server, Long>

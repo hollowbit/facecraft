@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,9 +130,26 @@ public class ServerManagerFragment extends Fragment {
                         conn.setUserCount(1);
                         conn.setUserId(user.getId());
 
+
                         try {
-                            udbh.getConnectionsTable().create(conn);
-                            refreshList();
+                            List<ServerConnection> allServers = udbh.getConnectionsTable().readAll();
+
+                            boolean found = false;
+                            for(ServerConnection c : allServers){
+                                if(c.getHost().toLowerCase().equals(conn.getHost().toLowerCase())){
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if(!found || conn.getHost() == null){
+                                udbh.getConnectionsTable().create(conn);
+                                refreshList();
+                            }
+                            else{
+                                Toast.makeText(getContext(), "That server connection already exists!", Toast.LENGTH_SHORT).show();
+                            }
+
                         } catch (DatabaseException e) {
                             e.printStackTrace();
                         }
@@ -163,6 +181,8 @@ public class ServerManagerFragment extends Fragment {
             userCountTextView = itemView.findViewById(R.id.userCount_TextView);
             roleTextView = itemView.findViewById(R.id.role_TextView);
             accessButton = itemView.findViewById(R.id.access_Button);
+            serverInformationTextView.setSelected(true);
+            serverInformationTextView.setHorizontallyScrolling(true);
         }
 
         public void setConnection(final ServerConnection currentConnection){

@@ -27,10 +27,11 @@ class UniversalDatabaseHandler
                 SampleUser(3, "Alex", "a")
         )
         val connections = mutableListOf(
-                ServerConnection(0,"mc.hollowbit.net", 25565, 3, ServerConnection.Role.MEMBER, 1),
+                ServerConnection(0,"mc.hollowbit.net", 25565, 3, ServerConnection.Role.ADMIN, 1),
                 ServerConnection(1,"realserver.realdomain.com", 25565, 16, ServerConnection.Role.ADMIN, 1),
                 ServerConnection(0,"mc.hollowbit.net", 25565, 3, ServerConnection.Role.OWNER, 2),
-                ServerConnection(0,"realhost.realdomain.com", 25565, 3, ServerConnection.Role.MEMBER, 2)
+                ServerConnection(0,"realhost.realdomain.com", 25565, 3, ServerConnection.Role.MEMBER, 2),
+                ServerConnection(0,"mc.hollowbit.net", 25565, 3, ServerConnection.Role.MEMBER, 3)
         )
 
 
