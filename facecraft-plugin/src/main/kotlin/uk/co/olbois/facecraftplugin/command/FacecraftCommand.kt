@@ -4,6 +4,7 @@ import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 import uk.co.olbois.facecraftplugin.FacecraftPlugin
 import uk.co.olbois.facecraftplugin.networking.NetworkManager
+import java.util.EnumSet.range
 
 class FacecraftCommand : Command {
 
@@ -32,7 +33,7 @@ class FacecraftCommand : Command {
                 }
 
                 // make sure there are 2 args
-                if (args.size < 3) {
+                if (args.size != 3) {
                     sender?.sendMessage("${ChatColor.RED}<Facecraft> Usage: /facecraft connect <address> <password>")
                     return true
                 }
@@ -98,17 +99,25 @@ class FacecraftCommand : Command {
                     return true
                 }
 
-                // make sure there are 2 args
-                if (args.size < 3) {
+                // make sure there are at least 4 args
+                if (args.size < 4) {
                     sender?.sendMessage("${ChatColor.RED}<Facecraft> Usage: /facecraft register <address> <password>")
                     return true
                 }
 
+                // build name argument
+                var name = ""
+                for (i in 3 until args.size) {
+                    name += args[i]
+                    if (i < args.size - 1)
+                        name += " "
+                }
+
                 // connect to server and handle result
-                FacecraftPlugin.networkManager.register(args[1], args[2]) {established, message ->
+                FacecraftPlugin.networkManager.register(args[1], name, args[2]) {established, message ->
                     when(established) {
                         true -> {
-                            sender?.sendMessage("${ChatColor.GREEN}<Facecraft> Registered! Please connect now: /facecraft connect <address> <password>")
+                            sender?.sendMessage("${ChatColor.GREEN}<Facecraft> Registered! Please connect now: /facecraft connect <address> <password> <name>")
                         }
                         false -> {
                             sender?.sendMessage("${ChatColor.RED}<Facecraft> Register failed! $message")

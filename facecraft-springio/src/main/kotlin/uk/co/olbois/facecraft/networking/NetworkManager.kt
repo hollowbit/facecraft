@@ -93,14 +93,8 @@ class NetworkManager {
 
         override fun onClose(conn: WebSocket?, code: Int, reason: String?, remote: Boolean) {
             if (conn != null) {
-                // find server connection, if exists
-                val connection = ConnectionManager.instance.websocketConnections[conn]
-
-                if (connection != null) {
-                    // remove references to this closed connection
-                    ConnectionManager.instance.websocketConnections.remove(conn)
-                    ConnectionManager.instance.serverWebsockets.remove(connection.address)
-                }
+                // remove references to this closed connection
+                ConnectionManager.instance.removeConnection(conn)
             }
         }
 
@@ -144,11 +138,12 @@ class NetworkManager {
         }
 
         override fun onError(conn: WebSocket?, ex: Exception?) {
-            if (conn != null) {
-                val connection = ConnectionManager.instance.websocketConnections[conn]
-                if (connection != null && ex != null) {
+            if (conn != null && ex != null) {
+                val connection = ConnectionManager.instance.getServerByWebSocket(conn)
+                if (connection != null)
                     println("Error with server [${connection.address}]: ${ex.message}")
-                }
+                else
+                    println("Error with disconnected server: ${ex.message}")
             }
         }
 

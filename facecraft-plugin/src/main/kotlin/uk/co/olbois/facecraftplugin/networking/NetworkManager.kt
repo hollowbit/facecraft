@@ -44,11 +44,11 @@ class NetworkManager {
         return socket.isOpen
     }
 
-    fun register(address: String, password: String, listener : (Boolean, String) -> Unit) {
+    fun register(address: String, name : String, password: String, listener : (Boolean, String) -> Unit) {
         if (socket.isClosed)
             return
 
-        this.sendPacket(RegisterPacket(address, password)) { responsePacket: ResponsePacket ->
+        this.sendPacket(RegisterPacket(address, name, password)) { responsePacket: ResponsePacket ->
             // send register response
             listener.invoke(responsePacket.errorCode == 0, responsePacket.errorMessage)
         }
@@ -130,6 +130,7 @@ class NetworkManager {
 
             // handle response packet
             if (packet is ResponsePacket) {
+                println("Test: $message")
                 val responseListener = responseListeners[packet.originId]
                 if (responseListener != null) {
                     responseListener.invoke(packet)
@@ -151,6 +152,7 @@ class NetworkManager {
         }
 
         override fun onError(ex: Exception?) {
+            ex?.printStackTrace()
             Bukkit.getServer().consoleSender.sendMessage("Facecraft Error: ${ex?.message}")
         }
 

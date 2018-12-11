@@ -8,13 +8,13 @@ class Server() {
 
     @Id
     @Column(name = "address")
-    val address = ""
+    var address = ""
 
     @Column(name = "name")
-    val name = ""
+    var name = ""
 
     @Column(name = "password")
-    val password = ""
+    var password = ""
 
     @ManyToMany(cascade = [CascadeType.ALL])
     @JoinTable
