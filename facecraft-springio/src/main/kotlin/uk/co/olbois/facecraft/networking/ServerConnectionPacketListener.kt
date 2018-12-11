@@ -22,16 +22,16 @@ class ServerConnectionPacketListener(networkManager: NetworkManager) : PacketLis
                 // make sure doesn't already exist
                 if (serverRepository.existsById(packet.address))
                     ResponsePacket(packet, 90, "Server with address [${packet.address}] already registered")
+                else {
+                    // create the server
+                    val server = Server()
+                    server.address = packet.address
+                    server.name = packet.name
+                    server.password = packet.password
+                    serverRepository.save(server)
 
-
-                // create the server
-                val server = Server()
-                server.address = packet.address
-                server.name = packet.name
-                server.password = packet.password
-                serverRepository.save(server)
-
-                ResponsePacket(packet,0, "")
+                    ResponsePacket(packet,0, "")
+                }
             } else
                 ResponsePacket(packet,1, "Internal server error...")
         }
@@ -41,28 +41,31 @@ class ServerConnectionPacketListener(networkManager: NetworkManager) : PacketLis
             if (packet is ConnectPacket) {
                 val serverRepository = Application.getInstance().serverRepository
 
+                val serverOptional = serverRepository.findById(packet.address)
+
                 // make sure doesn't already exist
-                if (!serverRepository.existsById(packet.address))
+                if (!serverOptional.isPresent)
                     ResponsePacket(packet,404, "Server with address [${packet.address}] not registered")
+                else {
+                    // get server
+                    val server = serverOptional.get()
 
-                // get server
-                val server = serverRepository.findById(packet.address) as Server
+                    // authenticate password
+                    if (packet.password != server.password)
+                        ResponsePacket(packet, 91, "The given password is incorrect")
+                    else {
+                        // add to connections
+                        ConnectionManager.instance.addConnection(conn, server)
 
-                // authenticate password
-                if (packet.password != server.password)
-                    ResponsePacket(packet,91, "The given password is incorrect")
-
-                // add to connections
-                ConnectionManager.instance.addConnection(conn, server)
-
-                // send valid response
-                ResponsePacket(packet,0, "")
+                        // send valid response
+                        ResponsePacket(packet, 0, "")
+                    }
+                }
             } else
                 ResponsePacket(packet,1, "Internal server error...")
         }
 
         register(PacketType.DISCONNECT) {packet: Packet, conn: WebSocket ->
-            println("Disconnect!")
             // simply remove the connection
             ConnectionManager.instance.removeConnection(conn)
             ResponsePacket(packet,0, "")

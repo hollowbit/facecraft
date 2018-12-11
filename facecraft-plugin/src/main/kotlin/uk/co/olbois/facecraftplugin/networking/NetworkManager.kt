@@ -130,7 +130,6 @@ class NetworkManager {
 
             // handle response packet
             if (packet is ResponsePacket) {
-                println("Test: $message")
                 val responseListener = responseListeners[packet.originId]
                 if (responseListener != null) {
                     responseListener.invoke(packet)

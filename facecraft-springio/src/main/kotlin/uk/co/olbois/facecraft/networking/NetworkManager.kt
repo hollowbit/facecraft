@@ -78,9 +78,7 @@ class NetworkManager {
 
         // send the packet
         val wrapper = PacketWrapper(packet.type, gson.toJson(packet))
-        val response = gson.toJson(wrapper)
-        println(response)
-        socket.send(response)
+        socket.send(gson.toJson(wrapper))
     }
 
     enum class Status {
