@@ -9,6 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
 import java.util.List;
 
 import uk.co.olbois.facecraft.R;
@@ -80,6 +85,24 @@ public class LoginFragment extends Fragment {
                 }
 
                 if(found){
+                    String deviceToken = null;
+                    FirebaseApp.initializeApp(getContext());
+
+                    final SampleUser finalU = u;
+                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+                        @Override
+                        public void onSuccess(InstanceIdResult instanceIdResult) {
+
+                            String newToken = instanceIdResult.getToken();
+                            finalU.setDeviceToken(newToken);
+                            try {
+                                dbh.getSampleUserTable().update(finalU);
+                            } catch (DatabaseException e) {
+                                e.printStackTrace();
+                            }
+                            Toast.makeText(getContext(), newToken, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     if(onLoggedInListener == null)
                         return;
                     onLoggedInListener.onLoggedIn(u);
