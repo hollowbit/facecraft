@@ -1,6 +1,20 @@
-main: uk.co.olbois.facecraftplugin.FacecraftPluginKt
-name: Facecraft-plugin
-version: 0.1
+main: uk.co.olbois.facecraftplugin.FacecraftPlugin
+name: Facecraft
+version: 1.0
 api-version: 1.13
 description: Plugin to interact with facecraft
 author: coolbois
+commands:
+  facecraft:
+    description: Standard facecraft command. See usage.
+    usage: /facecraft <connect | register | status | disconnect | addowner> [args...]
+    permission: facecraft.owner
+
+permissions:
+  facecraft.*:
+    description: Gives access to all facecraft commands
+    children:
+      facecraft.owner: true
+  facecraft.owner:
+    description: Access to commands for server owners
+    default: op
