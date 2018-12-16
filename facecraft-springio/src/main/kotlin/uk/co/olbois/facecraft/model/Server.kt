@@ -15,16 +15,18 @@ class Server {
 
     @Column(name = "password")
     var password = ""
-
+    
     @ManyToMany(cascade = [CascadeType.ALL], fetch=FetchType.EAGER)
     @JoinTable
     val owners: MutableList<User> = mutableListOf()
 
+    @ManyToMany(cascade = [CascadeType.ALL])
+    val members: List<User> = listOf()
+  
     override fun equals(other: Any?): Boolean {
         return when(other is Server) {
             true -> other.address == this.address
             false -> false
         }
     }
-
 }

@@ -6,9 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +23,10 @@ import uk.co.olbois.facecraft.R;
 import uk.co.olbois.facecraft.model.SampleUser;
 import uk.co.olbois.facecraft.model.UniversalDatabaseHandler;
 import uk.co.olbois.facecraft.model.serverconnection.ServerConnection;
+import uk.co.olbois.facecraft.server.HttpProgress;
+import uk.co.olbois.facecraft.server.OnResponseListener;
 import uk.co.olbois.facecraft.sqlite.DatabaseException;
+import uk.co.olbois.facecraft.tasks.RetrieveUserServersTask;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -83,6 +84,7 @@ public class ServerManagerFragment extends Fragment {
 
         setUpLoggedOutButton();
         setUpCreateConnection();
+
         return root;
     }
 
@@ -99,6 +101,7 @@ public class ServerManagerFragment extends Fragment {
     }
     //creates a alert dialog to create a new connection (SQLite only for now)
     private void setUpCreateConnection(){
+        /*
         createConnectionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,7 +128,7 @@ public class ServerManagerFragment extends Fragment {
 
                         //create the connection locally, then create it on sqlite db
                         ServerConnection conn = new ServerConnection();
-                        conn.setHost(connectionString);
+                        conn.setName(connectionString);
                         conn.setRole(ServerConnection.Role.OWNER);
                         conn.setUserCount(1);
                         conn.setUserId(user.getId());
@@ -136,13 +139,13 @@ public class ServerManagerFragment extends Fragment {
 
                             boolean found = false;
                             for(ServerConnection c : allServers){
-                                if(c.getHost().toLowerCase().equals(conn.getHost().toLowerCase())){
+                                if(c.getName().toLowerCase().equals(conn.getName().toLowerCase())){
                                     found = true;
                                     break;
                                 }
                             }
 
-                            if(!found || conn.getHost() == null){
+                            if(!found || conn.getName() == null){
                                 udbh.getConnectionsTable().create(conn);
                                 refreshList();
                             }
@@ -167,6 +170,7 @@ public class ServerManagerFragment extends Fragment {
                 alertDialog.show();
             }
         });
+        */
     }
 
     private class ConnectionsViewHolder extends RecyclerView.ViewHolder{
@@ -187,7 +191,7 @@ public class ServerManagerFragment extends Fragment {
 
         public void setConnection(final ServerConnection currentConnection){
             //set Ui elements based on particular connection
-            serverInformationTextView.setText("Server : " + currentConnection.getHost() + ":" + currentConnection.getPort());
+            serverInformationTextView.setText("Server : " + currentConnection.getName());
             userCountTextView.setText("User Count : " + currentConnection.getUserCount());
             roleTextView.setText("Role : " + currentConnection.getRole());
 
@@ -240,6 +244,26 @@ public class ServerManagerFragment extends Fragment {
 
         //create a new connections list, dont populate old one
         connections = new ArrayList<ServerConnection>();
+        RetrieveUserServersTask retrieveUserServersTask = new RetrieveUserServersTask("/users/" + user.getId(), new OnResponseListener<List<ServerConnection>>() {
+            @Override
+            public void onResponse(List<ServerConnection> data) {
+                connections.addAll(data);
+                connectionsRecyclerView.getAdapter().notifyDataSetChanged();
+            }
+
+            @Override
+            public void onProgress(HttpProgress value) {
+
+            }
+
+            @Override
+            public void onError(Exception error) {
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        retrieveUserServersTask.execute();
+        /*
         try {
             //get all connections and populate in-data connections array
             List<ServerConnection> unfilteredConnections = udbh.getConnectionsTable().readAll();
@@ -251,6 +275,6 @@ public class ServerManagerFragment extends Fragment {
             e.printStackTrace();
         }
         //refresh adapter!
-        connectionsRecyclerView.getAdapter().notifyDataSetChanged();
+        */
     }
 }
