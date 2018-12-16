@@ -19,7 +19,11 @@ import java.util.List;
 import uk.co.olbois.facecraft.R;
 import uk.co.olbois.facecraft.model.SampleUser;
 import uk.co.olbois.facecraft.model.UniversalDatabaseHandler;
+import uk.co.olbois.facecraft.server.HttpProgress;
+import uk.co.olbois.facecraft.server.OnResponseListener;
 import uk.co.olbois.facecraft.sqlite.DatabaseException;
+import uk.co.olbois.facecraft.tasks.ValidateLoginTask;
+import uk.co.olbois.facecraft.ui.SpringApplication;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -37,6 +41,7 @@ public class LoginFragment extends Fragment {
 
     private UniversalDatabaseHandler dbh;
     private List<SampleUser> users;
+    private SpringApplication application;
 
     public void setOnLoggedInListener(OnLoggedInListener onLoggedInListener){
         this.onLoggedInListener = onLoggedInListener;
@@ -53,6 +58,8 @@ public class LoginFragment extends Fragment {
         usernameEditText = root.findViewById(R.id.username_EditText);
         passwordEditText = root.findViewById(R.id.password_EditText);
         loginButton = root.findViewById(R.id.login_Button);
+
+        application = (SpringApplication) getContext().getApplicationContext();
 
         dbh = new UniversalDatabaseHandler(getContext());
         try {
@@ -71,46 +78,8 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                boolean found = false;
-                SampleUser u = null;
-                for(SampleUser currentUser : users){
-                    String password = currentUser.getPassword();
-                    String sentPassword = passwordEditText.getText().toString();
-                    if(currentUser.getUsername().toLowerCase().equals(usernameEditText.getText().toString().toLowerCase())
-                            && currentUser.getPassword().equals(passwordEditText.getText().toString())){
-                        found = true;
-                        u = currentUser;
-                        break;
-                    }
-                }
 
-                if(found){
-                    String deviceToken = null;
-                    FirebaseApp.initializeApp(getContext());
-
-                    final SampleUser finalU = u;
-                    FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
-                        @Override
-                        public void onSuccess(InstanceIdResult instanceIdResult) {
-
-                            String newToken = instanceIdResult.getToken();
-                            finalU.setDeviceToken(newToken);
-                            try {
-                                dbh.getSampleUserTable().update(finalU);
-                            } catch (DatabaseException e) {
-                                e.printStackTrace();
-                            }
-                            Toast.makeText(getContext(), newToken, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    if(onLoggedInListener == null)
-                        return;
-                    onLoggedInListener.onLoggedIn(u);
-                }
-                else{
-                    Toast.makeText(getContext(), "Invalid Username / Password", Toast.LENGTH_SHORT).show();
-                    clearFields();
-                }
+                setupValidateTask();
             }
         });
     }
@@ -118,5 +87,38 @@ public class LoginFragment extends Fragment {
     public void clearFields(){
         usernameEditText.setText("");
         passwordEditText.setText("");
+    }
+
+    public void setupValidateTask(){
+        ValidateLoginTask validateLoginTask = new ValidateLoginTask("/users", usernameEditText.getText().toString().toLowerCase(), passwordEditText.getText().toString(), new OnResponseListener<SampleUser>() {
+            @Override
+            public void onResponse(SampleUser data) {
+                if(onLoggedInListener == null)
+                    return;
+                onLoggedInListener.onLoggedIn(data);
+            }
+
+            @Override
+            public void onProgress(HttpProgress value) {
+
+            }
+
+            @Override
+            public void onError(Exception error) {
+
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                clearFields();
+            }
+        });
+        FirebaseApp.initializeApp(getContext());
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+
+                String newToken = instanceIdResult.getToken();
+                validateLoginTask.execute(newToken);
+            }
+        });
     }
 }
