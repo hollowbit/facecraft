@@ -6,8 +6,12 @@ import uk.co.olbois.facecraft.server.HttpRequestBuilder;
 import uk.co.olbois.facecraft.server.HttpResponse;
 import uk.co.olbois.facecraft.server.ServerException;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -25,59 +29,51 @@ public class MessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage){
         super.onMessageReceived(remoteMessage);
 
-        String messageTitle = remoteMessage.getNotification().getTitle();
-        String messageBody = remoteMessage.getNotification().getBody();
         Map<String, String> data = remoteMessage.getData();
+        String[] messageData = new String[3];
+
+        messageData[0] = data.get("title");
+        messageData[1] = data.get("body");
+
+        String[] inviteUrl = data.get("invite_url").split("/");
+        messageData[2] = "/" + inviteUrl[inviteUrl.length-2] + "/" + inviteUrl[inviteUrl.length-1];
+
+
+
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-        String[] inviteUrl = data.get("invite_url").split("/");
-        String path = "/" + inviteUrl[inviteUrl.length-2] + "/" + inviteUrl[inviteUrl.length-1];
-
         NotificationChannel channel = new NotificationChannel("inv_ch","Invite Channel", NotificationManager.IMPORTANCE_DEFAULT );
         channel.setDescription("Channel used for invite management!");
-
         mNotificationManager.createNotificationChannel(channel);
+
+        int mNotificationId = (int)System.currentTimeMillis();
+
+
+        String ACTION_ACCEPT="uk.co.olbois.facecraft.ACCEPT";
+        String ACTION_DENY = "uk.co.olbois.facecraft.DENY";
+
+        Intent acceptIntent = new Intent(this, NotificationBroadcastReceiver.class);
+        acceptIntent.setAction(ACTION_ACCEPT);
+        acceptIntent.putExtra(NotificationBroadcastReceiver.param.INITIAL_MESSAGE, messageData);
+        acceptIntent.putExtra(NotificationBroadcastReceiver.param.NOTIFICATION_ID, mNotificationId);
+
+        Intent declineIntent = new Intent(this, NotificationBroadcastReceiver.class);
+        declineIntent.setAction(ACTION_DENY);
+        declineIntent.putExtra(NotificationBroadcastReceiver.param.INITIAL_MESSAGE, messageData);
+        declineIntent.putExtra(NotificationBroadcastReceiver.param.NOTIFICATION_ID, mNotificationId);
+
+        PendingIntent acceptPendingIntent = PendingIntent.getBroadcast(this, 0, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent declinePendingIntent = PendingIntent.getBroadcast(this, 0, declineIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_CANCEL_CURRENT);
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "inv_ch")
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(messageTitle)
-                .setContentText(messageBody);
+                .setContentTitle(messageData[0])
+                .setContentText(messageData[1])
+                .addAction(R.drawable.rounded, "ACCEPT", acceptPendingIntent)
+                .addAction(R.drawable.rounded, "DECLINE", declinePendingIntent);
 
-        int mNotificationId = (int)System.currentTimeMillis();
         mNotificationManager.notify(mNotificationId, mBuilder.build());
-
-        try {
-            if(true){
-                HttpResponse response = new HttpRequestBuilder(path + "/invited_user_id")
-                        .method(HttpRequestBuilder.Method.GET)
-                        .perform();
-                String json = new String(response.getContent(), "UTF8");
-                SampleUser u = SampleUser.parse(json);
-
-                response = new HttpRequestBuilder(path + "/server")
-                        .method(HttpRequestBuilder.Method.GET)
-                        .perform();
-                json = new String(response.getContent(), "UTF8");
-                ServerConnection c = ServerConnection.parse(json);
-
-                response = new HttpRequestBuilder("/servers/" + c.getId() + "/members")
-                        .method(HttpRequestBuilder.Method.PATCH)
-                        .withRequestBody("text/uri-list", u.getUrl().getBytes())
-                        .perform();
-
-                response = new HttpRequestBuilder(path)
-                        .method(HttpRequestBuilder.Method.DELETE)
-                        .perform();
-            }
-            else{
-                HttpResponse response = new HttpRequestBuilder(path)
-                        .method(HttpRequestBuilder.Method.DELETE)
-                        .perform();
-            }
-        } catch (IOException | ServerException e) {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override
