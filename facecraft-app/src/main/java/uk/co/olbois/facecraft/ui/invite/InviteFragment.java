@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,30 +16,32 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import uk.co.olbois.facecraft.R;
 import uk.co.olbois.facecraft.model.SampleUser;
 import uk.co.olbois.facecraft.model.UniversalDatabaseHandler;
 import uk.co.olbois.facecraft.model.serverconnection.ServerConnection;
-import uk.co.olbois.facecraft.sqlite.DatabaseException;
+import uk.co.olbois.facecraft.server.HttpProgress;
+import uk.co.olbois.facecraft.server.OnResponseListener;
+import uk.co.olbois.facecraft.tasks.ChangeUserRoleTask;
+import uk.co.olbois.facecraft.tasks.RemoveUserFromServerTask;
+import uk.co.olbois.facecraft.tasks.RetrieveUserListTask;
+import uk.co.olbois.facecraft.tasks.SendInvitationTask;
 
 public class InviteFragment extends Fragment {
 
     private ServerConnection connection;
+    private SampleUser user;
     private TextView serverTextView;
     private RecyclerView usersRecyclerView;
     private RecyclerView currentUsersRecyclerView;
     private UniversalDatabaseHandler udbh;
     private List<SampleUser> users;
-    private List<Pair<SampleUser, ServerConnection>> currentConnections;
+    private List<SampleUser> currentConnections;
     private ServerConnection.Role[] rolePossibilities;
 
     private FirebaseFirestore mFirestore;
@@ -64,7 +65,6 @@ public class InviteFragment extends Fragment {
         usersRecyclerView.setHasFixedSize(true);
         usersRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
         usersRecyclerView.setAdapter(new UsersAdapter());
-
         usersRecyclerView.getAdapter().notifyDataSetChanged();
 
 
@@ -73,7 +73,7 @@ public class InviteFragment extends Fragment {
         currentUsersRecyclerView.setAdapter(new CurrentUsersAdapter());
 
         currentUsersRecyclerView.getAdapter().notifyDataSetChanged();
-        rolePossibilities = new ServerConnection.Role[]{ServerConnection.Role.MEMBER, ServerConnection.Role.ADMIN};
+        rolePossibilities = new ServerConnection.Role[]{ServerConnection.Role.MEMBER, ServerConnection.Role.OWNER};
 
         mFirestore = FirebaseFirestore.getInstance();
 
@@ -100,44 +100,26 @@ public class InviteFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    //update old connection
-                    connection.setUserCount(connection.getUserCount() + 1);
-                    //create new connection with old connections data + new user
-                    ServerConnection c = new ServerConnection();
-                    c.setUserId(currentUser.getId());
-                    c.setUserCount(connection.getUserCount());
-                    c.setRole(ServerConnection.Role.MEMBER);
-                    c.setHost(connection.getHost());
-                    c.setPort(connection.getPort());
+                    SendInvitationTask sendInvitationTask = new SendInvitationTask("/invites", connection, new OnResponseListener<Boolean>() {
+                        @Override
+                        public void onResponse(Boolean data) {
+                            users.remove(currentUser);
+                            usersRecyclerView.getAdapter().notifyDataSetChanged();
+                            Toast.makeText(getContext(), "sent", Toast.LENGTH_SHORT).show();
+                        }
 
-                    Map<String, Object> invite = new HashMap<>();
-                    invite.put("to", currentUser.getUsername());
-                    invite.put("device_token", currentUser.getDeviceToken());
-                    invite.put("server", connection.getHost() + connection.getPort());
+                        @Override
+                        public void onProgress(HttpProgress value) {
 
-                    mFirestore.collection("invites")
-                            .add(invite)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Toast.makeText(getContext(), "Snapshot with id " + documentReference.getId() , Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                        }
 
-                    try {
-                        //create and update on database
-                        udbh.getConnectionsTable().create(c);
-                        udbh.getConnectionsTable().update(connection);
-                        //refresh list
-                        currentConnections.add(new Pair<>(currentUser, c));
-                        users.remove(currentUser);
-                        usersRecyclerView.getAdapter().notifyDataSetChanged();
-                        currentUsersRecyclerView.getAdapter().notifyDataSetChanged();
-                    } catch (DatabaseException e) {
-                        e.printStackTrace();
-                    }
+                        @Override
+                        public void onError(Exception error) {
+                            Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-
+                    sendInvitationTask.execute(user, currentUser);
                 }
             });
         }
@@ -182,12 +164,14 @@ public class InviteFragment extends Fragment {
         }
 
         //Set user for this particular view, this assigns the values to the textviews AND sets up the invite button
-        public void setUser(final Pair<SampleUser, ServerConnection> currentValues){
-            usernameTextView.setText("User : " + currentValues.first.getUsername());
-            roleTextView.setText("Role : " + currentValues.second.getRole().toString());
+        public void setUser(final SampleUser currentValues){
+            check = 0;
+            usernameTextView.setText("User : " + currentValues.getUsername());
+            roleTextView.setText("Role : " + currentValues.getRole().toString());
 
-            if(connection.getRole().compareTo(currentValues.second.getRole()) <= 0){
+            if(connection.getRole().compareTo(currentValues.getRole()) <= 0){
                 removeButton.setEnabled(false);
+                roleSpinner.setEnabled(false);
             }
 
             ArrayAdapter<ServerConnection.Role> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, rolePossibilities);
@@ -206,19 +190,29 @@ public class InviteFragment extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-                    users.add(currentValues.first);
-                    currentConnections.remove(currentValues);
-                    connection.setUserCount(connection.getUserCount()-1);
 
-                    try {
-                        udbh.getConnectionsTable().update(connection);
-                        udbh.getConnectionsTable().delete(currentValues.second);
-                    } catch (DatabaseException e) {
-                        e.printStackTrace();
-                    }
+                    RemoveUserFromServerTask removeUserFromServerTask = new RemoveUserFromServerTask("/servers/" + connection.getId() + "/members", new OnResponseListener<Boolean>() {
+                        @Override
+                        public void onResponse(Boolean data) {
+                            users.add(currentValues);
+                            currentConnections.remove(currentValues);
 
-                    usersRecyclerView.getAdapter().notifyDataSetChanged();
-                    currentUsersRecyclerView.getAdapter().notifyDataSetChanged();
+                            usersRecyclerView.getAdapter().notifyDataSetChanged();
+                            currentUsersRecyclerView.getAdapter().notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onProgress(HttpProgress value) {
+
+                        }
+
+                        @Override
+                        public void onError(Exception error) {
+                            Toast.makeText(getContext(),error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    removeUserFromServerTask.execute(currentValues);
                 }
             });
 
@@ -227,14 +221,36 @@ public class InviteFragment extends Fragment {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
                     if(++check > 1){
-                        currentValues.second.setRole(rolePossibilities[position]);
+                        Toast.makeText(getContext(), "CHECKED?!??!?!?!", Toast.LENGTH_SHORT).show();
+                        ChangeUserRoleTask changeUserRoleTask = new ChangeUserRoleTask(rolePossibilities[position], connection, new OnResponseListener<Boolean>() {
+                            @Override
+                            public void onResponse(Boolean data) {
+                                currentValues.setRole(rolePossibilities[position]);
+                                roleTextView.setText("Role : " + currentValues.getRole().toString());
+                                removeButton.setEnabled(false);
+                                roleSpinner.setEnabled(false);
+                            }
+
+                            @Override
+                            public void onProgress(HttpProgress value) {
+
+                            }
+
+                            @Override
+                            public void onError(Exception error) {
+                                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        changeUserRoleTask.execute(currentValues);
+                        /*
                         try {
                             udbh.getConnectionsTable().update(currentValues.second);
                             roleTextView.setText("Role : " + currentValues.second.getRole().toString());
                         } catch (DatabaseException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(getContext(), rolePossibilities[position].toString(), Toast.LENGTH_SHORT).show();
+                        */
                     }
                 }
 
@@ -271,48 +287,46 @@ public class InviteFragment extends Fragment {
 
     //Takes in a connection, and sets it for this particular fragment
     //Also creates a list of users not in the sent in connection
-    public void setConnection(ServerConnection c){
+    public void setConnectionAndUser(ServerConnection c, SampleUser u){
         this.connection = c;
+        this.user = u;
 
         //set UI texts
-        serverTextView.setText("Server : " + connection.getHost() + " !");
+        serverTextView.setText("Server : " + connection.getName() + " !");
 
         //new list, dont populate old one
         this.users = new ArrayList<>();
         this.currentConnections = new ArrayList<>();
 
-        //get connections and users from sqlite db
-        try {
-            List<ServerConnection> allConnections = udbh.getConnectionsTable().readAll();
-            List<SampleUser> unfilteredUsers = udbh.getSampleUserTable().readAll();
-
-            //Go through each user
-            for(SampleUser u : unfilteredUsers){
-                boolean found = false;
-                //go through each connection
-                for(ServerConnection conn : allConnections){
-                    //if the user has a connection = to the current connection, found
-                    if(u.getId() == conn.getUserId() && conn.getHost().equals(this.connection.getHost())){
-                        found = true;
-                        if(u.getId() != connection.getUserId())
-                            currentConnections.add(new Pair<>(u, conn));
-                        break;
+        RetrieveUserListTask retrieveUserListTask = new RetrieveUserListTask("/servers/" + connection.getId(), new OnResponseListener<List<SampleUser>>() {
+            @Override
+            public void onResponse(List<SampleUser> data) {
+                for(SampleUser u : data){
+                    if(u.getRole() == ServerConnection.Role.OTHER){
+                        users.add(u);
+                    }
+                    else{
+                        currentConnections.add(u );
                     }
                 }
-
-                //check if user isn't in the connection
-                if(!found)
-                    users.add(u);
+                if(usersRecyclerView != null){
+                    usersRecyclerView.getAdapter().notifyDataSetChanged();
+                    currentUsersRecyclerView.getAdapter().notifyDataSetChanged();
+                }
+                Toast.makeText(getContext(), "done", Toast.LENGTH_LONG).show();
             }
 
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
+            @Override
+            public void onProgress(HttpProgress value) {
 
-        if(usersRecyclerView != null){
-            usersRecyclerView.getAdapter().notifyDataSetChanged();
-            currentUsersRecyclerView.getAdapter().notifyDataSetChanged();
-        }
+            }
+
+            @Override
+            public void onError(Exception error) {
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        retrieveUserListTask.execute();
     }
-
 }

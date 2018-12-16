@@ -17,7 +17,8 @@ class Server() {
     var password = ""
 
     @ManyToMany(cascade = [CascadeType.ALL])
-    @JoinTable
     val owners: List<User> = listOf()
 
+    @ManyToMany(cascade = [CascadeType.ALL])
+    val members: List<User> = listOf()
 }
