@@ -4,7 +4,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "servers")
-class Server() {
+class Server {
 
     @Id
     @Column(name = "address")
@@ -16,8 +16,15 @@ class Server() {
     @Column(name = "password")
     var password = ""
 
-    @ManyToMany(cascade = [CascadeType.ALL])
+    @ManyToMany(cascade = [CascadeType.ALL], fetch=FetchType.EAGER)
     @JoinTable
-    val owners: List<User> = listOf()
+    val owners: MutableList<User> = mutableListOf()
+
+    override fun equals(other: Any?): Boolean {
+        return when(other is Server) {
+            true -> other.address == this.address
+            false -> false
+        }
+    }
 
 }
