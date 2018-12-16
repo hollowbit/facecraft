@@ -157,10 +157,26 @@ public class SampleUser implements Identifiable<Long>, Parcelable {
         JsonElement ele = gson.fromJson(json, JsonElement.class);
         JsonObject jsonAsObj = ele.getAsJsonObject();
         JsonElement links = jsonAsObj.get("_links");
-        String url = links.getAsJsonObject().get("self").getAsJsonObject().get("href").getAsString();
+        String url = links.getAsJsonObject()
+                .get("self")
+                .getAsJsonObject()
+                .get("href")
+                .getAsString();
+
         s.setUrl(url);
-        s.setServersOwnedUrl(links.getAsJsonObject().get("serversOwned").getAsJsonObject().get("href").getAsString());
-        s.setServersPartOfUrl(links.getAsJsonObject().get("serversPartOf").getAsJsonObject().get("href").getAsString());
+
+        s.setServersOwnedUrl(links.getAsJsonObject()
+                .get("serversOwned")
+                .getAsJsonObject()
+                .get("href")
+                .getAsString());
+
+        s.setServersPartOfUrl(links.getAsJsonObject()
+                .get("serversPartOf")
+                .getAsJsonObject()
+                .get("href")
+                .getAsString());
+
         String[] arr = url.split("/");
 
         s.setId(Long.parseLong(arr[arr.length-1]));
