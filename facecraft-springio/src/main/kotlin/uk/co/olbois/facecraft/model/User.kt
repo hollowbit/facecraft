@@ -11,8 +11,14 @@ class User {
     @Column(name = "user_id")
     val id: Long = 0
 
-    @Column(name = "name")
-    val name = ""
+    @Column(name = "username")
+    val username = ""
+
+    @Column(name = "password")
+    val password = ""
+
+    @Column(name = "deviceToken")
+    val deviceToken = ""
 
     @ManyToMany(mappedBy = "owners", fetch=FetchType.EAGER)
     val serversOwned: MutableList<Server> = mutableListOf()
@@ -24,4 +30,6 @@ class User {
         }
     }
 
+    @ManyToMany(mappedBy = "members")
+    val serversPartOf: List<Server> = listOf()
 }
