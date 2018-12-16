@@ -198,8 +198,19 @@ public class ChatroomFragment extends Fragment {
      */
     private void sendMessage(String in) {
 
-        messageData.add(new Message(sampleUser.getUsername(), "app", in, new Date()));
+        Message message = new Message(sampleUser.getUsername(), "app", in, new Date());
+        // send message and get rid of --v line
+        messageData.add(message);
+
     }
+
+    /**
+     * is rin to poll the database for new messages
+     */
+    private void getMessages() {
+
+    }
+
 
     /**
      * Set the currently logged in user, called at activity start
