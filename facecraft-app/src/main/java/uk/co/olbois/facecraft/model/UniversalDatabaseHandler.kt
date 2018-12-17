@@ -17,7 +17,7 @@ class UniversalDatabaseHandler
 (val context: Context) : SQLiteOpenHelper(context, DATABASE_FILE_NAME, null, DATABASE_VERSION) {
 
     /*  NoteDatabaseHandler Tables */
-    val connectionsTable: Table<ServerConnection>
+    /*val connectionsTable: Table<ServerConnection>*/
     val sampleUserTable: Table<SampleUser>
 
     init {
@@ -26,19 +26,21 @@ class UniversalDatabaseHandler
                 SampleUser(2, "Nate", "Password123"),
                 SampleUser(3, "Alex", "a")
         )
+        /*
         val connections = mutableListOf(
-                ServerConnection(0,"mc.hollowbit.net", 25565, 3, ServerConnection.Role.MEMBER, 1),
+                ServerConnection(0,"mc.hollowbit.net", 25565, 3, ServerConnection.Role.OWNER, 1),
                 ServerConnection(1,"realserver.realdomain.com", 25565, 16, ServerConnection.Role.ADMIN, 1),
                 ServerConnection(0,"mc.hollowbit.net", 25565, 3, ServerConnection.Role.OWNER, 2),
-                ServerConnection(0,"realhost.realdomain.com", 25565, 3, ServerConnection.Role.MEMBER, 2)
+                ServerConnection(0,"realhost.realdomain.com", 25565, 3, ServerConnection.Role.MEMBER, 2),
+                ServerConnection(0,"mc.hollowbit.net", 25565, 3, ServerConnection.Role.MEMBER, 3)
         )
-
 
 
         connectionsTable = TableFactory.makeFactory(this, ServerConnection::class.java)
                 .setSeedData(connections)
                 .table
 
+        */
         sampleUserTable = TableFactory.makeFactory(this, SampleUser::class.java)
                 .setSeedData(users)
                 .table
@@ -53,18 +55,21 @@ class UniversalDatabaseHandler
     }*/
 
     override fun onCreate(database: SQLiteDatabase) {
-        database.execSQL(connectionsTable.getCreateTableStatement())
         database.execSQL(sampleUserTable.getCreateTableStatement())
+        /*
+        database.execSQL(connectionsTable.getCreateTableStatement())
 
         if (connectionsTable.hasInitialData())
             connectionsTable.initialize(database)
+        */
         if(sampleUserTable.hasInitialData())
             sampleUserTable.initialize(database)
     }
 
     override fun onUpgrade(database: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         Log.w(UniversalDatabaseHandler::class.java.name, "Upgrading database from version $oldVersion to $newVersion, which will destroy all old data")
-        database.execSQL(connectionsTable.getDropTableStatement())
+
+        //database.execSQL(connectionsTable.getDropTableStatement())
         onCreate(database)
     }
 

@@ -19,3 +19,4 @@ minecraft-server/server.properties
 minecraft-server/spigot.yml
 minecraft-server/usercache.json
 minecraft-server/whitelist.json
+minecraft-server/logs/
