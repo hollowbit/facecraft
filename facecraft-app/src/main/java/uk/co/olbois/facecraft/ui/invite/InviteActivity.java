@@ -35,7 +35,7 @@ public class InviteActivity extends AppCompatActivity {
         ServerConnection c = intent.getParcelableExtra(param.INITIAL_CONNECTION);
         SampleUser sampleUser = intent.getParcelableExtra(param.INITIAL_USER);
 
-        inviteFragment.setConnectionAndUser(c, sampleUser);
+        inviteFragment.setConnection(c);
     }
 
 }

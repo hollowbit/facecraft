@@ -42,23 +42,13 @@
         <TextView
             android:id="@+id/serverInformation_TextView"
             android:layout_width="wrap_content"
-            android:layout_height="21dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            android:ellipsize="marquee"
-            android:focusable="auto"
-            android:focusableInTouchMode="true"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:maxLength="32"
-            android:scrollbarAlwaysDrawHorizontalTrack="true"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
+            android:layout_marginTop="16dp"
             android:text="TextView"
             android:textColor="@android:color/background_light"
-            app:layout_constraintBaseline_toBaselineOf="@+id/access_Button"
-            app:layout_constraintEnd_toStartOf="@+id/access_Button"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/role_TextView"

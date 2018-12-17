@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="uk.co.olbois.facecraft">
-    <uses-permission android:name="android.permission.INTERNET" />
-
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
@@ -15,9 +13,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".ui.SpringApplication"
-        android:usesCleartextTraffic="true">
+        android:theme="@style/AppTheme">
 
         <activity
             android:name=".ui.servermanager.ServerManagerActivity"
@@ -36,11 +32,6 @@
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar">
-          <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
 
         </activity>
         <activity
@@ -54,18 +45,11 @@
         <activity
             android:name=".ui.calendar.CalendarActivity"
             android:label="@string/title_activity_calendar"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <service android:name=".firebase.MessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+            android:theme="@style/AppTheme.NoActionBar"><intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-        <receiver android:name=".firebase.NotificationBroadcastReceiver" android:exported="true">
-            <intent-filter>
-                <action android:name="uk.co.olbois.facecraft.ACCEPT"></action>
-                <action android:name="uk.co.olbois.facecraft.DENY"></action>
-            </intent-filter>
-        </receiver>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter></activity>
     </application>
+
 </manifest>
