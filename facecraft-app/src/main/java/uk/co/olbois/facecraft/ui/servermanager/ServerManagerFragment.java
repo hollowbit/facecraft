@@ -43,7 +43,11 @@ public class ServerManagerFragment extends Fragment {
         void onConnect(ServerConnection connection, SampleUser user);
     }
 
-    private Button createConnectionButton;
+    public interface OnManageInviteClickedListener{
+        void onManageInviteClicked(SampleUser u);
+    }
+
+    private Button manageInvitesButton;
     private Button logoutButton;
     private RecyclerView connectionsRecyclerView;
     private TextView welcomeTextView;
@@ -53,6 +57,7 @@ public class ServerManagerFragment extends Fragment {
 
     private OnLoggedOutListener onLoggedOutListener;
     private OnConnectListener onConnectListener;
+    private OnManageInviteClickedListener onManageInviteClickedListener;
 
     public void setOnLoggedOutListener(OnLoggedOutListener onLoggedOutListener){
         this.onLoggedOutListener = onLoggedOutListener;
@@ -60,6 +65,10 @@ public class ServerManagerFragment extends Fragment {
 
     public void setOnConnectListener(OnConnectListener onConnectListener){
         this.onConnectListener = onConnectListener;
+    }
+
+    public void setOnManageInviteClickedListener(OnManageInviteClickedListener onManageInviteClickedListener){
+        this.onManageInviteClickedListener = onManageInviteClickedListener;
     }
 
     public ServerManagerFragment() {
@@ -70,7 +79,7 @@ public class ServerManagerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_server_manager, container, false);
 
-        createConnectionButton = root.findViewById(R.id.createConnection_Button);
+        manageInvitesButton = root.findViewById(R.id.manageInvite_Button);
         logoutButton = root.findViewById(R.id.logout_Button);
         connectionsRecyclerView = root.findViewById(R.id.connections_RecyclerView);
         welcomeTextView = root.findViewById(R.id.welcome_TextView);
@@ -86,6 +95,7 @@ public class ServerManagerFragment extends Fragment {
         connectionsRecyclerView.getAdapter().notifyDataSetChanged();
 
         setUpLoggedOutButton();
+        setUpManageInviteButton();
 
         return root;
     }
@@ -98,6 +108,17 @@ public class ServerManagerFragment extends Fragment {
                 if(onLoggedOutListener == null)
                     return;
                 onLoggedOutListener.onLoggedOut();
+            }
+        });
+    }
+
+    private void setUpManageInviteButton(){
+        manageInvitesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onManageInviteClickedListener == null)
+                    return;
+                onManageInviteClickedListener.onManageInviteClicked(user);
             }
         });
     }

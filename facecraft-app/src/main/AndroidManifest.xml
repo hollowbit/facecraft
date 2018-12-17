@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="uk.co.olbois.facecraft">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
+        android:name=".ui.SpringApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".ui.SpringApplication"
         android:usesCleartextTraffic="true">
-
         <activity
             android:name=".ui.servermanager.ServerManagerActivity"
             android:label="@string/title_activity_server_manager"
@@ -48,7 +47,7 @@
         <activity
             android:name=".ui.calendar.CalendarActivity"
             android:label="@string/title_activity_calendar"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service android:name=".firebase.MessagingService">
             <intent-filter>
@@ -56,11 +55,19 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".firebase.NotificationBroadcastReceiver" android:exported="true">
+        <receiver
+            android:name=".firebase.NotificationBroadcastReceiver"
+            android:exported="true">
             <intent-filter>
-                <action android:name="uk.co.olbois.facecraft.ACCEPT"></action>
-                <action android:name="uk.co.olbois.facecraft.DENY"></action>
+                <action android:name="uk.co.olbois.facecraft.ACCEPT" />
+                <action android:name="uk.co.olbois.facecraft.DENY" />
             </intent-filter>
         </receiver>
+
+        <activity
+            android:name=".ui.invitemanager.InviteManagerActivity"
+            android:label="@string/title_activity_invite_manager"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
+
 </manifest>

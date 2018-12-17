@@ -20,7 +20,7 @@ class OwnerPacketListener(networkManager: NetworkManager) : PacketListener(netwo
                 if (server != null) {
 
                     // get user given by packet and make sure it exists
-                    val user = Application.getInstance().userRepository.findByName(packet.user)
+                    val user = Application.getInstance().userRepository.findByUsername(packet.user)
                     if (user != null) {
 
                         // make sure the user isn't already an owner of the server
@@ -46,7 +46,7 @@ class OwnerPacketListener(networkManager: NetworkManager) : PacketListener(netwo
                 val server = ConnectionManager.instance.getServerByWebSocket(conn)
                 if (server != null) {
                     // make sure the given user exists
-                    val user = Application.getInstance().userRepository.findByName(packet.user)
+                    val user = Application.getInstance().userRepository.findByUsername(packet.user)
                     if (user != null) {
                         // check if they currently are an owner of the server
                         if (server.owners.contains(user)) {
