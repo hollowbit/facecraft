@@ -11,6 +11,8 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguratio
 
 import uk.co.olbois.facecraft.controller.ConsoleOutputRepository;
 import uk.co.olbois.facecraft.networking.ConsoleOutputPacketListener;
+import uk.co.olbois.facecraft.controller.MessageRepository;
+import uk.co.olbois.facecraft.model.Message;
 import uk.co.olbois.facecraft.networking.NetworkManager;
 import uk.co.olbois.facecraft.controller.EventRepository;
 import uk.co.olbois.facecraft.controller.ServerRepository;
@@ -42,6 +44,9 @@ public class Application implements CommandLineRunner {
 
     private OwnerPacketListener ownerPacketListener;
     private ConsoleOutputPacketListener consoleOutputPacketListener;
+  
+    @Autowired
+    private MessageRepository messageRepository;
 
     public static void main(String[] args)  {
         networkManager = new NetworkManager();
@@ -72,6 +77,7 @@ public class Application implements CommandLineRunner {
     }
 
     public ConsoleOutputRepository getConsoleOutputRepository() { return consoleOutputRepository; }
+    public MessageRepository getMessageRepository() {return messageRepository;}
 
     public static Application getInstance() {
         return instance;

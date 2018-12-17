@@ -5,51 +5,43 @@ import android.os.AsyncTask;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 
 import uk.co.olbois.facecraft.model.SampleUser;
+import uk.co.olbois.facecraft.model.message.Message;
 import uk.co.olbois.facecraft.server.Either;
 import uk.co.olbois.facecraft.server.HttpRequestBuilder;
 import uk.co.olbois.facecraft.server.HttpResponse;
 import uk.co.olbois.facecraft.server.OnResponseListener;
 import uk.co.olbois.facecraft.server.ServerException;
 
-public class AddUserToServerTask extends AsyncTask<SampleUser, Void, Either<Exception, Boolean>> {
+public class SendMessageTask extends AsyncTask<Message, Void, Either<Exception, Boolean>> {
 
     private OnResponseListener<Boolean> onResponseListener;
     private String path;
 
-    public AddUserToServerTask(String path, OnResponseListener<Boolean> onResponseListener){
+    public SendMessageTask(String path, OnResponseListener<Boolean> onResponseListener){
         this.path = path;
         this.onResponseListener = onResponseListener;
     }
 
     //path = /servers/.../members
     @Override
-    protected Either<Exception, Boolean> doInBackground(SampleUser... sampleUsers) {
-        SampleUser u = sampleUsers[0];
+    protected Either<Exception, Boolean> doInBackground(Message... messages) {
+
+        Message message  = messages[0];
 
         try {
-            //Get all members of a server
-            HttpResponse response = new HttpRequestBuilder(path)
-                    .method(HttpRequestBuilder.Method.GET)
+
+            HttpResponse send = new HttpRequestBuilder(path)
+                    .method(HttpRequestBuilder.Method.POST)
+                    .withRequestBody("application/json", message.format().getBytes())
                     .perform();
 
-            String json = new String(response.getContent(), "UTF8");
-            LinkedList<SampleUser> springUsers = new LinkedList<>(Arrays.asList(SampleUser.parseArray(json)));
-
-            //If the user we're adding doesn't match any of the urls (Unique ID) of a user, throw him into the list!
-            if(!springUsers.stream().anyMatch(s -> s.getUrl().equals(u.getUrl()))){
-                response = new HttpRequestBuilder(path)
-                        .method(HttpRequestBuilder.Method.PATCH)
-                        .withRequestBody("text/uri-list", u.getUrl().getBytes())
-                        .perform();
-
-            }
-            return Either.right(true);
         } catch (IOException | ServerException e) {
             return Either.left(e);
         }
+
+        return Either.right(true);
     }
 
 
