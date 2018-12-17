@@ -6,6 +6,4 @@ import uk.co.olbois.facecraft.model.Message
 import uk.co.olbois.facecraft.model.User
 
 @RepositoryRestResource(collectionResourceRel = "users", path = "users")
-interface UserRepository : CrudRepository<User, Long> {
-    fun findByName(name : String) : User?
-}
+interface UserRepository : CrudRepository<User, Long>

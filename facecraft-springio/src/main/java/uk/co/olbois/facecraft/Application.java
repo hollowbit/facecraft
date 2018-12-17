@@ -15,7 +15,6 @@ import uk.co.olbois.facecraft.networking.NetworkManager;
 import uk.co.olbois.facecraft.controller.EventRepository;
 import uk.co.olbois.facecraft.controller.ServerRepository;
 import uk.co.olbois.facecraft.controller.UserRepository;
-import uk.co.olbois.facecraft.networking.OwnerPacketListener;
 
 @SpringBootApplication
 @EnableJpaRepositories
@@ -37,8 +36,6 @@ public class Application implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
 
-    private OwnerPacketListener ownerPacketListener;
-  
     @Autowired
     private MessageRepository messageRepository;
 
@@ -52,9 +49,6 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         instance = this;
-
-        // register packet listeners here
-        ownerPacketListener = new OwnerPacketListener(networkManager);
     }
 
     public EventRepository getEventRepository() {

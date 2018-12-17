@@ -29,7 +29,6 @@ public class RetrieveUserListTask extends AsyncTask<Void, Void, Either<Exception
 
     @Override
     protected Either<Exception, List<SampleUser>> doInBackground(Void... voids) {try {
-        //Retrieve a list of the owners, and give them the "Owner" role.
         HttpResponse response = new HttpRequestBuilder(path + "/owners")
                 .method(HttpRequestBuilder.Method.GET)
                 .perform();
@@ -41,7 +40,7 @@ public class RetrieveUserListTask extends AsyncTask<Void, Void, Either<Exception
             u.setRole(ServerConnection.Role.OWNER);
         }
 
-        //Retrieve a list of the members, and give them the "Member" role.
+
         response = new HttpRequestBuilder(path + "/members")
                 .method(HttpRequestBuilder.Method.GET)
                 .perform();
@@ -54,7 +53,6 @@ public class RetrieveUserListTask extends AsyncTask<Void, Void, Either<Exception
         }
 
 
-        //Retrieve ALL users
         response = new HttpRequestBuilder("/users")
                 .method(HttpRequestBuilder.Method.GET)
                 .perform();
@@ -67,12 +65,20 @@ public class RetrieveUserListTask extends AsyncTask<Void, Void, Either<Exception
         users.addAll(Arrays.asList(serverOwners));
         users.addAll(Arrays.asList(serverMembers));
 
-        //go through every user in the list, remove them from AllUsers list.
-        for(SampleUser u: users){
-            allUsers.removeIf(user -> user.getUrl().equals(u.getUrl()));
+        for(SampleUser u1: users){
+            boolean found = false;
+            SampleUser temp = null;
+            for(SampleUser u2:allUsers){
+                if(u1.getUrl().equals(u2.getUrl())){
+                    found = true;
+                    temp = u2;
+                    break;
+                }
+            }
+            if(found)
+                allUsers.remove(temp);
         }
 
-        //retrieve all invites!
         response = new HttpRequestBuilder("/invites")
                 .method(HttpRequestBuilder.Method.GET)
                 .perform();
@@ -80,7 +86,6 @@ public class RetrieveUserListTask extends AsyncTask<Void, Void, Either<Exception
         json = new String(response.getContent(), "UTF8");
         Invite[] invites = Invite.parseArray(json);
 
-        //Finally go through all invites and remove them from the AllUsers list (Dont want a user being invited twice!)
         for(Invite i : invites){
             response = new HttpRequestBuilder("/invites/" + i.getId() + "/invited_user_id")
                     .method(HttpRequestBuilder.Method.GET)

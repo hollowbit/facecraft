@@ -7,7 +7,7 @@ author: coolbois
 commands:
   facecraft:
     description: Standard facecraft command. See usage.
-    usage: /facecraft <connect | register | status | disconnect | addowner | removeowner> [args...]
+    usage: /facecraft <connect | register | status | disconnect | addowner> [args...]
     permission: facecraft.owner
 
 permissions:

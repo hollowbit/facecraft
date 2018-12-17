@@ -31,7 +31,6 @@ public class ValidateLoginTask extends AsyncTask<String, Void, Either<Exception,
     protected Either<Exception, SampleUser> doInBackground(String... tokens) {
         String token = tokens[0];
         try {
-            //Retrieve all users
             HttpResponse response = new HttpRequestBuilder(path)
                     .method(HttpRequestBuilder.Method.GET)
                     .perform();
@@ -39,7 +38,6 @@ public class ValidateLoginTask extends AsyncTask<String, Void, Either<Exception,
             String json = new String(response.getContent(), "UTF8");
             SampleUser[] springUsers = SampleUser.parseArray(json);
 
-            //Check to see if the user's entered credentials match with a record in the database
             for(SampleUser s : springUsers){
                 if(s.getUsername().toLowerCase().equals(username) && s.getPassword().equals(password)){
                     s.setDeviceToken(token);
@@ -55,7 +53,6 @@ public class ValidateLoginTask extends AsyncTask<String, Void, Either<Exception,
         } catch (IOException | ServerException e) {
             return Either.left(e);
         }
-        //No user found with the credentials, therefore send back error message
         return Either.left(new IOException("No user with that password or username!"));
     }
 
