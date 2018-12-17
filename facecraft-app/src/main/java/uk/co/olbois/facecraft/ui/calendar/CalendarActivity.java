@@ -37,12 +37,15 @@ public class CalendarActivity extends AppCompatActivity {
         });
     }
 
+
     /**
      * Show the time picker dialog when the event is triggered
      * @param calendar
      */
-    public void showTimePickerDialog(final Calendar calendar) {
-        DialogFragment newFragment = new TimePickerFragment(new myCallBack() {
+    //public void showTimePickerDialog(final Calendar calendar) {
+    //    DialogFragment newFragment = new TimePickerFragment(new myCallBack() {
+    public void showTimePickerDialog(View v) {
+        final DialogFragment newFragment = new TimePickerFragment(new myCallBack() {
             @Override
             // TODO : get rid of mystr parameter <1.2>
             public void UpdateTime(String mystr, Calendar calendar1) {
@@ -54,7 +57,16 @@ public class CalendarActivity extends AppCompatActivity {
                 calendarFragment = (CalendarFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
                 calendarFragment.setTime(calendar1);
             }
-        }, calendar);
+        //}, calendar);
+
+            @Override
+            public String getMyText() {
+                EditText txtView = (EditText)findViewById(R.id.editTime);
+                return txtView.getText().toString();
+            }
+        });
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
+
+
 }
