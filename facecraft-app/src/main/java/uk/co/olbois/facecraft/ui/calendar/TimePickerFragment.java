@@ -15,11 +15,9 @@ import android.widget.Toast;
 public class TimePickerFragment extends DialogFragment
         implements TimePickerDialog.OnTimeSetListener {
 
-    myCallBack mCallBack;
-    Calendar calendar;
-    public TimePickerFragment(myCallBack callBack, Calendar calendar){
+    myCallBack mCallBack = null;
+    public TimePickerFragment(myCallBack callBack){
         this.mCallBack=callBack;
-        this.calendar = calendar;
     }
 
     @Override
@@ -40,13 +38,7 @@ public class TimePickerFragment extends DialogFragment
         String minutes = String.valueOf(view.getMinute());
         //Toast.makeText(getActivity(), hour, Toast.LENGTH_LONG).show();
         //Toast.makeText(getActivity(), minutes, Toast.LENGTH_LONG).show();
-
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-        c.set(Calendar.MINUTE, minute);
-
-        // TODO stop sending "hour + ":" + minute" <1.1>
-        this.mCallBack.UpdateTime(hour + " : " + minutes, c);
+        this.mCallBack.UpdateMyText(hour + " : " + minutes);
 
     }
 }

@@ -18,29 +18,12 @@
         android:textColor="@android:color/background_light" />
 
     <TextView
-        android:id="@+id/currentUsers_TextView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight=".3"
-        android:background="@android:color/darker_gray"
-        android:text="Manage Users"
-        android:textAlignment="center"
-        android:textSize="24sp" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/currentUsers_RecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/dark_gray" />
-
-    <TextView
         android:id="@+id/allUsers_TextView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight=".3"
+        android:layout_weight=".2"
         android:background="@android:color/darker_gray"
-        android:text="Invite Users"
+        android:text="All Users"
         android:textAlignment="center"
         android:textSize="24sp" />
 
