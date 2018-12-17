@@ -30,6 +30,12 @@ public class CalendarActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Show the time picker dialog when the event is triggered
+     * @param calendar
+     */
+    //public void showTimePickerDialog(final Calendar calendar) {
+    //    DialogFragment newFragment = new TimePickerFragment(new myCallBack() {
 
     public void showTimePickerDialog(View v) {
         final DialogFragment newFragment = new TimePickerFragment(new myCallBack() {
@@ -38,6 +44,7 @@ public class CalendarActivity extends AppCompatActivity {
                 EditText txtView = (EditText)findViewById(R.id.editTime);
                 txtView.setText(mystr);
             }
+        //}, calendar);
 
             @Override
             public String getMyText() {
@@ -47,6 +54,4 @@ public class CalendarActivity extends AppCompatActivity {
         });
         newFragment.show(getSupportFragmentManager(), "timePicker");
     }
-
-
 }

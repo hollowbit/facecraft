@@ -6,10 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.icu.util.Calendar;
-import android.net.Uri;
-import android.provider.CalendarContract;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,22 +16,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.api.client.util.DateTime;
-import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.EventAttendee;
-import com.google.api.services.calendar.model.EventDateTime;
-import com.google.api.services.calendar.model.EventReminder;
-
 import org.w3c.dom.Text;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.Year;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Date;
 
 import uk.co.olbois.facecraft.R;
 
@@ -44,20 +28,14 @@ import uk.co.olbois.facecraft.R;
  */
 public class CalendarFragment extends Fragment {
 
-    private com.google.api.services.calendar.Calendar service;
-
     public CalendarFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View root = inflater.inflate(R.layout.fragment_calendar, container, false);
 
-        final View saveBtn = root.findViewById(R.id.btnSaveEvent);
-
-        final View setTimeBtn = root.findViewById(R.id.btnSetTime);
 
         final CalendarView calendarView = root.findViewById(R.id.calendarView);
 
@@ -67,44 +45,25 @@ public class CalendarFragment extends Fragment {
 
         final Calendar calendar = Calendar.getInstance();
 
-
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                /*calendar.set(Calendar.YEAR,year);
-                calendar.set(Calendar.MONTH, month);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);*/
-
-                calendar.set(year, month, dayOfMonth);
-
-                long date = calendar.getTime().getTime();
-                long currentDate = System.currentTimeMillis();
-                if (date < currentDate) {
-                    saveBtn.setClickable(false);
-                    Toast.makeText(getContext(), "Cannot set an event in the past", Toast.LENGTH_SHORT).show();
-                    //calendarView.setDate(-1);
-                } else {
-                    saveBtn.setClickable(true);
-                    calendarView.setDate(date);
-                }
-
-            }
-        });
+        // set the calender time to the current time
+        calendar = Calendar.getInstance();
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String date = "";
-                Long unixTime = Long.valueOf(0);
+
+                // formatted date
+                String date;
+                // event date
+                Long unixTime;
+                //calendar time
                 String time;
-                String title = titleView.getText().toString();
 
                 unixTime = calendarView.getDate();
 
 
                 SimpleDateFormat sdf = new SimpleDateFormat("MMMM d, yyyy");
                 date = sdf.format(unixTime);
-
 
                 time = timeView.getText().toString();
 
@@ -128,9 +87,14 @@ public class CalendarFragment extends Fragment {
 
                 }
 
+                // TODO: change this line to get "calendar" hour and minute, format it into am/pm <4>
+                time = String.valueOf(timeView.getText()).trim();
 
+                Toast.makeText(getContext(), "Event " + titleView.getText() + " saved for \n" + date + " at " + time ,Toast.LENGTH_SHORT).show();
             }
         });
+
+        // When the set time button is clicked, trigger the event and open the dialog fragment
 
         setTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +107,13 @@ public class CalendarFragment extends Fragment {
         return root;
 
     }
-
+    /**
+     * set the onclick listener for setting the time
+     * @param onSetTimeClickedListener
+     */
+    //public void setOnSetTimeClickedListener( OnSetTimeClickedListener onSetTimeClickedListener){
+    //    this.onSetTimeClickedListener = onSetTimeClickedListener;
+    //}
 
     public void createNewEvent(String title, long date, String time) {
         //events.insert();
@@ -287,11 +257,13 @@ public class CalendarFragment extends Fragment {
                 .putExtra(CalendarContract.Events.TITLE, event.getSummary());
         startActivity(intent);
 
-
-
-
-
-
+    /**
+     * set the current event time
+     * @param calendar
+     */
+    public void setTime(Calendar calendar) {
+        // TODO set the edit text "timeView" here based on "calendar" hour and minute  and format it into am/pm <3>
+        this.calendar = calendar;
     }
 
 
