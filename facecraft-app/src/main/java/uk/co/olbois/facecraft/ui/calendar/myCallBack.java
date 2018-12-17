@@ -4,6 +4,6 @@ import android.icu.util.Calendar;
 
 public interface myCallBack {
         // Declaration of the template function for the interface
-        // TODO: Get rid of the mystr parameter <1.0>
-        public void UpdateTime(String mystr, Calendar calendar);
+        public void UpdateMyText(String mystr);
+        public String getMyText();
 }
