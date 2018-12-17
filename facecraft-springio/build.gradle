@@ -59,6 +59,9 @@ dependencies {
 
     // gson
     compile 'com.google.code.gson:gson:2.8.5'
+
+    // mysql
+    runtimeOnly('mysql:mysql-connector-java')
 }
 
 compileKotlin {

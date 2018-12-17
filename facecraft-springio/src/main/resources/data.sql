@@ -1,3 +1,15 @@
+create table `console_output` (
+    `id` BIGINT(19) NOT NULL,
+    `message` VARCHAR(255),
+    `server` VARCHAR(255),
+    PRIMARY KEY(id),
+    FOREIGN KEY(`server`)
+      REFERENCES server(address)
+      ON DELETE CASCADE
+) ;
+
+create table
+
 insert into users (username, password) values ('Alex', 'a');
 insert into users (username, password) values ('JJ', 'Password123');
 insert into users (username, password) values ('Ahmed', 'Password123');
