@@ -22,6 +22,7 @@ import uk.co.olbois.facecraft.model.SampleUser;
 import uk.co.olbois.facecraft.model.serverconnection.ServerConnection;
 import uk.co.olbois.facecraft.server.HttpProgress;
 import uk.co.olbois.facecraft.server.OnResponseListener;
+import uk.co.olbois.facecraft.tasks.HandleInviteTask;
 import uk.co.olbois.facecraft.tasks.RetrieveUserInvitesTask;
 
 /**
@@ -80,7 +81,7 @@ public class InviteManagerFragment extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-
+                    runHandleTask(invite, true);
                 }
             });
 
@@ -88,7 +89,7 @@ public class InviteManagerFragment extends Fragment {
 
                 @Override
                 public void onClick(View v) {
-
+                    runHandleTask(invite, false);
                 }
             });
         }
@@ -145,5 +146,32 @@ public class InviteManagerFragment extends Fragment {
 
         retrieveUserInvitesTask.execute(u);
 
+    }
+
+    public void runHandleTask(Pair<ServerConnection, Invite> invitePair, Boolean accepted){
+
+
+        HandleInviteTask handleInviteTask = new HandleInviteTask(accepted, "/invites", new OnResponseListener<Boolean>(){
+
+            @Override
+            public void onResponse(Boolean data) {
+                invites.remove(invitePair);
+                invitesRecyclerView.getAdapter().notifyDataSetChanged();
+            }
+
+            @Override
+            public void onProgress(HttpProgress value) {
+
+            }
+
+            @Override
+            public void onError(Exception error) {
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                invites.remove(invitePair);
+                invitesRecyclerView.getAdapter().notifyDataSetChanged();
+            }
+        });
+
+        handleInviteTask.execute(invitePair.second);
     }
 }
