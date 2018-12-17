@@ -31,7 +31,6 @@
           <option name="pluginClasspaths">
             <array />
           </option>
-          <option name="coroutinesState" value="warn" />
         </compilerArguments>
       </configuration>
     </facet>
@@ -41,8 +40,8 @@
     <output-test url="file://$MODULE_DIR$/build/classes/java/test" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src/main/kotlin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/kotlin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/kotlin" isTestSource="true" />
@@ -52,22 +51,30 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="Gradle: kotlin-stdlib-jdk8-1.2.51" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spigot-api-1.13.1-R0.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: bukkit-1.13.1-R0.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: kotlin-stdlib-jdk7-1.2.51" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: kotlin-stdlib-1.2.51" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: commons-lang-2.6" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: json-simple-1.1.1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: bungeecord-chat-1.13-SNAPSHOT" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: guava-21.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: gson-2.8.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: snakeyaml-1.21" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: kotlin-stdlib-common-1.2.51" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: annotations-13.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: junit-4.10" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: hamcrest-core-1.1" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="Gradle: junit-4.12" level="project" />
-    <orderEntry type="library" exported="" scope="TEST" name="Gradle: hamcrest-core-1.3" level="project" />
+    <orderEntry type="library" exported="" name="kotlin-stdlib-jdk8-1.2.51" level="project" />
+    <orderEntry type="library" exported="" name="spigot-api-1.13.1-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="bukkit-1.13.1-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="kotlin-stdlib-jdk7-1.2.51" level="project" />
+    <orderEntry type="library" exported="" name="kotlin-stdlib-1.2.51" level="project" />
+    <orderEntry type="library" exported="" name="commons-lang-2.6" level="project" />
+    <orderEntry type="library" exported="" name="json-simple-1.1.1" level="project" />
+    <orderEntry type="library" exported="" name="bungeecord-chat-1.13-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="guava-21.0" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.8.0" level="project" />
+    <orderEntry type="library" exported="" name="snakeyaml-1.21" level="project" />
+    <orderEntry type="library" exported="" name="kotlin-stdlib-common-1.2.51" level="project" />
+    <orderEntry type="library" exported="" name="annotations-13.0" level="project" />
+    <orderEntry type="library" exported="" name="junit-4.10" level="project" />
+    <orderEntry type="library" exported="" name="hamcrest-core-1.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="junit-4.12" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="hamcrest-core-1.3" level="project" />
+    <orderEntry type="library" exported="" name="facecraft-plugin.facecraft-plugin-1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="facecraft-plugin.facecraft-plugin-1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="facecraft-plugin.facecraft-plugin-1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="facecraft-plugin.facecraft-plugin-1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="facecraft-plugin.facecraft-plugin-1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="facecraft-plugin.facecraft-plugin-1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="facecraft-plugin.facecraft-plugin-1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" exported="" name="facecraft-plugin.facecraft-plugin-1.0-SNAPSHOT" level="project" />
   </component>
 </module>

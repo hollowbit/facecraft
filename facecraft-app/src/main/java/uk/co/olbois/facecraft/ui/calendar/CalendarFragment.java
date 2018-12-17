@@ -1,11 +1,15 @@
 package uk.co.olbois.facecraft.ui.calendar;
 
+import android.Manifest;
 import android.content.ContentResolver;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.icu.util.Calendar;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -71,16 +75,15 @@ public class CalendarFragment extends Fragment {
                 calendar.set(Calendar.MONTH, month);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);*/
 
-                calendar.set(year,month,dayOfMonth);
+                calendar.set(year, month, dayOfMonth);
 
-                long date =  calendar.getTime().getTime();
+                long date = calendar.getTime().getTime();
                 long currentDate = System.currentTimeMillis();
-                if(date < currentDate){
+                if (date < currentDate) {
                     saveBtn.setClickable(false);
-                    Toast.makeText(getContext(), "Cannot set an event in the past" ,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Cannot set an event in the past", Toast.LENGTH_SHORT).show();
                     //calendarView.setDate(-1);
-                }
-                else {
+                } else {
                     saveBtn.setClickable(true);
                     calendarView.setDate(date);
                 }
@@ -106,33 +109,24 @@ public class CalendarFragment extends Fragment {
                 time = timeView.getText().toString();
 
                 long currentDate = System.currentTimeMillis();
-                if( unixTime > 0 && !title.isEmpty() && !time.isEmpty() ) {
-                    if (unixTime >= currentDate){
-                    Toast.makeText(getContext(), "Event " + titleView.getText() + " saved for \n" + date + " at " + time, Toast.LENGTH_SHORT).show();
+                if (unixTime > 0 && !title.isEmpty() && !time.isEmpty()) {
+                    if (unixTime >= currentDate) {
+                        Toast.makeText(getContext(), "Event " + titleView.getText() + " saved for \n" + date + " at " + time, Toast.LENGTH_SHORT).show();
 
-                        createNewEvent(title,unixTime,time);
+                        createNewEvent(title, unixTime, time);
+                    } else {
+                        Toast.makeText(getContext(), "Cannot set an event in the past", Toast.LENGTH_SHORT).show();
                     }
-                    else {
-                        Toast.makeText(getContext(), "Cannot set an event in the past" ,Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else {
-                    if(title.isEmpty())
-                    {
+                } else {
+                    if (title.isEmpty()) {
                         Toast.makeText(getContext(), "Cannot save an event with no title", Toast.LENGTH_SHORT).show();
-                    }
-                    else if(time.isEmpty()) {
+                    } else if (time.isEmpty()) {
                         Toast.makeText(getContext(), "Cannot save an event with no time", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+                    } else {
                         Toast.makeText(getContext(), "Error: could not save the event", Toast.LENGTH_SHORT).show();
                     }
 
                 }
-
-
-
-
 
 
             }
@@ -141,11 +135,9 @@ public class CalendarFragment extends Fragment {
         setTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((CalendarActivity)getActivity()).showTimePickerDialog(v);
+                ((CalendarActivity) getActivity()).showTimePickerDialog(v);
             }
         });
-
-
 
 
         return root;
@@ -153,34 +145,29 @@ public class CalendarFragment extends Fragment {
     }
 
 
-
-
-
-    public void createNewEvent(String title,long date,String time){
+    public void createNewEvent(String title, long date, String time) {
         //events.insert();
 
         Event event = new Event()
                 .setSummary(title);
-                //.setDescription("A chance to hear more about Google's developer products.");
+        //.setDescription("A chance to hear more about Google's developer products.");
 
-        Date date2 = new Date((long)date);
+        Date date2 = new Date((long) date);
         Calendar ctime = Calendar.getInstance();
         String[] times = time.trim().split(":");
         String hour = times[0].trim();
         String minute = times[1].trim();
         String hourPlusOne = String.valueOf(Integer.parseInt(hour) + 1);
 
-        if(minute.length() == 1) {
+        if (minute.length() == 1) {
             minute = "0" + minute;
         }
-        if(hour.length() == 1) {
+        if (hour.length() == 1) {
             hour = "0" + hour;
         }
-        if(hourPlusOne.length() == 1) {
+        if (hourPlusOne.length() == 1) {
             hourPlusOne = "0" + hourPlusOne;
         }
-
-
 
 
         DateTime dt = new DateTime(date2);
@@ -193,7 +180,7 @@ public class CalendarFragment extends Fragment {
         String realdate = dates[0] + "T" + hour + ":" + minute + ":00-" + dates2[3];
         String realdateOneHourPlus = dates[0] + "T" + hourPlusOne + ":" + String.valueOf(minute) + ":00-" + dates2[3];
 
-                                                //2015-05-28T09:00:00-07:00
+        //2015-05-28T09:00:00-07:00
         DateTime startDateTime = new DateTime(realdate);
         EventDateTime start = new EventDateTime()
                 .setDateTime(startDateTime)
@@ -206,7 +193,11 @@ public class CalendarFragment extends Fragment {
                 .setTimeZone("America/New_York");
         event.setEnd(end);
 
-        final String[] EVENT_PROJECTION = new String[] {
+        addEvent(event);
+
+        //Event is created
+
+        /*final String[] EVENT_PROJECTION = new String[]{
                 CalendarContract.Calendars._ID,                           // 0
                 CalendarContract.Calendars.ACCOUNT_NAME,                  // 1
                 CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,         // 2
@@ -221,30 +212,84 @@ public class CalendarFragment extends Fragment {
 
         // Run query
         Cursor cur = null;
-        ContentResolver cr =  getActivity().getContentResolver();
+        ContentResolver cr = getActivity().getContentResolver();
         Uri uri = CalendarContract.Calendars.CONTENT_URI;
         String selection = "((" + CalendarContract.Calendars.ACCOUNT_NAME + " = ?) AND ("
                 + CalendarContract.Calendars.ACCOUNT_TYPE + " = ?) AND ("
                 + CalendarContract.Calendars.OWNER_ACCOUNT + " = ?))";
-        String[] selectionArgs = new String[] {"hera@example.com", "com.example",
+        String[] selectionArgs = new String[]{"hera@example.com", "com.example",
                 "hera@example.com"};
-        // Submit the query and get a Cursor object back.
-        cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
 
-        while (cur.moveToNext()) {
-            long calID = 0;
-            String displayName = null;
-            String accountName = null;
-            String ownerName = null;
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                    Manifest.permission.READ_CALENDAR)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.READ_CALENDAR},
+                        1);
+            }
+        } else {
+            // Permission has already been granted
+            cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
 
-            // Get the field values
-            calID = cur.getLong(PROJECTION_ID_INDEX);
-            displayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
-            accountName = cur.getString(PROJECTION_ACCOUNT_NAME_INDEX);
-            ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
+            while (cur.moveToNext()) {
+                long calID = 0;
+                String displayName = null;
+                String accountName = null;
+                String ownerName = null;
 
-            // Do something with the values...
-        }
+                // Get the field values
+                calID = cur.getLong(PROJECTION_ID_INDEX);
+                displayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
+                accountName = cur.getString(PROJECTION_ACCOUNT_NAME_INDEX);
+                ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
+
+                // Do something with the values...
+            }
+        }*/
+
+
+    }
+
+    public void addEvent(Event event) {
+
+        //Convert event to unix time
+        Date unix = new Date(event.getStart().getDateTime().getValue());
+
+        Calendar cal = Calendar.getInstance();
+
+        cal.setTime(unix);
+
+        //get indiviudal ints from unix time
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int hour = cal.get(Calendar.HOUR);
+        int minute = cal.get(Calendar.MINUTE);
+
+
+        //Create intent with individual ints
+        Calendar beginTime = Calendar.getInstance();
+        beginTime.set(year, month, day, hour, minute);
+        Calendar endTime = Calendar.getInstance();
+        endTime.set(year, month, day, ((hour + 1) % 24) , minute);
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+                .putExtra(CalendarContract.Events.TITLE, event.getSummary());
+        startActivity(intent);
+
+
+
+
 
 
     }
