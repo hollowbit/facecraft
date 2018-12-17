@@ -41,7 +41,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
         //set user
         chatroomFragment.setUser(u);
-
+        chatroomFragment.setConnection(serverConnection);
     }
 
 }
