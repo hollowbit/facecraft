@@ -22,6 +22,9 @@ class Server {
 
     @ManyToMany(cascade = [CascadeType.ALL])
     val members: List<User> = listOf()
+
+    @OneToMany(mappedBy = "server", targetEntity = ConsoleOutput::class)
+    private val consoleOutputs: List<ConsoleOutput> = mutableListOf()
   
     override fun equals(other: Any?): Boolean {
         return when(other is Server) {

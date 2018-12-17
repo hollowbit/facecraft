@@ -9,31 +9,37 @@ import uk.co.olbois.facecraftplugin.networking.packet.Packet
 import uk.co.olbois.facecraftplugin.networking.packet.PacketType
 import uk.co.olbois.facecraftplugin.networking.packet.RemoveOwnerPacket
 
-
 class OwnerPacketListener(networkManager: NetworkManager) : PacketListener(networkManager) {
 
     init {
         register(PacketType.ADD_OWNER) { packet: Packet, conn: WebSocket ->
             if (packet is AddOwnerPacket) {
                 // get server associated to packet to make sure they are connected
-                val server = ConnectionManager.instance.getServerByWebSocket(conn)
-                if (server != null) {
+                val serverAddress = ConnectionManager.instance.getServerByWebSocket(conn)
+                if (serverAddress != null) {
 
-                    // get user given by packet and make sure it exists
-                    val user = Application.getInstance().userRepository.findByName(packet.user)
-                    if (user != null) {
+                    // get the server model, if possible
+                    val serverOptional = Application.getInstance().serverRepository.findById(serverAddress)
+                    if (serverOptional.isPresent) {
+                        val server = serverOptional.get()
 
-                        // make sure the user isn't already an owner of the server
-                        if (!user.serversOwned.contains(server)) {
-                            // all is good, add the owner and send response
-                            user.serversOwned.add(server)
-                            server.owners.add(user)
-                            Application.getInstance().serverRepository.save(server)
-                            ResponsePacket(packet, 0, "")
+                        // get user given by packet and make sure it exists
+                        val user = Application.getInstance().userRepository.findByUsername(packet.user)
+                        if (user != null) {
+
+                            // make sure the user isn't already an owner of the server
+                            if (!user.serversOwned.contains(server)) {
+                                // all is good, add the owner and send response
+                                user.serversOwned.add(server)
+                                server.owners.add(user)
+                                Application.getInstance().serverRepository.save(server)
+                                ResponsePacket(packet, 0, "")
+                            } else
+                                ResponsePacket(packet, 4, "User is already an owner of this server")
                         } else
-                            ResponsePacket(packet, 4, "User is already an owner of this server")
+                            ResponsePacket(packet, 3, "User doesn't exist")
                     } else
-                        ResponsePacket(packet, 3, "User doesn't exist")
+                        ResponsePacket(packet, 5, "The server you are connected to no longer exists.")
                 } else
                     ResponsePacket(packet, 2, "Not connected. Please connect first")
             } else
@@ -43,23 +49,31 @@ class OwnerPacketListener(networkManager: NetworkManager) : PacketListener(netwo
         register(PacketType.REMOVE_OWNER) {packet: Packet, conn: WebSocket ->
             if (packet is RemoveOwnerPacket) {
                 // see if this connection is connected to a server
-                val server = ConnectionManager.instance.getServerByWebSocket(conn)
-                if (server != null) {
-                    // make sure the given user exists
-                    val user = Application.getInstance().userRepository.findByName(packet.user)
-                    if (user != null) {
-                        // check if they currently are an owner of the server
-                        if (server.owners.contains(user)) {
+                val serverAddress = ConnectionManager.instance.getServerByWebSocket(conn)
+                if (serverAddress != null) {
 
-                            // all is good, remove the owner and send response
-                            user.serversOwned.remove(server)
-                            server.owners.remove(user)
-                            Application.getInstance().serverRepository.save(server)
-                            ResponsePacket(packet, 0, "")
+                    // get the server model, if possible
+                    val serverOptional = Application.getInstance().serverRepository.findById(serverAddress)
+                    if (serverOptional.isPresent) {
+                        val server = serverOptional.get()
+
+                        // make sure the given user exists
+                        val user = Application.getInstance().userRepository.findByUsername(packet.user)
+                        if (user != null) {
+                            // check if they currently are an owner of the server
+                            if (server.owners.contains(user)) {
+
+                                // all is good, remove the owner and send response
+                                user.serversOwned.remove(server)
+                                server.owners.remove(user)
+                                Application.getInstance().serverRepository.save(server)
+                                ResponsePacket(packet, 0, "")
+                            } else
+                                ResponsePacket(packet, 4, "User is already not an owner")
                         } else
-                            ResponsePacket(packet, 4, "User is already not an owner")
+                            ResponsePacket(packet, 3, "User doesn't exist")
                     } else
-                        ResponsePacket(packet, 3, "User doesn't exist")
+                        ResponsePacket(packet, 5, "The server you are connected to no longer exists.")
                 } else
                     ResponsePacket(packet, 2, "Not connected. Please connect first")
             } else

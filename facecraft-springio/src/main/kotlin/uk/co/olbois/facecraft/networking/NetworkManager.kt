@@ -137,9 +137,9 @@ class NetworkManager {
 
         override fun onError(conn: WebSocket?, ex: Exception?) {
             if (conn != null && ex != null) {
-                val connection = ConnectionManager.instance.getServerByWebSocket(conn)
-                if (connection != null)
-                    println("Error with server [${connection.address}]: ${ex.message}")
+                val serverAddress = ConnectionManager.instance.getServerByWebSocket(conn)
+                if (serverAddress != null)
+                    println("Error with server [$serverAddress]: ${ex.message}")
                 else
                     println("Error with disconnected server: ${ex.message}")
             }
