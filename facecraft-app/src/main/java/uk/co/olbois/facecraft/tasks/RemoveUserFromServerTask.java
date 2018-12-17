@@ -30,6 +30,7 @@ public class RemoveUserFromServerTask extends AsyncTask<SampleUser, Void, Either
 
 
         try {
+            //Only users from the members list can be deleted, therefore get a list of the members
             HttpResponse response = new HttpRequestBuilder(path)
                     .method(HttpRequestBuilder.Method.GET)
                     .perform();
@@ -37,21 +38,23 @@ public class RemoveUserFromServerTask extends AsyncTask<SampleUser, Void, Either
             String json = new String(response.getContent(), "UTF8");
             LinkedList<SampleUser> springUsers = new LinkedList<>(Arrays.asList(SampleUser.parseArray(json)));
 
+            //if the user we wish to remove exists in the list of users, delete him from the list
             springUsers.removeIf(s -> s.getUrl().equals(u.getUrl()));
 
+
+            //EMPTY THE uri-list with an empty put
             response = new HttpRequestBuilder(path)
                     .method(HttpRequestBuilder.Method.PUT)
                     .withRequestBody("text/uri-list", new byte[0])
                     .perform();
 
+            //Patch in the users, effectively append them to the list, one by one.
             for(SampleUser user : springUsers){
                 response = new HttpRequestBuilder(path)
                         .method(HttpRequestBuilder.Method.PATCH)
                         .withRequestBody("text/uri-list", user.getUrl().getBytes())
                         .perform();
             }
-
-
 
             return Either.right(true);
         } catch (IOException | ServerException e) {
