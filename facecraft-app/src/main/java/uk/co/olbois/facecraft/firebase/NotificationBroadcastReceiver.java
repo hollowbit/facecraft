@@ -28,22 +28,23 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        //retrieve the message that was sent
-        String[] messageData = intent.getStringArrayExtra(param.INITIAL_MESSAGE);
+        //retrieve the message that was sent and the notification id (timestamp pretty much)
+        String invitePath = intent.getStringExtra(param.INITIAL_MESSAGE);
         int notification_id = intent.getIntExtra(param.NOTIFICATION_ID, 0);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
+        //Action is either "ACCEPT" or "DENY" ( the two buttons of notification)
         String action = intent.getAction();
 
         PendingResult pendingResult = goAsync();
-        Task asyncTask;
+        HandleInviteTask asyncTask;
         switch(action){
             case ACTION_ACCEPT:
-                asyncTask = new Task(pendingResult, true, messageData);
+                asyncTask = new HandleInviteTask(pendingResult, true, invitePath);
                 asyncTask.execute();
                 break;
             case ACTION_DENY:
-                asyncTask = new Task(pendingResult, false, messageData);
+                asyncTask = new HandleInviteTask(pendingResult, false, invitePath);
                 asyncTask.execute();
                 break;
         }
@@ -51,45 +52,53 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
         notificationManager.cancel(notification_id);
     }
 
-    private static class Task extends AsyncTask<Void, Void, Either<Exception, Boolean>> {
+    //An asynchronous task that handles a invite in the database based on whether the decline or accept button was clicked
+    private static class HandleInviteTask extends AsyncTask<Void, Void, Either<Exception, Boolean>> {
         private final PendingResult pendingResult;
-        private final String[] messageData;
+        private final String invitePath;
         private final Boolean accepted;
 
-        private Task(PendingResult pendingResult, Boolean accepted, String[] message){
+        private HandleInviteTask(PendingResult pendingResult, Boolean accepted, String message){
             this.pendingResult = pendingResult;
             this.accepted = accepted;
-            this.messageData = message;
+            this.invitePath = message;
         }
 
         @Override
         protected Either<Exception, Boolean> doInBackground(Void... voids) {
 
             try {
+                //Accept button was clicked
                 if(accepted){
-                    HttpResponse response = new HttpRequestBuilder(messageData[2] + "/invited_user_id")
+                    //Get the user who sent the invite
+                    HttpResponse response = new HttpRequestBuilder(invitePath + "/invited_user_id")
                             .method(HttpRequestBuilder.Method.GET)
                             .perform();
                     String json = new String(response.getContent(), "UTF8");
                     SampleUser u = SampleUser.parse(json);
 
-                    response = new HttpRequestBuilder(messageData[2] + "/server")
+                    //Get the server the user was invited to
+                    response = new HttpRequestBuilder(invitePath + "/server")
                             .method(HttpRequestBuilder.Method.GET)
                             .perform();
                     json = new String(response.getContent(), "UTF8");
                     ServerConnection c = ServerConnection.parse(json);
 
+                    //Add the user into the servers "members" list
                     response = new HttpRequestBuilder("/servers/" + c.getId() + "/members")
                             .method(HttpRequestBuilder.Method.PATCH)
                             .withRequestBody("text/uri-list", u.getUrl().getBytes())
                             .perform();
 
-                    response = new HttpRequestBuilder(messageData[2])
+                    //Delete the invite
+                    response = new HttpRequestBuilder(invitePath)
                             .method(HttpRequestBuilder.Method.DELETE)
                             .perform();
                 }
+                //Decline button was clicked
                 else{
-                    HttpResponse response = new HttpRequestBuilder(messageData[2])
+                    //Delete the invite from the database!
+                    HttpResponse response = new HttpRequestBuilder(invitePath)
                             .method(HttpRequestBuilder.Method.DELETE)
                             .perform();
                 }
@@ -101,7 +110,6 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
         @Override
         protected void onPostExecute(Either<Exception, Boolean> either) {
             pendingResult.finish();
-
         }
     }
 }
