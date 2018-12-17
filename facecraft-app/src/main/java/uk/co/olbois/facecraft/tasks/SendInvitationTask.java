@@ -31,15 +31,18 @@ public class SendInvitationTask extends AsyncTask<SampleUser, Void, Either<Excep
 
     @Override
     protected Either<Exception, Boolean> doInBackground(SampleUser... users) {
+        //Get access to the firestore database
         FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
         SampleUser sender = users[0];
         SampleUser receiver = users[1];
+        //create an invite out of the sent fields
         Invite invite = new Invite();
         invite.setServer(connection.getUrl());
         invite.setInvited_by(sender.getUrl());
         invite.setInvited_user_id(receiver.getUrl());
 
         try {
+            //create the invite on the springio database
             HttpResponse response = new HttpRequestBuilder(path)
                     .method(HttpRequestBuilder.Method.POST)
                     .withRequestBody("application/json", invite.format().getBytes())
@@ -49,6 +52,7 @@ public class SendInvitationTask extends AsyncTask<SampleUser, Void, Either<Excep
             return Either.left(e);
         }
 
+        //create a hash map with all the data we wish to send to the firebase database
         Map<String, Object> invite_payload = new HashMap<>();
         invite_payload.put("to", receiver.getUsername());
         invite_payload.put("device_token", receiver.getDeviceToken());
@@ -59,6 +63,7 @@ public class SendInvitationTask extends AsyncTask<SampleUser, Void, Either<Excep
         invite_payload.put("invite_url", invite.getUrl());
 
 
+        //Send the hashmap to the invites collection on my firebase database
         mFirestore.collection("invites")
                 .add(invite_payload);
         return Either.right(true);
