@@ -9,7 +9,7 @@ import uk.co.olbois.facecraft.model.ConsoleOutput
 @RepositoryRestResource(collectionResourceRel = "consoleoutputs", path = "consoleoutputs")
 interface ConsoleOutputRepository : CrudRepository<ConsoleOutput, Long> {
 
-    @Query("SELECT c FROM ConsoleOutput c WHERE server.address = :serverAddress AND c.id > :lastId")
+    @Query("SELECT c FROM ConsoleOutput c WHERE server.address = :serverAddress AND c.id > :lastId ORDER BY c.id")
     fun findAllSinceLastByServer(@Param("lastId") lastId: Long, @Param("serverAddress") serverAddress: String) : List<ConsoleOutput>
 
 }

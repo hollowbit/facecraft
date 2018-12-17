@@ -33,4 +33,8 @@ internal class ConnectionManager private constructor() {
         return serverWebsockets[server.address]
     }
 
+    fun getWebSocketByServer(serverAddress : String) : WebSocket? {
+        return serverWebsockets[serverAddress]
+    }
+
 }
