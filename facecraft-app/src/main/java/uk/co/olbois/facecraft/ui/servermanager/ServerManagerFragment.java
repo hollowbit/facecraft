@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,10 +23,16 @@ import uk.co.olbois.facecraft.R;
 import uk.co.olbois.facecraft.model.SampleUser;
 import uk.co.olbois.facecraft.model.UniversalDatabaseHandler;
 import uk.co.olbois.facecraft.model.serverconnection.ServerConnection;
+import uk.co.olbois.facecraft.server.HttpProgress;
+import uk.co.olbois.facecraft.server.OnResponseListener;
 import uk.co.olbois.facecraft.sqlite.DatabaseException;
+import uk.co.olbois.facecraft.tasks.RetrieveUserServersTask;
 
 /**
- * A placeholder fragment containing a simple view.
+ * This is the fragment where you see all of the connections you are a part of
+ *
+ * This is effectively a way point into the Hub Activity, where you can get to
+ * the main part of this project!
  */
 public class ServerManagerFragment extends Fragment {
     public interface OnLoggedOutListener{
@@ -81,7 +86,7 @@ public class ServerManagerFragment extends Fragment {
         connectionsRecyclerView.getAdapter().notifyDataSetChanged();
 
         setUpLoggedOutButton();
-        setUpCreateConnection();
+
         return root;
     }
 
@@ -96,61 +101,11 @@ public class ServerManagerFragment extends Fragment {
             }
         });
     }
-    //creates a alert dialog to create a new connection (SQLite only for now)
-    private void setUpCreateConnection(){
-        createConnectionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //set up alert dialog basic information
-                final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
-                alertDialog.setTitle("Create Connection!");
-                alertDialog.setMessage("Enter Domain : ");
 
-                //The view to show is an EditText instead of a textview
-                final EditText input = new EditText(getContext());
-                LinearLayout.LayoutParams lp  = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT
-                );
-                input.setLayoutParams(lp);
-                alertDialog.setView(input);
-                alertDialog.setIcon(R.drawable.rounded);
-
-                //set up Create button on Alert Dialog
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Create", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String connectionString = input.getText().toString();
-
-                        //create the connection locally, then create it on sqlite db
-                        ServerConnection conn = new ServerConnection();
-                        conn.setHost(connectionString);
-                        conn.setRole(ServerConnection.Role.OWNER);
-                        conn.setUserCount(1);
-                        conn.setUserId(user.getId());
-
-                        try {
-                            udbh.getConnectionsTable().create(conn);
-                            refreshList();
-                        } catch (DatabaseException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Nothing more to do, exit out of alert dialog
-                        dialog.cancel();
-                    }
-                });
-
-                alertDialog.show();
-            }
-        });
-    }
-
+    /**
+     * Private inner class of a View Holder, set up for the connections so that we may
+     * inflate them appropriately with the correct information
+     */
     private class ConnectionsViewHolder extends RecyclerView.ViewHolder{
 
         private TextView serverInformationTextView;
@@ -163,11 +118,17 @@ public class ServerManagerFragment extends Fragment {
             userCountTextView = itemView.findViewById(R.id.userCount_TextView);
             roleTextView = itemView.findViewById(R.id.role_TextView);
             accessButton = itemView.findViewById(R.id.access_Button);
+            serverInformationTextView.setSelected(true);
+            serverInformationTextView.setHorizontallyScrolling(true);
         }
 
+        /**
+         * This is the function that binds the data to the view elements.
+         * @param currentConnection
+         */
         public void setConnection(final ServerConnection currentConnection){
             //set Ui elements based on particular connection
-            serverInformationTextView.setText("Server : " + currentConnection.getHost() + ":" + currentConnection.getPort());
+            serverInformationTextView.setText("Server : " + currentConnection.getName());
             userCountTextView.setText("User Count : " + currentConnection.getUserCount());
             roleTextView.setText("Role : " + currentConnection.getRole());
 
@@ -184,6 +145,10 @@ public class ServerManagerFragment extends Fragment {
         }
     }
 
+    /**
+     * private inner class of an adapter for our connections recycler view, this is what
+     * inflates the views based on a viewHolder.
+     */
     private class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsViewHolder>{
 
         @NonNull
@@ -206,31 +171,46 @@ public class ServerManagerFragment extends Fragment {
         }
     }
 
+    /**
+     * Generally called when the fragment is being created, this initializes the user field
+     * in this fragment so that we can retrieve appropriate data later on.
+     * @param u
+     */
     public void setUser(SampleUser u){
         this.user = u;
 
         welcomeTextView.setText("Welcome, " + user.getUsername() + " !");
-
         refreshList();
     }
 
+    /**
+     * This function refreshes the list of servers by pulling data from the database!
+     */
     public void refreshList(){
         if(user == null)
             return;
 
         //create a new connections list, dont populate old one
         connections = new ArrayList<ServerConnection>();
-        try {
-            //get all connections and populate in-data connections array
-            List<ServerConnection> unfilteredConnections = udbh.getConnectionsTable().readAll();
-            for(ServerConnection connection : unfilteredConnections){
-                if(connection.getUserId() == user.getId())
-                    connections.add(connection);
+        //This asynchronous task retrieves all the servers the user is a part of!
+        RetrieveUserServersTask retrieveUserServersTask = new RetrieveUserServersTask("/users/" + user.getId(), new OnResponseListener<List<ServerConnection>>() {
+            @Override
+            public void onResponse(List<ServerConnection> data) {
+                connections.addAll(data);
+                connectionsRecyclerView.getAdapter().notifyDataSetChanged();
             }
-        } catch (DatabaseException e) {
-            e.printStackTrace();
-        }
-        //refresh adapter!
-        connectionsRecyclerView.getAdapter().notifyDataSetChanged();
+
+            @Override
+            public void onProgress(HttpProgress value) {
+
+            }
+
+            @Override
+            public void onError(Exception error) {
+                Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        retrieveUserServersTask.execute();
     }
 }

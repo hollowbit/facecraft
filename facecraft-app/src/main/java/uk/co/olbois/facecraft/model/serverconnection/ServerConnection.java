@@ -3,17 +3,25 @@ package uk.co.olbois.facecraft.model.serverconnection;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import uk.co.olbois.facecraft.model.SampleUser;
 import uk.co.olbois.facecraft.sqlite.Identifiable;
 
-public class ServerConnection implements Identifiable<Long>, Parcelable {
+public class ServerConnection implements Identifiable<String>, Parcelable {
 
-    private Long id;
-    private String host;
-    private int port = 25565;
-    private Long userId;
+    private String id;
+    private String name;
 
-    // TODO delete these, they will eventually be queried from the server
+    private String password;
+    private String url;
+    private String members;
+    private String owners;
+
     private int userCount;
     private Role role = Role.MEMBER;
 
@@ -31,22 +39,24 @@ public class ServerConnection implements Identifiable<Long>, Parcelable {
     };
 
     private ServerConnection(Parcel parcel){
-        this.id = parcel.readLong();
-        this.host = parcel.readString();
-        this.port = parcel.readInt();
-        this.userId = parcel.readLong();
+        this.id = parcel.readString();
+        this.name = parcel.readString();
         this.userCount = parcel.readInt();
         this.role = Role.values()[parcel.readInt()];
+        this.url = parcel.readString();
+        this.members = parcel.readString();
+        this.owners = parcel.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(host);
-        dest.writeInt(port);
-        dest.writeLong(userId);
+        dest.writeString(id);
+        dest.writeString(name);
         dest.writeInt(userCount);
         dest.writeInt(role.ordinal());
+        dest.writeString(url);
+        dest.writeString(members);
+        dest.writeString(owners);
     }
 
     @Override
@@ -58,39 +68,29 @@ public class ServerConnection implements Identifiable<Long>, Parcelable {
 
     }
 
-    public ServerConnection(Long id, String host, int port, int userCount, Role role, Long userId) {
+    public ServerConnection(String id, String host, int userCount, Role role) {
         this.id = id;
-        this.host = host;
-        this.port = port;
+        this.name = host;
         this.userCount = userCount;
         this.role = role;
-        this.userId = userId;
     }
 
     @Override
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
     @Override
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getHost() {
-        return host;
+    public String getName() {
+        return name;
     }
 
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getUserCount() {
@@ -109,16 +109,83 @@ public class ServerConnection implements Identifiable<Long>, Parcelable {
         this.role = role;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getMembers() {
+        return members;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setMembers(String members) {
+        this.members = members;
+    }
+
+    public String getOwners() {
+        return owners;
+    }
+
+    public void setOwners(String owners) {
+        this.owners = owners;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public enum Role {
-        MEMBER, ADMIN, OWNER
+        MEMBER, OWNER, OTHER
     }
 
+
+    public String format(){
+        Gson gson = new GsonBuilder()
+                .create();
+
+        return gson.toJson(this);
+    }
+
+    public static ServerConnection parse(String json){
+        Gson gson = new GsonBuilder()
+                .create();
+
+        ServerConnection sc = gson.fromJson(json, ServerConnection.class);
+
+        JsonElement ele = gson.fromJson(json, JsonElement.class);
+        JsonObject jsonAsObj = ele.getAsJsonObject();
+        JsonElement links = jsonAsObj.get("_links");
+        String url = links.getAsJsonObject().get("self").getAsJsonObject().get("href").getAsString();
+        sc.setUrl(url);
+        sc.setMembers(links.getAsJsonObject().get("members").getAsJsonObject().get("href").getAsString());
+        sc.setOwners(links.getAsJsonObject().get("owners").getAsJsonObject().get("href").getAsString());
+        String[] arr = url.split("/");
+
+        sc.setId(arr[arr.length-1]);
+
+        return sc;
+    }
+
+    public static ServerConnection[] parseArray(String json){
+        Gson gson = new GsonBuilder()
+                .create();
+
+        JsonElement ele = gson.fromJson(json, JsonElement.class);
+        JsonArray serversFromJson = ele.getAsJsonObject().get("_embedded").getAsJsonObject().get("servers").getAsJsonArray();
+
+        ServerConnection[] servers = new ServerConnection[serversFromJson.size()];
+        int count = 0;
+        for(JsonElement server : serversFromJson){
+            servers[count++] = parse(server.getAsJsonObject().toString());
+        }
+
+        return servers;
+    }
 }

@@ -79,7 +79,7 @@ public class HubActivity extends AppCompatActivity {
 
                     case "server":
                         sendIntent = new Intent(HubActivity.this, ServerConsoleActivity.class);
-                        //sendIntent.putExtra(ServerConsoleActivity.param.INITIAL_USER, u);
+                        sendIntent.putExtra(ServerConsoleActivity.INITIAL_CONNECTION, serverConnection);
                         startActivityForResult(sendIntent, 0);
                         break;
 
