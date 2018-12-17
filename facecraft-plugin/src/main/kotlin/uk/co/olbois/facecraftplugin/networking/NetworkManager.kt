@@ -6,6 +6,7 @@ import org.java_websocket.client.WebSocketClient
 import org.java_websocket.handshake.ServerHandshake
 import uk.co.olbois.facecraftplugin.networking.packet.*
 import java.lang.Exception
+import java.net.ConnectException
 import java.net.URI
 
 class NetworkManager {
@@ -151,8 +152,10 @@ class NetworkManager {
         }
 
         override fun onError(ex: Exception?) {
-            ex?.printStackTrace()
-            Bukkit.getServer().consoleSender.sendMessage("Facecraft Error: ${ex?.message}")
+            if (ex is ConnectException) {
+                Bukkit.getServer().consoleSender.sendMessage("Facecraft Error: Could not connect to Facecraft central")
+            } else
+                Bukkit.getServer().consoleSender.sendMessage("Facecraft Error: ${ex?.message}")
         }
 
     }
