@@ -6,5 +6,5 @@ import uk.co.olbois.facecraft.model.User
 
 @RepositoryRestResource(collectionResourceRel = "users", path = "users")
 interface UserRepository : CrudRepository<User, Long> {
-    fun findByName(name : String) : User?
+    fun findByUsername(name : String) : User?
 }

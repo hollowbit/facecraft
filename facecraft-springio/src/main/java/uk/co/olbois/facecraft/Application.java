@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 
+import uk.co.olbois.facecraft.controller.ConsoleOutputRepository;
+import uk.co.olbois.facecraft.networking.ConsoleOutputPacketListener;
 import uk.co.olbois.facecraft.networking.NetworkManager;
 import uk.co.olbois.facecraft.controller.EventRepository;
 import uk.co.olbois.facecraft.controller.ServerRepository;
@@ -35,7 +37,11 @@ public class Application implements CommandLineRunner {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ConsoleOutputRepository consoleOutputRepository;
+
     private OwnerPacketListener ownerPacketListener;
+    private ConsoleOutputPacketListener consoleOutputPacketListener;
 
     public static void main(String[] args)  {
         networkManager = new NetworkManager();
@@ -50,6 +56,7 @@ public class Application implements CommandLineRunner {
 
         // register packet listeners here
         ownerPacketListener = new OwnerPacketListener(networkManager);
+        consoleOutputPacketListener = new ConsoleOutputPacketListener(networkManager);
     }
 
     public EventRepository getEventRepository() {
@@ -63,6 +70,8 @@ public class Application implements CommandLineRunner {
     public UserRepository getUserRepository() {
         return userRepository;
     }
+
+    public ConsoleOutputRepository getConsoleOutputRepository() { return consoleOutputRepository; }
 
     public static Application getInstance() {
         return instance;

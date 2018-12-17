@@ -37,6 +37,10 @@ class NetworkManager {
     }
 
     fun unload() {
+        // if connected, send disconnect packet
+        if (status == Status.OPEN)
+            disconnect()
+
         // close the socket if unloaded
         socket.close()
     }

@@ -9,23 +9,23 @@ internal class ConnectionManager private constructor() {
         val instance = ConnectionManager()
     }
 
-    private val websocketConnections = mutableMapOf<WebSocket, Server>()
+    private val websocketConnections = mutableMapOf<WebSocket, String>()
     private val serverWebsockets = mutableMapOf<String, WebSocket>()
 
-    fun addConnection(websocket: WebSocket, server: Server) {
-        websocketConnections[websocket] = server
-        serverWebsockets[server.address] = websocket
+    fun addConnection(websocket: WebSocket, serverAddress: String) {
+        websocketConnections[websocket] = serverAddress
+        serverWebsockets[serverAddress] = websocket
     }
 
     fun removeConnection(websocket: WebSocket) {
-        val server = websocketConnections[websocket]
-        if (server != null)
-            serverWebsockets.remove(server.address)
+        val serverAddress = websocketConnections[websocket]
+        if (serverAddress != null)
+            serverWebsockets.remove(serverAddress)
 
         websocketConnections.remove(websocket)
     }
 
-    fun getServerByWebSocket(websocket : WebSocket) : Server? {
+    fun getServerByWebSocket(websocket : WebSocket) : String? {
         return websocketConnections[websocket]
     }
 
