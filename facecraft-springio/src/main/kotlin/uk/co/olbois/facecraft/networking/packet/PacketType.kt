@@ -8,7 +8,5 @@ enum class PacketType(val clazz : Class<*>) {
     REGISTER(RegisterPacket::class.java),
     CONNECT(ConnectPacket::class.java),
     RESPONSE(ResponsePacket::class.java),
-    DISCONNECT(DisconnectPacket::class.java),
-    ADD_OWNER(AddOwnerPacket::class.java),
-    REMOVE_OWNER(RemoveOwnerPacket::class.java)
+    DISCONNECT(DisconnectPacket::class.java)
 }

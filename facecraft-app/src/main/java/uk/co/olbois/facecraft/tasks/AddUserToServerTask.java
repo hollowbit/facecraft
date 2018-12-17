@@ -30,7 +30,6 @@ public class AddUserToServerTask extends AsyncTask<SampleUser, Void, Either<Exce
         SampleUser u = sampleUsers[0];
 
         try {
-            //Get all members of a server
             HttpResponse response = new HttpRequestBuilder(path)
                     .method(HttpRequestBuilder.Method.GET)
                     .perform();
@@ -38,7 +37,6 @@ public class AddUserToServerTask extends AsyncTask<SampleUser, Void, Either<Exce
             String json = new String(response.getContent(), "UTF8");
             LinkedList<SampleUser> springUsers = new LinkedList<>(Arrays.asList(SampleUser.parseArray(json)));
 
-            //If the user we're adding doesn't match any of the urls (Unique ID) of a user, throw him into the list!
             if(!springUsers.stream().anyMatch(s -> s.getUrl().equals(u.getUrl()))){
                 response = new HttpRequestBuilder(path)
                         .method(HttpRequestBuilder.Method.PATCH)

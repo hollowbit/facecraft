@@ -3,7 +3,6 @@
     package="uk.co.olbois.facecraft">
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,7 +12,6 @@
         android:theme="@style/AppTheme"
         android:name=".ui.SpringApplication"
         android:usesCleartextTraffic="true">
-
         <activity
             android:name=".ui.servermanager.ServerManagerActivity"
             android:label="@string/title_activity_server_manager"
@@ -55,12 +53,5 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
-        <receiver android:name=".firebase.NotificationBroadcastReceiver" android:exported="true">
-            <intent-filter>
-                <action android:name="uk.co.olbois.facecraft.ACCEPT"></action>
-                <action android:name="uk.co.olbois.facecraft.DENY"></action>
-            </intent-filter>
-        </receiver>
     </application>
 </manifest>

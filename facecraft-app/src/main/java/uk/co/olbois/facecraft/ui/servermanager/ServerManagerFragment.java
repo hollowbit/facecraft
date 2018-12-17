@@ -29,10 +29,7 @@ import uk.co.olbois.facecraft.sqlite.DatabaseException;
 import uk.co.olbois.facecraft.tasks.RetrieveUserServersTask;
 
 /**
- * This is the fragment where you see all of the connections you are a part of
- *
- * This is effectively a way point into the Hub Activity, where you can get to
- * the main part of this project!
+ * A placeholder fragment containing a simple view.
  */
 public class ServerManagerFragment extends Fragment {
     public interface OnLoggedOutListener{
@@ -86,6 +83,7 @@ public class ServerManagerFragment extends Fragment {
         connectionsRecyclerView.getAdapter().notifyDataSetChanged();
 
         setUpLoggedOutButton();
+        setUpCreateConnection();
 
         return root;
     }
@@ -101,11 +99,80 @@ public class ServerManagerFragment extends Fragment {
             }
         });
     }
+    //creates a alert dialog to create a new connection (SQLite only for now)
+    private void setUpCreateConnection(){
+        /*
+        createConnectionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //set up alert dialog basic information
+                final AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+                alertDialog.setTitle("Create Connection!");
+                alertDialog.setMessage("Enter Domain : ");
 
-    /**
-     * Private inner class of a View Holder, set up for the connections so that we may
-     * inflate them appropriately with the correct information
-     */
+                //The view to show is an EditText instead of a textview
+                final EditText input = new EditText(getContext());
+                LinearLayout.LayoutParams lp  = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT
+                );
+                input.setLayoutParams(lp);
+                alertDialog.setView(input);
+                alertDialog.setIcon(R.drawable.rounded);
+
+                //set up Create button on Alert Dialog
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Create", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String connectionString = input.getText().toString();
+
+                        //create the connection locally, then create it on sqlite db
+                        ServerConnection conn = new ServerConnection();
+                        conn.setName(connectionString);
+                        conn.setRole(ServerConnection.Role.OWNER);
+                        conn.setUserCount(1);
+                        conn.setUserId(user.getId());
+
+
+                        try {
+                            List<ServerConnection> allServers = udbh.getConnectionsTable().readAll();
+
+                            boolean found = false;
+                            for(ServerConnection c : allServers){
+                                if(c.getName().toLowerCase().equals(conn.getName().toLowerCase())){
+                                    found = true;
+                                    break;
+                                }
+                            }
+
+                            if(!found || conn.getName() == null){
+                                udbh.getConnectionsTable().create(conn);
+                                refreshList();
+                            }
+                            else{
+                                Toast.makeText(getContext(), "That server connection already exists!", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } catch (DatabaseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Nothing more to do, exit out of alert dialog
+                        dialog.cancel();
+                    }
+                });
+
+                alertDialog.show();
+            }
+        });
+        */
+    }
+
     private class ConnectionsViewHolder extends RecyclerView.ViewHolder{
 
         private TextView serverInformationTextView;
@@ -122,10 +189,6 @@ public class ServerManagerFragment extends Fragment {
             serverInformationTextView.setHorizontallyScrolling(true);
         }
 
-        /**
-         * This is the function that binds the data to the view elements.
-         * @param currentConnection
-         */
         public void setConnection(final ServerConnection currentConnection){
             //set Ui elements based on particular connection
             serverInformationTextView.setText("Server : " + currentConnection.getName());
@@ -145,10 +208,6 @@ public class ServerManagerFragment extends Fragment {
         }
     }
 
-    /**
-     * private inner class of an adapter for our connections recycler view, this is what
-     * inflates the views based on a viewHolder.
-     */
     private class ConnectionsAdapter extends RecyclerView.Adapter<ConnectionsViewHolder>{
 
         @NonNull
@@ -171,28 +230,20 @@ public class ServerManagerFragment extends Fragment {
         }
     }
 
-    /**
-     * Generally called when the fragment is being created, this initializes the user field
-     * in this fragment so that we can retrieve appropriate data later on.
-     * @param u
-     */
     public void setUser(SampleUser u){
         this.user = u;
 
         welcomeTextView.setText("Welcome, " + user.getUsername() + " !");
+
         refreshList();
     }
 
-    /**
-     * This function refreshes the list of servers by pulling data from the database!
-     */
     public void refreshList(){
         if(user == null)
             return;
 
         //create a new connections list, dont populate old one
         connections = new ArrayList<ServerConnection>();
-        //This asynchronous task retrieves all the servers the user is a part of!
         RetrieveUserServersTask retrieveUserServersTask = new RetrieveUserServersTask("/users/" + user.getId(), new OnResponseListener<List<ServerConnection>>() {
             @Override
             public void onResponse(List<ServerConnection> data) {
@@ -212,5 +263,18 @@ public class ServerManagerFragment extends Fragment {
         });
 
         retrieveUserServersTask.execute();
+        /*
+        try {
+            //get all connections and populate in-data connections array
+            List<ServerConnection> unfilteredConnections = udbh.getConnectionsTable().readAll();
+            for(ServerConnection connection : unfilteredConnections){
+                if(connection.getUserId() == user.getId())
+                    connections.add(connection);
+            }
+        } catch (DatabaseException e) {
+            e.printStackTrace();
+        }
+        //refresh adapter!
+        */
     }
 }

@@ -13,7 +13,7 @@ import uk.co.olbois.facecraftplugin.networking.packet.PacketType
 class ServerConnectionPacketListener(networkManager: NetworkManager) : PacketListener(networkManager) {
 
     init {
-        register(PacketType.REGISTER) {packet: Packet, _ ->
+        register(PacketType.REGISTER) {packet: Packet, conn: WebSocket ->
             // make sure this is actually a register packet
             if (packet is RegisterPacket) {
 

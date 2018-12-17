@@ -61,14 +61,13 @@ public class InviteFragment extends Fragment {
 
         udbh = new UniversalDatabaseHandler(getContext());
 
-        //set up recycler view for users not in the server
+        //set up recycler view
         usersRecyclerView.setHasFixedSize(true);
         usersRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
         usersRecyclerView.setAdapter(new UsersAdapter());
         usersRecyclerView.getAdapter().notifyDataSetChanged();
 
 
-        //set up recycler view for users in the server
         currentUsersRecyclerView.setHasFixedSize(true);
         currentUsersRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
         currentUsersRecyclerView.setAdapter(new CurrentUsersAdapter());
@@ -81,9 +80,7 @@ public class InviteFragment extends Fragment {
         return root;
     }
 
-    /**
-     * A view holder to allow us to bind specific user data to a view in our recycler view
-     */
+    //A Users View Holder, effectively takes in a user, and inflates a view using the users information!
     private class UsersViewHolder extends RecyclerView.ViewHolder{
 
         private TextView usernameTextView;
@@ -103,8 +100,6 @@ public class InviteFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    //This sends an invite to a specific user in the springio database, ALSO sends a document
-                    // to the firebase database!
                     SendInvitationTask sendInvitationTask = new SendInvitationTask("/invites", connection, new OnResponseListener<Boolean>() {
                         @Override
                         public void onResponse(Boolean data) {
@@ -130,10 +125,6 @@ public class InviteFragment extends Fragment {
         }
     }
 
-    /**
-     * An Adapter for users that aren't in our server connection, this inflates a view based on
-     * a particular view holder
-     */
     private class UsersAdapter extends RecyclerView.Adapter<UsersViewHolder>{
 
         @NonNull
@@ -155,11 +146,7 @@ public class InviteFragment extends Fragment {
             return users.size();
         }
     }
-
-    /**
-     * A View Holder for users that ARE in our server connection, this binds a particular user's
-     * data with a view.
-     */
+    //A Users View Holder, effectively takes in a user, and inflates a view using the users information!
     private class CurrentUsersViewHolder extends RecyclerView.ViewHolder{
 
         private TextView usernameTextView;
@@ -182,7 +169,6 @@ public class InviteFragment extends Fragment {
             usernameTextView.setText("User : " + currentValues.getUsername());
             roleTextView.setText("Role : " + currentValues.getRole().toString());
 
-            //Is our role above their role? If not, disable the buttons!
             if(connection.getRole().compareTo(currentValues.getRole()) <= 0){
                 removeButton.setEnabled(false);
                 roleSpinner.setEnabled(false);
@@ -194,7 +180,6 @@ public class InviteFragment extends Fragment {
 
             roleSpinner.setAdapter(adapter);
 
-            //if we aren't the owner of a server, we can't change a users role!
             if(connection.getRole() != ServerConnection.Role.OWNER){
                 roleSpinner.setEnabled(false);
                 roleSpinner.setVisibility(View.INVISIBLE);
@@ -206,15 +191,12 @@ public class InviteFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    //This task deletes a member from the members list on the database.
                     RemoveUserFromServerTask removeUserFromServerTask = new RemoveUserFromServerTask("/servers/" + connection.getId() + "/members", new OnResponseListener<Boolean>() {
                         @Override
                         public void onResponse(Boolean data) {
-                            //Refresh the lists locally instead of querying the server again
                             users.add(currentValues);
                             currentConnections.remove(currentValues);
 
-                            //Refresh those recycler views!
                             usersRecyclerView.getAdapter().notifyDataSetChanged();
                             currentUsersRecyclerView.getAdapter().notifyDataSetChanged();
                         }
@@ -234,19 +216,15 @@ public class InviteFragment extends Fragment {
                 }
             });
 
-            //Set up the role Spinner action for when an item is selected in the spinner
             roleSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
                     if(++check > 1){
-
-                        //This task runs and changes a user's role in our database, really only used for changing a
-                        //member to a owner.
+                        Toast.makeText(getContext(), "CHECKED?!??!?!?!", Toast.LENGTH_SHORT).show();
                         ChangeUserRoleTask changeUserRoleTask = new ChangeUserRoleTask(rolePossibilities[position], connection, new OnResponseListener<Boolean>() {
                             @Override
                             public void onResponse(Boolean data) {
-                                //set the variables locally instead of making another request to the server
                                 currentValues.setRole(rolePossibilities[position]);
                                 roleTextView.setText("Role : " + currentValues.getRole().toString());
                                 removeButton.setEnabled(false);
@@ -265,6 +243,14 @@ public class InviteFragment extends Fragment {
                         });
 
                         changeUserRoleTask.execute(currentValues);
+                        /*
+                        try {
+                            udbh.getConnectionsTable().update(currentValues.second);
+                            roleTextView.setText("Role : " + currentValues.second.getRole().toString());
+                        } catch (DatabaseException e) {
+                            e.printStackTrace();
+                        }
+                        */
                     }
                 }
 
@@ -276,10 +262,6 @@ public class InviteFragment extends Fragment {
         }
     }
 
-    /**
-     * An Adapter for users that ARE in our server connection, this effectively inflates a view
-     * based on a view holder while supplying the user to the view holder
-     */
     private class CurrentUsersAdapter extends RecyclerView.Adapter<CurrentUsersViewHolder>{
 
         @NonNull
@@ -316,26 +298,22 @@ public class InviteFragment extends Fragment {
         this.users = new ArrayList<>();
         this.currentConnections = new ArrayList<>();
 
-        //This task retrieves all users from the database that are in our current server!
         RetrieveUserListTask retrieveUserListTask = new RetrieveUserListTask("/servers/" + connection.getId(), new OnResponseListener<List<SampleUser>>() {
             @Override
             public void onResponse(List<SampleUser> data) {
                 for(SampleUser u : data){
-                    //users who are not in our server added to users list
                     if(u.getRole() == ServerConnection.Role.OTHER){
                         users.add(u);
                     }
                     else{
-                        //These users are in our server!
                         currentConnections.add(u );
                     }
                 }
-
-                //Refresh the recyclerviews!
                 if(usersRecyclerView != null){
                     usersRecyclerView.getAdapter().notifyDataSetChanged();
                     currentUsersRecyclerView.getAdapter().notifyDataSetChanged();
                 }
+                Toast.makeText(getContext(), "done", Toast.LENGTH_LONG).show();
             }
 
             @Override

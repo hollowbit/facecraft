@@ -4,18 +4,11 @@ import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 import uk.co.olbois.facecraftplugin.FacecraftPlugin
 import uk.co.olbois.facecraftplugin.networking.NetworkManager
-import uk.co.olbois.facecraftplugin.networking.packet.AddOwnerPacket
-import uk.co.olbois.facecraftplugin.networking.packet.RemoveOwnerPacket
+import java.util.EnumSet.range
 
 class FacecraftCommand : Command {
 
     override fun invoke(args: Array<out String>?, sender: CommandSender?): Boolean {
-        // make sure we can even connect to facecraft
-        if (!FacecraftPlugin.networkManager.canConnect()) {
-            sender?.sendMessage("${ChatColor.RED}<Facecraft> Cannot connect to Facecraft Central Server")
-            return true
-        }
-
         // there must be args
         if (args == null)
             return false
@@ -27,10 +20,15 @@ class FacecraftCommand : Command {
         val label = args.first()
         return when(label) {
             "connect" -> {
+                if (!FacecraftPlugin.networkManager.canConnect()) {
+                    sender?.sendMessage("${ChatColor.RED}<Facecraft> Cannot connect to Facecraft Central Server")
+                    return true
+                }
+
                 // make sure you are not already connected
                 val status = FacecraftPlugin.networkManager.status
                 if (status == NetworkManager.Status.OPEN) {
-                    sender?.sendMessage("${ChatColor.GREEN}<Facecraft> Already Connected!")
+                    sender?.sendMessage("${ChatColor.GREEN}Facecraft: Already Connected!")
                     return true
                 }
 
@@ -70,6 +68,11 @@ class FacecraftCommand : Command {
                 true
             }
             "disconnect" -> {
+                if (!FacecraftPlugin.networkManager.canConnect()) {
+                    sender?.sendMessage("${ChatColor.RED}<Facecraft> Cannot connect to Facecraft Central Server")
+                    return true
+                }
+
                 // make sure you are not already disconnected
                 val status = FacecraftPlugin.networkManager.status
                 if (status == NetworkManager.Status.CLOSED) {
@@ -84,6 +87,11 @@ class FacecraftCommand : Command {
                 true
             }
             "register" -> {
+                if (!FacecraftPlugin.networkManager.canConnect()) {
+                    sender?.sendMessage("${ChatColor.RED}<Facecraft> Cannot connect to Facecraft Central Server")
+                    return true
+                }
+
                 // make sure you are not already connected
                 val status = FacecraftPlugin.networkManager.status
                 if (status == NetworkManager.Status.OPEN) {
@@ -93,7 +101,7 @@ class FacecraftCommand : Command {
 
                 // make sure there are at least 4 args
                 if (args.size < 4) {
-                    sender?.sendMessage("${ChatColor.RED}<Facecraft> Usage: /facecraft register <address> <password> <name...>")
+                    sender?.sendMessage("${ChatColor.RED}<Facecraft> Usage: /facecraft register <address> <password>")
                     return true
                 }
 
@@ -109,7 +117,7 @@ class FacecraftCommand : Command {
                 FacecraftPlugin.networkManager.register(args[1], name, args[2]) {established, message ->
                     when(established) {
                         true -> {
-                            sender?.sendMessage("${ChatColor.GREEN}<Facecraft> Registered! Please connect now: /facecraft connect <address> <password>")
+                            sender?.sendMessage("${ChatColor.GREEN}<Facecraft> Registered! Please connect now: /facecraft connect <address> <password> <name>")
                         }
                         false -> {
                             sender?.sendMessage("${ChatColor.RED}<Facecraft> Register failed! $message")
@@ -117,53 +125,6 @@ class FacecraftCommand : Command {
                     }
                 }
 
-                true
-            }
-            "addowner" -> {
-                // make sure you are not already connected
-                val status = FacecraftPlugin.networkManager.status
-                if (status == NetworkManager.Status.CLOSED) {
-                    sender?.sendMessage("${ChatColor.RED}<Facecraft> Please connect first: /facecraft connect <address> <password>!")
-                    return true
-                }
-
-                if (args.size < 2) {
-                    sender?.sendMessage("${ChatColor.RED}<Facecraft> Usage: /facecraft addowner <facecraft-username>")
-                    return true
-                }
-
-                val packet = AddOwnerPacket(args[1])
-
-                FacecraftPlugin.networkManager.sendPacket(packet) {responsePacket ->
-                    if (responsePacket.errorCode == 0)
-                        sender?.sendMessage("${ChatColor.GREEN}<Facecraft> ${packet.user} has been added as an owner")
-                    else
-                        sender?.sendMessage("${ChatColor.RED}<Facecraft> Could not add ${packet.user} as an owner: " + responsePacket.errorMessage)
-                }
-
-                true
-            }
-            "removeowner" -> {
-                // make sure you are not already connected
-                val status = FacecraftPlugin.networkManager.status
-                if (status == NetworkManager.Status.CLOSED) {
-                    sender?.sendMessage("${ChatColor.RED}<Facecraft> Please connect first: /facecraft connect <address> <password>!")
-                    return true
-                }
-
-                if (args.size < 2) {
-                    sender?.sendMessage("${ChatColor.RED}<Facecraft> Usage: /facecraft removeowner <facecraft-username>")
-                    return true
-                }
-
-                val packet = RemoveOwnerPacket(args[1])
-
-                FacecraftPlugin.networkManager.sendPacket(packet) {responsePacket ->
-                    if (responsePacket.errorCode == 0)
-                        sender?.sendMessage("${ChatColor.GREEN}<Facecraft> ${packet.user} has been removed as an owner")
-                    else
-                        sender?.sendMessage("${ChatColor.RED}<Facecraft> Could not remove ${packet.user} as an owner: " + responsePacket.errorMessage)
-                }
                 true
             }
             else -> false

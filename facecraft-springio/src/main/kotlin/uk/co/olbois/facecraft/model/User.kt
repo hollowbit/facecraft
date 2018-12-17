@@ -4,7 +4,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "users")
-class User {
+class User() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,15 +20,8 @@ class User {
     @Column(name = "deviceToken")
     val deviceToken = ""
 
-    @ManyToMany(mappedBy = "owners", fetch=FetchType.EAGER)
-    val serversOwned: MutableList<Server> = mutableListOf()
-
-    override fun equals(other: Any?): Boolean {
-        return when(other is User) {
-            true -> other.id == this.id
-            false -> false
-        }
-    }
+    @ManyToMany(mappedBy = "owners")
+    val serversOwned: List<Server> = listOf()
 
     @ManyToMany(mappedBy = "members")
     val serversPartOf: List<Server> = listOf()

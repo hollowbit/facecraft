@@ -32,13 +32,11 @@ public class ChangeUserRoleTask extends AsyncTask<SampleUser, Void, Either<Excep
         u.setRole(role);
 
         try {
-            //We can only ever change a user's role to the "Owner" role, therefore patch him in!
             HttpResponse response = new HttpRequestBuilder("/servers/" + connection.getId() + "/owners")
                 .method(HttpRequestBuilder.Method.PATCH)
                 .withRequestBody("text/uri-list", u.getUrl().getBytes())
                 .perform();
 
-            //A little bit of code re-usage, delete the user from the members list effectively
             RemoveUserFromServerTask removeUserFromServerTask = new RemoveUserFromServerTask("/servers/" + connection.getId() + "/members", new OnResponseListener<Boolean>() {
                 @Override
                 public void onResponse(Boolean data) {
