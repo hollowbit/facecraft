@@ -37,11 +37,11 @@ public class ChatroomActivity extends AppCompatActivity {
 
         //retrieve the user that was sent
         SampleUser u = intent.getParcelableExtra(param.INITIAL_USER);
-        ServerConnection c = intent.getParcelableExtra(param.INITIAL_CONNECTION);
+        ServerConnection serverConnection = intent.getParcelableExtra(param.INITIAL_CONNECTION);
 
         //set user
         chatroomFragment.setUser(u);
-        chatroomFragment.setConnection(c);
+
     }
 
 }

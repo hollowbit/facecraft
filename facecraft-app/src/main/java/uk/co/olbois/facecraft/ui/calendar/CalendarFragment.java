@@ -1,5 +1,10 @@
 package uk.co.olbois.facecraft.ui.calendar;
 
+import android.Manifest;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.icu.util.Calendar;
 import android.net.Uri;
 import android.provider.CalendarContract;
@@ -10,7 +15,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -45,16 +49,6 @@ public class CalendarFragment extends Fragment {
     public CalendarFragment() {
     }
 
-    public interface OnSetTimeClickedListener{
-        void onSetTimeClicked(Calendar calendar);
-    }
-
-    private OnSetTimeClickedListener onSetTimeClickedListener;
-
-    private Calendar calendar;
-
-    // TODO                                                                                         here  <2>
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,15 +59,13 @@ public class CalendarFragment extends Fragment {
 
         final View setTimeBtn = root.findViewById(R.id.btnSetTime);
 
-        Button saveBtn = root.findViewById(R.id.btnSaveEvent);
-        Button setTimeBtn = root.findViewById(R.id.btnSetTime);
         final CalendarView calendarView = root.findViewById(R.id.calendarView);
-        // TODO: make this --v a field       move to ------------------------------------------------^ <2>
+
         final TextView timeView = root.findViewById(R.id.editTime);
+
         final EditText titleView = root.findViewById(R.id.editTextTitle);
 
-        // set the calender time to the current time
-         Calendar calendar = Calendar.getInstance();
+        final Calendar calendar = Calendar.getInstance();
 
 
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -99,7 +91,6 @@ public class CalendarFragment extends Fragment {
             }
         });
 
-        // Set the on click listener for the save button
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,33 +132,18 @@ public class CalendarFragment extends Fragment {
             }
         });
 
-        // When the set time button is clicked, trigger the event and open the dialog fragment
         setTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onSetTimeClickedListener.onSetTimeClicked(calendar);
+                ((CalendarActivity) getActivity()).showTimePickerDialog(v);
             }
         });
+
 
         return root;
 
     }
 
-    /**
-     * set the onclick listener for setting the time
-     * @param onSetTimeClickedListener
-     *
-    public void setOnSetTimeClickedListener( OnSetTimeClickedListener onSetTimeClickedListener){
-        this.onSetTimeClickedListener = onSetTimeClickedListener;
-    }
-
-    *
-     * set the current event time
-     * @param calendar
-     */
-    //public void setTime(Calendar calendar) {
-        // TODO set the edit text "timeView" here based on "calendar" hour and minute  and format it into am/pm <3>
-    //    this.calendar = calendar;
 
     public void createNewEvent(String title, long date, String time) {
         //events.insert();
@@ -317,4 +293,8 @@ public class CalendarFragment extends Fragment {
 
 
     }
+
+
+
+
 }
