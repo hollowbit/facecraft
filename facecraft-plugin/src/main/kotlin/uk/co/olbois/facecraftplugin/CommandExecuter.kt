@@ -36,10 +36,10 @@ class CommandExecuter(private val plugin: FacecraftPlugin) : Runnable {
         val messageQueueCopy = mutableListOf<String>()
         commandQueueCopy.addAll(messageQueue)
         // clear current list
-        messageQueue.clear()
+        commandQueue.clear()
 
         // handle all copied commands
-        messageQueueCopy.forEach { c ->
+        commandQueueCopy.forEach { c ->
             Bukkit.getServer().logger.info(c)
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), c)
         }
