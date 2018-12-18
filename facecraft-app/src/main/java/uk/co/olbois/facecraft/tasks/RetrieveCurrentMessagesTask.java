@@ -32,7 +32,7 @@ public class RetrieveCurrentMessagesTask extends AsyncTask<Void, Void, Either<Ex
 
         try {
 
-        HttpResponse response = new HttpRequestBuilder(path + "/messages")
+        HttpResponse response = new HttpRequestBuilder(path)
                 .method(HttpRequestBuilder.Method.GET)
                 .perform();
 
