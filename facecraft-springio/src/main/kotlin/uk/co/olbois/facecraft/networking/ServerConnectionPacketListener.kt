@@ -55,7 +55,7 @@ class ServerConnectionPacketListener(networkManager: NetworkManager) : PacketLis
                         ResponsePacket(packet, 91, "The given password is incorrect")
                     else {
                         // add to connections
-                        ConnectionManager.instance.addConnection(conn, server)
+                        ConnectionManager.instance.addConnection(conn, server.address)
 
                         // send valid response
                         ResponsePacket(packet, 0, "")
