@@ -44,12 +44,12 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/createConnection_Button"
+            android:id="@+id/manageInvite_Button"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@color/design_default_color_primary_dark"
-            android:text="Create connection"
+            android:text="Manage Invites"
             android:textColor="@android:color/background_light" />
 
         <Button

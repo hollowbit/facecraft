@@ -37,7 +37,6 @@ public class LoginFragment extends Fragment {
     private static final int MIN_USERNAME_LENGTH = 4;
     private static final int MIN_PASSWORD_LENGTH = 4;
 
-
     private OnLoggedInListener onLoggedInListener;
 
     private EditText usernameEditText;

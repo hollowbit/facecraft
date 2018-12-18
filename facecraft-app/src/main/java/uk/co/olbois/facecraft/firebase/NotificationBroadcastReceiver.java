@@ -74,6 +74,12 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
                     HttpResponse response = new HttpRequestBuilder(invitePath + "/invited_user_id")
                             .method(HttpRequestBuilder.Method.GET)
                             .perform();
+
+
+                    if(response.getCode() == 404){
+                        return Either.left(new IOException("The user doesn't exist in the database!"));
+                    }
+
                     String json = new String(response.getContent(), "UTF8");
                     SampleUser u = SampleUser.parse(json);
 
@@ -81,6 +87,11 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
                     response = new HttpRequestBuilder(invitePath + "/server")
                             .method(HttpRequestBuilder.Method.GET)
                             .perform();
+
+                    if(response.getCode() == 404){
+                        return Either.left(new IOException("The server doesn't exist in the database!"));
+                    }
+
                     json = new String(response.getContent(), "UTF8");
                     ServerConnection c = ServerConnection.parse(json);
 
