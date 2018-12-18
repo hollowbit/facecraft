@@ -3,6 +3,7 @@ package uk.co.olbois.facecraft.tasks;
 import android.os.AsyncTask;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -29,10 +30,18 @@ public class SendMessageTask extends AsyncTask<Message, Void, Either<Exception, 
     protected Either<Exception, Boolean> doInBackground(Message... messages) {
 
         Message message  = messages[0];
-
+        SimpleDateFormat sdl = new SimpleDateFormat("MMM dd, YYYY h:mm:ss aa");
+        String dt = sdl.format(message.getDate());
+        String msgStr = message.getUsername() + "Ω" + message.getSenderType() + "Ω" + message.getMessage()+ "Ω" + dt + "Ω" + message.getServerAddr() + "Ω" + message.getServerAddr();
         try {
 
-            HttpResponse send = new HttpRequestBuilder(path)
+            HttpResponse send = new HttpRequestBuilder(path + "/send")
+                    .method(HttpRequestBuilder.Method.POST)
+                    .withRequestBody("application/json", msgStr.getBytes())
+                    .perform();
+
+
+            HttpResponse send2 = new HttpRequestBuilder(path)
                     .method(HttpRequestBuilder.Method.POST)
                     .withRequestBody("application/json", message.format().getBytes())
                     .perform();
@@ -59,4 +68,4 @@ public class SendMessageTask extends AsyncTask<Message, Void, Either<Exception, 
                 break;
         }
     }
-}
+}//var username : String, var senderType : String, var message : String, var date : Date, var serverAddr : String, var url : String?

@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import uk.co.olbois.facecraft.R;
 import uk.co.olbois.facecraft.model.SampleUser;
@@ -42,8 +44,13 @@ public class ChatroomFragment extends Fragment {
     // The current server connection
     private ServerConnection serverConnection;
 
-    SendMessageTask sendMessageTask;
-    RetrieveCurrentMessagesTask retrieveCurrentMessagesTask;
+    private MessageAdapter messageAdapter;
+
+    private SendMessageTask sendMessageTask;
+
+    private TimerTask timerTask;
+
+    private Timer timer;
 
     public ChatroomFragment() {
     }
@@ -57,11 +64,11 @@ public class ChatroomFragment extends Fragment {
         final EditText input = view.findViewById(R.id.text_edit_text);
 
         // Generate sample messages (for prototype demo)
-        //messageData = generateMessages();
+        messageData = new ArrayList<>();
 
         // Set the message recycler view adapter
         final RecyclerView messageRecyclerView = view.findViewById(R.id.message_recycler_view);
-        final MessageAdapter messageAdapter = new MessageAdapter(messageData);
+        messageAdapter = new MessageAdapter(messageData);
         messageRecyclerView.setLayoutManager(new LinearLayoutManager((getContext())));
         messageRecyclerView.setAdapter(messageAdapter);
 
@@ -82,42 +89,6 @@ public class ChatroomFragment extends Fragment {
 
                 // scroll to the bottom of th recycler view
                 messageRecyclerView.scrollToPosition(messageData.size() -1);
-            }
-        });
-
-        sendMessageTask = new SendMessageTask("/messages" , new OnResponseListener<Boolean>() {
-            @Override
-            public void onResponse(Boolean data) {
-
-            }
-
-            @Override
-            public void onProgress(HttpProgress value) {
-
-            }
-
-            @Override
-            public void onError(Exception error) {
-
-                Toast.makeText(getContext(), "There was an error sending your message", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        retrieveCurrentMessagesTask = new RetrieveCurrentMessagesTask("/messages", new OnResponseListener<List<Message>>() {
-            @Override
-            public void onResponse(List<Message> data) {
-                messageData = data;
-                messageAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onProgress(HttpProgress value) {
-
-            }
-
-            @Override
-            public void onError(Exception error) {
-
             }
         });
 
@@ -164,8 +135,8 @@ public class ChatroomFragment extends Fragment {
 
             SimpleDateFormat formatter = new SimpleDateFormat("EE MMM d 'at' HH:mm");
 
-            time.setText(formatter.format(message.getTime()));
-            messageText.setText(message.getContent());
+            time.setText(formatter.format(message.getDate()));
+            messageText.setText(message.getMessage());
         }
     }
 
@@ -244,6 +215,24 @@ public class ChatroomFragment extends Fragment {
 
         messageData.add(new Message(sampleUser.getUsername(), "app", in, new Date(), serverConnection.getId(), null));
 
+        sendMessageTask = new SendMessageTask("/messages" , new OnResponseListener<Boolean>() {
+            @Override
+            public void onResponse(Boolean data) {
+
+            }
+
+            @Override
+            public void onProgress(HttpProgress value) {
+
+            }
+
+            @Override
+            public void onError(Exception error) {
+
+                Toast.makeText(getContext(), "There was an error sending your message", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // send the message to the database
         sendMessageTask.execute(new Message(sampleUser.getUsername(), "app", in, new Date(), serverConnection.getId(), null));
     }
@@ -262,6 +251,45 @@ public class ChatroomFragment extends Fragment {
      */
     public void setConnection(ServerConnection c) {
         this.serverConnection = c;
+
+        retrieve();
+    }
+
+    public void retrieve() {
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                RetrieveCurrentMessagesTask retrieveCurrentMessagesTask = new RetrieveCurrentMessagesTask("/messages", new OnResponseListener<List<Message>>() {
+                    @Override
+                    public void onResponse(List<Message> data) {
+                        messageData.clear();
+                        for (Message m : data) {
+                            if (m.getServerAddr().equals(serverConnection.getId()))
+                                messageData.add(m);
+                        }
+                        messageAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onProgress(HttpProgress value) {
+
+                    }
+
+                    @Override
+                    public void onError(Exception error) {
+
+                    }
+                });
+
+                retrieveCurrentMessagesTask.execute();
+            }
+        };
+
+        timer = new Timer("Timer");
+        timer.schedule(timerTask, 0, 5000);
+
+
     }
     
 

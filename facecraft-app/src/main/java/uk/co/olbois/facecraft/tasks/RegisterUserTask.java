@@ -65,6 +65,11 @@ public class RegisterUserTask extends AsyncTask<String, Void, Either<Exception, 
                     .method(HttpRequestBuilder.Method.GET)
                     .perform();
 
+            //Sanity check to make sure the user was retrieved properly
+            if(response.getCode() == 404){
+                return Either.left(new IOException("The user doesn't exist in the database!"));
+            }
+
             //Make user from database into a sampleuser
             json = new String(response.getContent(), "UTF8");
             newUser = SampleUser.parse(json);

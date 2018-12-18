@@ -22,11 +22,10 @@ class OwnerPacketListener(networkManager: NetworkManager) : PacketListener(netwo
                     val serverOptional = Application.getInstance().serverRepository.findById(serverAddress)
                     if (serverOptional.isPresent) {
                         val server = serverOptional.get()
-
+                      
                         // get user given by packet and make sure it exists
                         val user = Application.getInstance().userRepository.findByUsername(packet.user)
                         if (user != null) {
-
                             // make sure the user isn't already an owner of the server
                             if (!user.serversOwned.contains(server)) {
                                 // all is good, add the owner and send response
