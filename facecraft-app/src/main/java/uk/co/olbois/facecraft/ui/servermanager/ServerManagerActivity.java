@@ -15,6 +15,7 @@ import uk.co.olbois.facecraft.model.serverconnection.ServerConnection;
 import uk.co.olbois.facecraft.ui.hub.HubActivity;
 import uk.co.olbois.facecraft.ui.invite.InviteActivity;
 import uk.co.olbois.facecraft.ui.invite.InviteFragment;
+import uk.co.olbois.facecraft.ui.invitemanager.InviteManagerActivity;
 
 public class ServerManagerActivity extends AppCompatActivity {
 
@@ -57,6 +58,15 @@ public class ServerManagerActivity extends AppCompatActivity {
 
                 intent.putExtra(HubActivity.param.INITIAL_CONNECTION, connection);
                 intent.putExtra(HubActivity.param.INITIAL_USER, user);
+                startActivityForResult(intent, 0);
+            }
+        });
+
+        serverManagerFragment.setOnManageInviteClickedListener(new ServerManagerFragment.OnManageInviteClickedListener() {
+            Intent intent = new Intent(ServerManagerActivity.this, InviteManagerActivity.class);
+            @Override
+            public void onManageInviteClicked(SampleUser u) {
+                intent.putExtra(InviteManagerActivity.param.INITIAL_USER, u);
                 startActivityForResult(intent, 0);
             }
         });
