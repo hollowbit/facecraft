@@ -12,6 +12,7 @@ import android.view.View;
 import uk.co.olbois.facecraft.R;
 import uk.co.olbois.facecraft.model.SampleUser;
 import uk.co.olbois.facecraft.model.serverconnection.ServerConnection;
+//import uk.co.olbois.facecraft.ui.calendar.CalendarActivity;
 import uk.co.olbois.facecraft.ui.calendar.CalendarActivity;
 import uk.co.olbois.facecraft.ui.chatroom.ChatroomActivity;
 import uk.co.olbois.facecraft.ui.chatroom.ChatroomFragment;
