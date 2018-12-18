@@ -50,6 +50,11 @@ public class RetrieveUserInvitesTask extends AsyncTask<SampleUser, Void, Either<
                         .method(HttpRequestBuilder.Method.GET)
                         .perform();
 
+
+                if(response.getCode() == 404){
+                    return Either.left(new IOException("The user doesn't exist in the database!"));
+                }
+
                 json = new String(response.getContent(), "UTF8");
                 SampleUser inviteUser = SampleUser.parse(json);
 
@@ -58,6 +63,11 @@ public class RetrieveUserInvitesTask extends AsyncTask<SampleUser, Void, Either<
                     response = new HttpRequestBuilder(path + "/" + i.getId() + "/server")
                             .method(HttpRequestBuilder.Method.GET)
                             .perform();
+
+
+                    if(response.getCode() == 404){
+                        return Either.left(new IOException("The server doesn't exist in the database!"));
+                    }
 
                     json = new String(response.getContent(), "UTF8");
                     ServerConnection connection = ServerConnection.parse(json);
