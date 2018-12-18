@@ -5,7 +5,7 @@ import com.google.gson.JsonElement
 import uk.co.olbois.facecraft.model.SampleUser
 import java.util.*
 
-class Message(var username : String, var senderType : String, var content : String, var time : Date, var server : String, var url : String?) {
+class Message(var username : String, var senderType : String, var message : String, var date : Date, var serverAddr : String, var url : String?) {
 
 
     fun format(): String {

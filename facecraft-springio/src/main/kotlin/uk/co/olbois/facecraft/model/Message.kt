@@ -1,5 +1,6 @@
 package uk.co.olbois.facecraft.model
 
+import java.util.*
 import javax.persistence.*
 
 @Entity
@@ -8,20 +9,20 @@ class Message() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val message_id = ""
+    var message_id = ""
 
     @Column(name = "username")
-    val username = ""
+    var username = ""
 
     @Column(name = "message")
-    val message = ""
+    var message = ""
 
     @Column(name = "date")
-    val date = ""
+    var date = ""
 
     @Column(name = "sender_type")
-    val senderType = ""
+    var senderType = ""
 
     @Column(name = "server")
-    val serverAddr = ""
+    var serverAddr = ""
 }
