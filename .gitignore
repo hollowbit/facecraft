@@ -2,6 +2,8 @@
 build/
 .gradle/
 .DS_Store
+local.properties
+*.iml
 
 # minecraft
 minecraft-server/plugins/
