@@ -1,6 +1,7 @@
 package uk.co.olbois.facecraft.ui.hub;
 
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -75,6 +76,7 @@ public class HubActivity extends AppCompatActivity {
                     case "event":
                         sendIntent = new Intent(HubActivity.this, CalendarActivity.class);
                         sendIntent.putExtra(CalendarActivity.param.INITIAL_USER, u);
+                        sendIntent.putExtra(CalendarActivity.param.INITIAL_CONNECTION, connection);
                         startActivityForResult(sendIntent, 0);
                         break;
 

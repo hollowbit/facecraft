@@ -41,10 +41,12 @@ public class SendMessageTask extends AsyncTask<Message, Void, Either<Exception, 
                     .perform();
 
 
-            HttpResponse send2 = new HttpRequestBuilder(path)
-                    .method(HttpRequestBuilder.Method.POST)
-                    .withRequestBody("application/json", message.format().getBytes())
-                    .perform();
+            if (message.getSenderType() != "null") {
+                HttpResponse send2 = new HttpRequestBuilder(path)
+                        .method(HttpRequestBuilder.Method.POST)
+                        .withRequestBody("application/json", message.format().getBytes())
+                        .perform();
+            }
 
         } catch (IOException | ServerException e) {
             return Either.left(e);

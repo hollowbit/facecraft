@@ -39,6 +39,11 @@ import java.util.Arrays;
 import java.util.Date;
 
 import uk.co.olbois.facecraft.R;
+import uk.co.olbois.facecraft.model.message.Message;
+import uk.co.olbois.facecraft.model.serverconnection.ServerConnection;
+import uk.co.olbois.facecraft.server.HttpProgress;
+import uk.co.olbois.facecraft.server.OnResponseListener;
+import uk.co.olbois.facecraft.tasks.SendMessageTask;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -46,6 +51,8 @@ import uk.co.olbois.facecraft.R;
 public class CalendarFragment extends Fragment {
 
     private com.google.api.services.calendar.Calendar service;
+
+    private ServerConnection conn;
 
     public CalendarFragment() {
     }
@@ -118,10 +125,31 @@ public class CalendarFragment extends Fragment {
 
                         createNewEvent(title, unixTime, time);
 
-                        
+
                         String message = "The " + title + "! was decided to be at " + dt.getTime() + "\nMake sure you are prepared!";
 
+                        Message message1 = new Message("Event", "null", message, dt, conn.getId(), "");
 
+                        SendMessageTask sendMessageTask = new SendMessageTask("/messages" , new OnResponseListener<Boolean>() {
+                            @Override
+                            public void onResponse(Boolean data) {
+
+                            }
+
+                            @Override
+                            public void onProgress(HttpProgress value) {
+
+                            }
+
+                            @Override
+                            public void onError(Exception error) {
+
+                                Toast.makeText(getContext(), "There was an error sending your message", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        // send the message to the database
+                        sendMessageTask.execute(message1);
 
 
                     } else {
@@ -303,6 +331,11 @@ public class CalendarFragment extends Fragment {
 
 
     }
+
+    public void setConnection(ServerConnection conn){
+        this.conn = conn;
+    }
+
 
 
 
