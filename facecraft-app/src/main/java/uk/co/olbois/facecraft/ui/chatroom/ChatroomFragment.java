@@ -213,7 +213,7 @@ public class ChatroomFragment extends Fragment {
      */
     private void sendMessage(String in) {
 
-        messageData.add(new Message(sampleUser.getUsername(), "app", in, new Date(), serverConnection.getId(), null));
+        //messageData.add(new Message(sampleUser.getUsername(), "app", in, new Date(), serverConnection.getId(), null));
 
         sendMessageTask = new SendMessageTask("/messages" , new OnResponseListener<Boolean>() {
             @Override
